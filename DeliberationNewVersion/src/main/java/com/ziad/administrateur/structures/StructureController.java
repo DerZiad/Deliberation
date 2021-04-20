@@ -39,6 +39,7 @@ public class StructureController {
 		@GetMapping("/inscription/StructureEnseignement")
 		public ModelAndView structureDEnseignement() throws DataNotFoundExceptions{
 			ModelAndView model = new ModelAndView(PAGE_LIST_ANNEES);
+			System.out.println("I m here");
 			model.addObject(ATTRIBUT_LIST_FILIERES, structure_metier.listerFilieres());
 			model.addObject(ATTRIBUT_LIST_ETAPES, structure_metier.listerEtapes());
 			model.addObject(ATTRIBUT_LIST_SEMESTRES, structure_metier.listerSemestres());

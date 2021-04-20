@@ -31,6 +31,8 @@ public class User {
 
 	private String roles = "";
 
+	private String sms = "";
+
 	public User(String username, String password, String roles) {
 		this.username = username;
 		this.password = password;
@@ -101,6 +103,14 @@ public class User {
 		} else {
 			roles = roles + "," + role.getRole();
 		}
+	}
+
+	public String getSms() {
+		return sms;
+	}
+
+	public void setSms(String sms) {
+		this.sms = sms;
 	}
 
 }

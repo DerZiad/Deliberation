@@ -46,11 +46,11 @@
 													</c:if>
 												</c:forEach>
 												<td><c:if test="${etape.diplomante==1 }">
-														<input type="checkbox" id="lesIds" name="${etape.id_etape }"
-															onchange="envoi_form()" checked>
+														<input type="checkbox" id="lesIds"
+															name="${etape.id_etape }" onchange="envoi_form()" checked>
 													</c:if> <c:if test="${etape.diplomante==0 }">
-														<input type="checkbox" id="lesIds" name="${etape.id_etape }"
-															onchange="envoi_form()">
+														<input type="checkbox" id="lesIds"
+															name="${etape.id_etape }" onchange="envoi_form()">
 													</c:if></td>
 											</c:if>
 										</tr>
@@ -70,7 +70,8 @@
 				style="display: none">
 				<div class="card-body">
 					<h5 class="card-title">Liste des modules du
-						${semestre.libelle_semestre } filiére ${semestre.etape.filiere.nom_filiere }</h5>
+						${semestre.libelle_semestre } filiére
+						${semestre.etape.filiere.nom_filiere }</h5>
 
 					<table class="mb-0 table table-hover">
 						<thead>

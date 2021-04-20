@@ -54,23 +54,4 @@ public class PrincipalControllers {
 		}
 		return model;
 	}
-
-	@GetMapping("/signin")
-	public ModelAndView getInscriptionPage(HttpServletRequest request) {
-		ModelAndView model = null;
-		try {
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			AnonymousException.isAnonymous(authentication);
-			model = new ModelAndView("redirect:/");
-		} catch (AnonymousException e) {
-			model = new ModelAndView("signin");
-			String err = request.getParameter("error");
-			if (err != null && err.equals("true")) {
-				System.out.println("error is :" + err);
-				model.addObject("err", "Vos identifiants sont incorrects.");
-			}
-		}
-		return model;
-	}
-
 }

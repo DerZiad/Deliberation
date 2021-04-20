@@ -43,20 +43,6 @@
 									id="username" placeholder="Nom d'utilisateur" type="text"
 									class="form-control" value="${professeur.user.username }">
 							</div>
-							<div class="position-relative form-group">
-								<div class="form-check">
-									<input type="checkbox" class="form-check-input"
-										id="module" name="module" value="1" <c:if test="${professeur.isResponsableModule()}">checked</c:if>> <label class="form-check-label"
-										for="module">Responsable de module</label>
-								</div>
-							</div>
-							<div class="position-relative form-group">
-								<div class="form-check">
-									<input type="checkbox" class="form-check-input"
-										id="filiere" name="filiere" value="1" <c:if test="${professeur.isResponsableFiliere()}">checked</c:if>> <label class="form-check-label"
-										for="filiere">Responsable de filiere</label>
-								</div>
-							</div>
 							<button class="mt-1 btn btn-primary" type="submit">Modifier</button>
 							<button class="mt-1 btn btn-danger"
 								formaction="/admin/professeur/supprimer/${professeur.id_professeur}" formmethod="GET">Supprimer</button>

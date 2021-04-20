@@ -3,6 +3,7 @@ package com.ziad.administrateur.filiere;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,9 +23,14 @@ public interface FiliereInterface {
 
 	public List<Filiere> getFiliereList() throws DataNotFoundExceptions;
 
-	public void getFiliereProfile(ModelAndView model,Long id) throws InvalidEntries,DataNotFoundExceptions;
+	public Filiere getFiliereProfile(ModelAndView model,Long id) throws InvalidEntries,DataNotFoundExceptions;
 
 	public void modifyFiliereProfile(Long id_filiere, String name, Long etablissement_id, Integer semester_number) throws InvalidEntries;
 	
 	public void suprimerFiliere(Long id) throws InvalidEntries;
+	
+	public Filiere listerEtapes(Long id_filire) throws DataNotFoundExceptions;
+	
+	public Filiere diplomerEtapes(HttpServletRequest request) throws EntityNotFoundException;
+	
 }

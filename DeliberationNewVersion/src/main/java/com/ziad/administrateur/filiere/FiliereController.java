@@ -3,6 +3,7 @@ package com.ziad.administrateur.filiere;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -56,8 +57,23 @@ public class FiliereController {
 	@GetMapping("/filiere/profile/{id}")
 	public ModelAndView getFiliereProfile(@PathVariable("id") Long id) throws InvalidEntries, DataNotFoundExceptions {
 		ModelAndView model = new ModelAndView("Filiere/FiliereProfile");
-		filiere_metier.getFiliereProfile(model, id);
+		Filiere filiere = filiere_metier.getFiliereProfile(model, id);
 		model.addObject("professeurs",filiere_metier.listerResponsableFiliere());
+		model.addObject("etapes",filiere.getEtapes());
+		return model;
+	}
+	@GetMapping("/filiere/profile/{id_filiere}/etapes")
+	public ModelAndView listerEtapes(@PathVariable("id_filiere") Long id_filiere)throws DataNotFoundExceptions {
+		ModelAndView model = new ModelAndView("Filiere/etapes");
+		Filiere filiere = filiere_metier.listerEtapes(id_filiere);
+		model.addObject("etapes",filiere.getEtapes());
+		model.addObject("filiere",filiere);
+		return model;
+	}
+	@PostMapping("/filiere/profile/{id_filiere}/etapes")
+	public ModelAndView diplomerEtape(HttpServletRequest request) throws EntityNotFoundException{
+		Filiere filiere = filiere_metier.diplomerEtapes(request);
+		ModelAndView model = new ModelAndView("redirect:/filiere/profile/"+filiere.getId_filiere()+"/etapes");
 		return model;
 	}
 

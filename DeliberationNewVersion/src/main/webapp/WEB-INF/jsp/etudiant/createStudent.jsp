@@ -5,26 +5,26 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="http://kwonnam.pe.kr/jsp/template-inheritance"
 	prefix="layout"%>
-<layout:extends name="layout.jsp">
+<layout:extends name="../layout.jsp">
 	<layout:put block="content" type="REPLACE">
 
 		<div class="main-card mb-3 card">
 			<div class="card-body">
-				<h5 class="card-title">Inscription En Ligne Etudiant</h5>
-				<form class="" action="/student/InscriptionEnLigne" method="POST">
+				<h5 class="card-title">Création d'un étudiant</h5>
+				<form class="" action="/signup" method="POST">
 					<div class="form-row">
 						<div class="col-md-6">
 							<div class="position-relative form-group">
 								<label for="last_name_fr" class="">Nom en français</label><input
 									name="last_name_fr" id="last_name_fr" placeholder=""
-									type="text" class="form-control" required>
+									type="text" class="form-control">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="position-relative form-group">
 								<label for="last_name_ar" class="">Nom en arabe</label><input
 									name="last_name_ar" id="last_name_ar" placeholder=""
-									type="text" class="form-control" required>
+									type="text" class="form-control">
 							</div>
 						</div>
 					</div>
@@ -33,14 +33,14 @@
 							<div class="position-relative form-group">
 								<label for="first_name_fr" class="">Prénom en français</label><input
 									name="first_name_fr" id="first_name_fr" placeholder=""
-									type="text" class="form-control" required>
+									type="text" class="form-control">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="position-relative form-group">
 								<label for="first_name_ar" class="">Prénom en arabe</label><input
 									name="first_name_ar" id="first_name_ar" placeholder=""
-									type="text" class="form-control" required>
+									type="text" class="form-control">
 							</div>
 						</div>
 					</div>
@@ -50,13 +50,13 @@
 							<div class="position-relative form-group">
 								<label for="massar_edu" class="">Code Massar</label><input
 									name="massar_edu" id="massar_edu" placeholder="" type="text"
-									class="form-control" required>
+									class="form-control">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="position-relative form-group">
 								<label for="cne" class="">CNE</label><input name="cne" id="cne"
-									placeholder="" type="text" class="form-control" required>
+									placeholder="" type="text" class="form-control">
 							</div>
 						</div>
 					</div>
@@ -71,7 +71,7 @@
 						<div class="col-md-3">
 							<div class="position-relative form-group">
 								<label for="city" class="">Ville</label><input name="city"
-									id="city" placeholder="" type="text" class="form-control" required>
+									id="city" placeholder="" type="text" class="form-control">
 							</div>
 						</div>
 
@@ -84,13 +84,13 @@
 										<div
 											class="custom-radio custom-control">
 											<input type="radio" id="male" value="HOMME" name="gender"
-												class="custom-control-input" required><label
+												class="custom-control-input" checked><label
 												class="custom-control-label" for="male">Homme</label>
 										</div>
 										<div
 											class="custom-radio custom-control">
 											<input type="radio" id="female" value="FEMME" name="gender"
-												class="custom-control-input" required><label
+												class="custom-control-input"><label
 												class="custom-control-label" for="female">Femme</label>
 										</div>
 									</div>
@@ -105,14 +105,14 @@
 							<div class="position-relative form-group">
 								<label for="birth_date" class="">Date de naissance</label><input
 									name="birth_date" id="birth_date"
-									type="date" class="form-control" required>
+									type="date" class="form-control">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="position-relative form-group">
 								<label for="birth_place" class="">Lieu de naissance</label><input
 									name="birth_place" id="birth_place" placeholder=""
-									type="text" class="form-control" required>
+									type="text" class="form-control">
 							</div>
 						</div>
 					</div>
@@ -121,14 +121,14 @@
 							<div class="position-relative form-group">
 								<label for="province" class="">Province</label><input
 									name="province" id="province" placeholder=""
-									type="text" class="form-control" required>
+									type="text" class="form-control">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="position-relative form-group">
 								<label for="bac_year" class="">Année bac</label><input
 									name="bac_year" id="bac_year" placeholder=""
-									type="number" class="form-control" required>
+									type="number" class="form-control">
 							</div>
 						</div>
 					</div>
@@ -137,18 +137,14 @@
 							<div class="position-relative form-group">
 								<label for="bac_type" class="">Type du bac</label><input
 									name="bac_type" id="bac_type" placeholder=""
-									type="text" class="form-control" required>
+									type="text" class="form-control">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="position-relative form-group">
-								<label for="mention" class="">Mention</label>
-								<select name="mention" id="mention" class="form-control" required>
-								<option value="Trés bien">Trés bien</option>
-								<option value="Bien">Bien</option>
-								<option value="Assez Bien">Assez Bien</option>
-								<option value="Passable">Passable</option>
-								</select>
+								<label for="mention" class="">Mention</label><input
+									name="mention" id="mention" placeholder=""
+									type="text" class="form-control">
 							</div>
 						</div>
 					</div>
@@ -157,33 +153,28 @@
 							<div class="position-relative form-group">
 								<label for="high_school" class="">Lycée</label><input
 									name="high_school" id="high_school" placeholder=""
-									type="text" class="form-control" required>
+									type="text" class="form-control">
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="position-relative form-group">
 								<label for="bac_place" class="">Lieu d'obtention du bac</label><input
 									name="bac_place" id="bac_place" placeholder=""
-									type="text" class="form-control" required>
+									type="text" class="form-control">
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="position-relative form-group">
 								<label for="academy" class="">Académie</label><input
 									name="academy" id="academy" placeholder=""
-									type="text" class="form-control" required>
+									type="text" class="form-control">
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="position-relative form-group">
-								<label for="etablissement_id" class="">établissement</label>
-								
-								<select name="etablissement_id" id="exampleSelect" class="form-control">
-									<c:forEach var="etablissement" items="${etablissements}">
-										<option value="${etablissement.id }"> ${etablissement.name }</option>
-									</c:forEach>
-								</select>
-								
+								<label for="establishment" class="">établissement</label><input
+									name="establishment" id="establishment" placeholder=""
+									type="text" class="form-control">
 							</div>
 						</div>
 					</div>

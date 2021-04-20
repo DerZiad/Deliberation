@@ -9,13 +9,26 @@
 
 
 		<div class="row">
+
 			<div class="col-md-3">
-				<div class="main-card mb-3 card">
-					<div class="card-body">
-						<h5 class="card-title">filière: ${filiere.nom_filiere }</h5>
-						<a href="/filiere/profile/${filiere.id_filiere }/etudiant/liste"><button
-								class="mb-2 mr-2 btn btn-warning btn-block">Les
-								étudiants de la filière</button></a>
+				<div class="row-md-6">
+					<div class="main-card mb-3 card">
+						<div class="card-body">
+							<h5 class="card-title">filière: ${filiere.nom_filiere }</h5>
+							<a href="/filiere/profile/${filiere.id_filiere }/etudiant/liste"><button
+									class="mb-2 mr-2 btn btn-warning btn-block">Les
+									étudiants de la filière</button></a>
+						</div>
+					</div>
+				</div>
+				<div class="row-md-6">
+					<div class="row-md-6">
+						<div class="main-card mb-3 card">
+							<div class="card-body">
+								<a href="/admin/filiere/profile/${filiere.id_filiere }/etapes"><button
+										class="mb-2 mr-2 btn btn-warning btn-block">Les étapes de la filieres</button></a>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -67,6 +80,7 @@
 				</div>
 			</div>
 		</div>
+		
 
 	</layout:put>
 </layout:extends>

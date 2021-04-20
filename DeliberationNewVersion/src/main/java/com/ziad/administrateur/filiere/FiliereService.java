@@ -3,9 +3,9 @@ package com.ziad.administrateur.filiere;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -14,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
 import com.ziad.administrateur.etablissement.InvalidEntries;
-import com.ziad.enums.Role;
 import com.ziad.enums.TypeSemestre;
 import com.ziad.models.Etablissement;
 import com.ziad.models.Etape;
@@ -96,7 +95,7 @@ public class FiliereService implements FiliereInterface {
 	}
 
 	@Override
-	public void getFiliereProfile(ModelAndView model, Long id) throws InvalidEntries, DataNotFoundExceptions {
+	public Filiere getFiliereProfile(ModelAndView model, Long id) throws InvalidEntries, DataNotFoundExceptions {
 		Filiere filiere = filiereRepository.getOne(id);
 		if (filiere == null)
 			throw new InvalidEntries("Les données saisies sont invalides");
@@ -114,6 +113,7 @@ public class FiliereService implements FiliereInterface {
 
 		model.addObject("semester_number", (semestres == null) ? 0 : semestres.size());
 		model.addObject("etab_fili", filiere.getEtablissement().getId_etablissement());
+		return filiere;
 	}
 
 	@Override
@@ -176,15 +176,40 @@ public class FiliereService implements FiliereInterface {
 
 	@Override
 	public List<Professeur> listerResponsableFiliere() throws DataNotFoundExceptions {
-		List<Professeur> responsables_filieres = professeurRepository.findAll();
-		if (responsables_filieres.size() == 0)
-			throw new DataNotFoundExceptions("La liste des professeurs est vide");
-		responsables_filieres = responsables_filieres.stream()
-				.filter(prof -> prof.getUser().getRoleList().contains(Role.RESPONSABLE_FILIERE.getRole()))
-				.collect(Collectors.toList());
-		if (responsables_filieres.size() == 0)
-			throw new DataNotFoundExceptions("La liste des responsables de filieres est vide");
-		return responsables_filieres;
+		return professeurRepository.findAll();
+	}
+
+	@Override
+	public Filiere listerEtapes(Long id_filire) throws DataNotFoundExceptions, EntityNotFoundException {
+		Filiere filiere = filiereRepository.getOne(id_filire);
+		return filiere;
+	}
+
+	@Override
+	public Filiere diplomerEtapes(HttpServletRequest request) throws EntityNotFoundException {
+		String id_filiere_String = request.getParameter("id_filiere");
+		Long id_filiere = null;
+		try {
+			id_filiere = Long.parseLong(id_filiere_String);
+		} catch (Exception e) {
+			throw new EntityNotFoundException();
+		}
+		Filiere filiere = filiereRepository.getOne(id_filiere);
+		List<Etape> etapes = filiere.getEtapes();
+		etapes.stream().forEach(etape -> etape.setDiplomante(false));
+		etapeRepository.saveAll(etapes);
+
+		ArrayList<Long> ips = new ArrayList<Long>();
+		for (Etape etape : etapes) {
+			String id_etape_String = request.getParameter(etape.getId_etape() + "");
+			if (id_etape_String != null)
+				ips.add(Long.parseLong(id_etape_String));
+		}
+
+		List<Etape> etape_recus = etapeRepository.findAllById(ips);
+		etape_recus.stream().forEach(etape -> etape.setDiplomante(true));
+		etapeRepository.saveAll(etape_recus);
+		return filiere;
 	}
 
 }

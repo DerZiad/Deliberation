@@ -75,10 +75,8 @@ public class ProfesseurController {
 
 	@PostMapping("/professeur/creer")
 	public ModelAndView professeurCreate(@RequestParam("first_name") String first_name,
-			@RequestParam("last_name") String last_name, @RequestParam("email") String email,
-			@RequestParam(name = "module", required = false) Integer module,
-			@RequestParam(name = "filiere", required = false) Integer filiere) {
-		professeur_metier.createProfesseur(first_name, last_name, email, module, filiere);
+			@RequestParam("last_name") String last_name, @RequestParam("email") String email) {
+		professeur_metier.createProfesseur(first_name, last_name, email);
 		return new ModelAndView(REDIRECT_PROFESSEUR_LIST_LINK);
 	}
 
@@ -100,10 +98,8 @@ public class ProfesseurController {
 
 	@PostMapping("/professeur/profile/{id}")
 	public ModelAndView modifyProfesseur(@PathVariable("id") Long id, @RequestParam("last_name") String last_name,
-			@RequestParam("first_name") String first_name, @RequestParam("email") String email,
-			@RequestParam(name = "filiere", required = false) Integer filiere,
-			@RequestParam(name = "module", required = false) Integer module) throws EntityNotFoundException {
-		professeur_metier.modifierProfesseur(id, last_name, first_name, email, filiere, module);
+			@RequestParam("first_name") String first_name, @RequestParam("email") String email) throws EntityNotFoundException {
+		professeur_metier.modifierProfesseur(id, last_name, first_name, email);
 		return new ModelAndView(REDIRECT_PROFESSEUR_PROFILE_LINK + id);
 	}
 

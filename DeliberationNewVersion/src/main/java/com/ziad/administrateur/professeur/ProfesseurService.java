@@ -39,20 +39,13 @@ public class ProfesseurService implements ProfesseurImplementation {
 	private ElementRepository elementRepository;
 
 	@Override
-	public void createProfesseur(String first_name, String last_name, String email, Integer module, Integer filiere) {
+	public void createProfesseur(String first_name, String last_name, String email) {
 		User user = new User();
 		user.setActive(1);
 		user.setUsername(last_name.toLowerCase());
 		user.setPassword(passwordEncoder.encode(last_name.toLowerCase()));
 		Professeur professeur = new Professeur(first_name, last_name, email, user, new ArrayList<Modulee>(),
 				new ArrayList<Element>(), new ArrayList<Filiere>());
-		if (filiere != null) {
-			user.addRole(Role.RESPONSABLE_FILIERE);
-		}
-
-		if (module != null) {
-			user.addRole(Role.RESPONSABLE_MODULE);
-		}
 		user.addRole(Role.PROFESSEUR);
 		professeurRepository.save(professeur);
 		historiqueRepository
@@ -60,22 +53,13 @@ public class ProfesseurService implements ProfesseurImplementation {
 	}
 
 	@Override
-	public void modifierProfesseur(Long id_professeur, String last_name, String first_name, String email,
-			Integer filiere, Integer module) throws EntityNotFoundException {
+	public void modifierProfesseur(Long id_professeur, String last_name, String first_name, String email) throws EntityNotFoundException {
 		Professeur professeur = professeurRepository.getOne(id_professeur);
 		professeur.setPrenom_professeur(first_name);
 		professeur.setNom_professeur(last_name);
 		professeur.setEmail_professeur(email);
 
 		User user = professeur.getUser();
-		user.setRoles("");
-		if (filiere != null) {
-			user.addRole(Role.RESPONSABLE_FILIERE);
-		}
-
-		if (module != null) {
-			user.addRole(Role.RESPONSABLE_MODULE);
-		}
 		user.addRole(Role.PROFESSEUR);
 		historiqueRepository
 				.save(new Historique("Professeur " + first_name + " " + last_name + " modifié", new java.util.Date()));

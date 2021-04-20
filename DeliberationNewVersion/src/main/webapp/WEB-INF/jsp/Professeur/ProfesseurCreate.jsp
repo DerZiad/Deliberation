@@ -39,26 +39,6 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-row">
-						<div class="col-md-12">
-							<div class="position-relative form-group">
-								<div class="form-check">
-									<input type="checkbox" class="form-check-input"
-										id="composotionmodule" name="filiere" value="1"> <label class="form-check-label"
-										for="composotionmodule">Responsable de filiere</label>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-12">
-							<div class="position-relative form-group">
-								<div class="form-check">
-									<input type="checkbox" class="form-check-input"
-										id="composotionmodule" name="module" value="1"> <label class="form-check-label"
-										for="composotionmodule">Responsable de module</label>
-								</div>
-							</div>
-						</div>
-					</div>
 					<button class="mt-2 btn btn-primary col-md-6" type="submit">Valider</button>
 				</form>
 			</div>

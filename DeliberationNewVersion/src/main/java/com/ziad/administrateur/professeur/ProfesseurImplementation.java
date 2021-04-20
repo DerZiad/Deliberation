@@ -11,12 +11,12 @@ import com.ziad.models.Professeur;
 
 public interface ProfesseurImplementation {
 	
-	public void createProfesseur(String first_name, String last_name, String email,Integer module,Integer filiere);
+	public void createProfesseur(String first_name, String last_name, String email);
 	
 	public List<Professeur> listerProfesseurs() throws DataNotFoundExceptions;
 	
 	public Professeur getProfesseur(Long id) throws EntityNotFoundException;
-	public void modifierProfesseur(Long id_professeur,String last_name,String first_name,String email,Integer filiere,Integer module) throws EntityNotFoundException;
+	public void modifierProfesseur(Long id_professeur,String last_name,String first_name,String email) throws EntityNotFoundException;
 	public void deleteProfesseur(Long id) throws EntityNotFoundException;
 
 	public void renitialiserPassword(Long id) throws EntityNotFoundException;
