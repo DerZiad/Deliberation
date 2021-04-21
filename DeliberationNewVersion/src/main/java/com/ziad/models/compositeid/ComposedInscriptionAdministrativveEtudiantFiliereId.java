@@ -19,15 +19,18 @@ public class ComposedInscriptionAdministrativveEtudiantFiliereId implements Seri
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@OneToOne(cascade = CascadeType.PERSIST)
+	@OneToOne(cascade = CascadeType.ALL)
 	private Etudiant etudiant;
 
-	@OneToOne(cascade = CascadeType.PERSIST)
+	@OneToOne(cascade = CascadeType.ALL)
 	private InscriptionAdministrative inscription_administrative;
 
-	@OneToOne(cascade = CascadeType.PERSIST)
+	@OneToOne(cascade = CascadeType.DETACH)
 	private Filiere filiere;
-
+	public ComposedInscriptionAdministrativveEtudiantFiliereId() {
+		
+	}
+	
 	public ComposedInscriptionAdministrativveEtudiantFiliereId(Etudiant etudiant,
 			InscriptionAdministrative inscription_administrative, Filiere filiere) {
 		super();

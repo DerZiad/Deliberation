@@ -178,6 +178,26 @@
 							</div>
 						</div>
 					</div>
+					<div class="form-row">
+						<div class="col-md-3">
+							<div class="position-relative form-group">
+								<label for="email" class="">Email</label><input
+									name="email" id="email" placeholder=""
+									type="text" class="form-control">
+							</div>
+						</div>
+						
+					</div>
+					<div class="form-row">
+						<div class="col-md-3">
+							<div class="position-relative form-group">
+								<label for="password" class="">Password</label><input
+									name="password" id="password" placeholder=""
+									type="password" class="form-control">
+							</div>
+						</div>
+						
+					</div>
 					<button class="mt-2 btn btn-primary col-md-12" type="submit">Valider</button>
 				</form>
 			</div>

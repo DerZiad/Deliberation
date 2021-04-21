@@ -10,11 +10,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Etudiant;
+import com.ziad.models.InscriptionAdministrative;
 import com.ziad.models.InscriptionEnLigne;
 import com.ziad.models.Modulee;
 import com.ziad.models.Professeur;
 import com.ziad.models.User;
+import com.ziad.repositories.AnnneAcademiqueRepository;
 import com.ziad.repositories.EtudiantRepository;
 import com.ziad.repositories.ModuleRepository;
 import com.ziad.repositories.ProfesseurRepository;
@@ -33,6 +36,8 @@ public class DeliberationNewVersionApplication implements CommandLineRunner {
 	private ProfesseurRepository professeur_repository;
 	@Autowired
 	private ModuleRepository modulee_repo;
+	@Autowired
+	private AnnneAcademiqueRepository annee_academique_repo;
 	private String principal_password = "test123";
 
 	public static void main(String[] args) {
@@ -101,6 +106,11 @@ public class DeliberationNewVersionApplication implements CommandLineRunner {
 		//ie.setEtudiant(etudiant);
 		
 		etudiant_repository.save(etudiant);*/
+		AnneeAcademique anneeAcademique = new AnneeAcademique(2019,new ArrayList<InscriptionAdministrative>());
+		annee_academique_repo.save(anneeAcademique);
+		Etudiant etudiant = new Etudiant(principal_password, principal_password, principal_password, principal_password, principal_password, principal_password, principal_password, null, null, principal_password, principal_password, principal_password, null, principal_password, principal_password, principal_password, principal_password, principal_password, null, principal_password, null, null);
+		etudiant_repository.save(etudiant);
 	}
+
 
 }

@@ -58,21 +58,6 @@
 						</a></li>
 					</ul></li>
 				<li><a href="#" aria-expanded="false"> <i
-						class="metismenu-icon pe-7s-id"></i> Responsables <i
-						class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-				</a>
-					<ul class="mm-collapse" style="height: 7.04px;">
-						<li><a href="/admin/responsable/creer"
-							class="${ResponsableCreate}"> <i
-								class="metismenu-icon pe-7s-add-user"></i>Ajouter un
-								responsable
-						</a></li>
-						<li><a href="/admin/responsable/liste"
-							class="${listResponsable}"> <i
-								class="metismenu-icon pe-7s-menu"></i>Liste des responsables
-						</a></li>
-					</ul></li>
-				<li><a href="#" aria-expanded="false"> <i
 						class="metismenu-icon pe-7s-id"></i> Filières <i
 						class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
 				</a>
@@ -158,10 +143,6 @@
 								class="metismenu-icon pe-7s-menu"></i>Listes I. Pedagogique
 						</a></li>
 					</ul></li>
-				<li><a href="/admin/inscription/StructureEnseignement"
-					class="${StructureEnseignement}"> <i
-						class="metismenu-icon pe-7s-graph3"></i> Structure d'Enseignement
-				</a></li>
 				
 				<li><a href="#" aria-expanded="false"> <i
 						class="metismenu-icon pe-7s-id"></i> Note Element de module <i

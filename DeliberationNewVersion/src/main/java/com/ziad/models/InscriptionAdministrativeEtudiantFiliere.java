@@ -25,6 +25,9 @@ public class InscriptionAdministrativeEtudiantFiliere {
 		super();
 		this.composite_association_id = composite_association_id;
 	}
+	public InscriptionAdministrativeEtudiantFiliere() {
+		
+	}
 
 	public ComposedInscriptionAdministrativveEtudiantFiliereId getComposite_association_id() {
 		return composite_association_id;

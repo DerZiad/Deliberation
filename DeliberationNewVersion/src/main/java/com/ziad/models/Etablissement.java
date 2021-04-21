@@ -26,19 +26,16 @@ public class Etablissement {
 
 	@Column(name = "name")
 	private String nom_etablissement;
-	
-	@OneToMany(targetEntity = Filiere.class,mappedBy = "etablissement",cascade = CascadeType.ALL)
+
+	@OneToMany(targetEntity = Filiere.class, mappedBy = "etablissement", cascade = CascadeType.ALL)
 	@NotFound(action = NotFoundAction.IGNORE)
 	private List<Filiere> filieres = new ArrayList<Filiere>();
 	
-	
-	public Etablissement(String nom_etablissement, List<Filiere> filieres) {
-		super();
-		this.nom_etablissement = nom_etablissement;
-		this.filieres = filieres;
-	}
+	@OneToMany(mappedBy = "etablissement",cascade = CascadeType.ALL)
+	private List<InscriptionEnLigne> inscriptions_en_lignes = new ArrayList<InscriptionEnLigne>();
 
 	public Etablissement() {
+
 	}
 
 	public Etablissement(long id_etablissement, String nom_etablissement, List<Filiere> filieres) {
@@ -46,6 +43,31 @@ public class Etablissement {
 		this.id_etablissement = id_etablissement;
 		this.nom_etablissement = nom_etablissement;
 		this.filieres = filieres;
+	}
+
+
+	public Etablissement(long id_etablissement, String nom_etablissement, List<Filiere> filieres,
+			List<InscriptionEnLigne> inscriptions_en_lignes) {
+		super();
+		this.id_etablissement = id_etablissement;
+		this.nom_etablissement = nom_etablissement;
+		this.filieres = filieres;
+		this.inscriptions_en_lignes = inscriptions_en_lignes;
+	}
+
+	public Etablissement(String nom_etablissement, List<Filiere> filieres) {
+		super();
+		this.nom_etablissement = nom_etablissement;
+		this.filieres = filieres;
+	}
+	
+	
+	public Etablissement(String nom_etablissement, List<Filiere> filieres,
+			List<InscriptionEnLigne> inscriptions_en_lignes) {
+		super();
+		this.nom_etablissement = nom_etablissement;
+		this.filieres = filieres;
+		this.inscriptions_en_lignes = inscriptions_en_lignes;
 	}
 
 	public long getId_etablissement() {
@@ -70,6 +92,14 @@ public class Etablissement {
 
 	public void setFilieres(List<Filiere> filieres) {
 		this.filieres = filieres;
+	}
+
+	public List<InscriptionEnLigne> getInscriptions_en_lignes() {
+		return inscriptions_en_lignes;
+	}
+
+	public void setInscriptions_en_lignes(List<InscriptionEnLigne> inscriptions_en_lignes) {
+		this.inscriptions_en_lignes = inscriptions_en_lignes;
 	}
 
 }

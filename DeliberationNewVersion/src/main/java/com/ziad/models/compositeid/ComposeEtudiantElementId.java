@@ -31,7 +31,10 @@ public class ComposeEtudiantElementId implements Serializable {
 	@OneToOne
 	@JoinColumn(name = "etudiant")
 	private Etudiant etudiant;
-
+	
+	public ComposeEtudiantElementId() {
+		
+	}
 	public ComposeEtudiantElementId(Element element, Etudiant etudiant) {
 		super();
 		this.element = element;

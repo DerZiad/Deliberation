@@ -1,6 +1,9 @@
 package com.ziad.repositories;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.ziad.models.InscriptionEnLigne;
@@ -9,10 +12,10 @@ public interface InscriptionEnLigneRepository extends JpaRepository<InscriptionE
 	/*
 	@Query("select s from InscriptionEnLigne s")
 	List<InscriptionEnLigne> getAllInscriptionsEnLigne();
-	
+	*/
 	@Query("select s from InscriptionEnLigne s where s.accepted=1")
 	List<InscriptionEnLigne> getAllInscriptionsEnLigneAccepted();
-	
+	/*
 	@Query("select s from InscriptionEnLigne s where s.accepted!=0 and s.first_name_fr=:x and s.last_name_fr=:y")
 	InscriptionEnLigne findByNameAccepted(@Param("x")String first_name_fr,@Param("y")String last_name_fr);
 	

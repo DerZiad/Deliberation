@@ -41,7 +41,7 @@ public class Semestre {
 	@Column(name = "ordre")
 	private int ordre;
 	
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "semestre",cascade = CascadeType.ALL)
 	private List<Modulee> modules = new ArrayList<Modulee>();
 
 	public Semestre() {

@@ -20,7 +20,10 @@ public class ComposedEtudiantElementInscriptionPedagogique implements Serializab
 	private Etudiant etudiant;
 	@OneToOne(targetEntity = Element.class,cascade = CascadeType.PERSIST)
 	private Element element;
-
+	
+	public ComposedEtudiantElementInscriptionPedagogique() {
+		
+	}
 	public ComposedEtudiantElementInscriptionPedagogique(Etudiant etudiant, Element element) {
 		super();
 		this.etudiant = etudiant;

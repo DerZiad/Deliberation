@@ -33,12 +33,6 @@ public class InscriptionPedagogique {
 	@Column(name = "validation")
 	private Double validation;
 
-	@Column(name = "date_pre_inscription")
-	private Date date_pre_inscription;
-
-	@Column(name = "date_valid_inscription")
-	private Date date_valid_inscription;
-
 	// Par Module / Semestre / Element
 	@Column(name = "type_inscription")
 	@Enumerated(value = EnumType.STRING)
@@ -49,15 +43,12 @@ public class InscriptionPedagogique {
 	}
 
 	public InscriptionPedagogique(ComposedEtudiantElementInscriptionPedagogique id_inscription_pedagogique,
-			String annee_academique, Double note_semestre, Double validation, Date date_pre_inscription,
-			Date date_valid_inscription, TypeInscription type_inscription) {
+			String annee_academique, Double note_semestre, Double validation, TypeInscription type_inscription) {
 		super();
 		this.id_inscription_pedagogique = id_inscription_pedagogique;
 		this.annee_academique = annee_academique;
 		this.note_semestre = note_semestre;
 		this.validation = validation;
-		this.date_pre_inscription = date_pre_inscription;
-		this.date_valid_inscription = date_valid_inscription;
 		this.type_inscription = type_inscription;
 	}
 
@@ -93,23 +84,6 @@ public class InscriptionPedagogique {
 	public void setValidation(Double validation) {
 		this.validation = validation;
 	}
-
-	public Date getDate_pre_inscription() {
-		return date_pre_inscription;
-	}
-
-	public void setDate_pre_inscription(Date date_pre_inscription) {
-		this.date_pre_inscription = date_pre_inscription;
-	}
-
-	public Date getDate_valid_inscription() {
-		return date_valid_inscription;
-	}
-
-	public void setDate_valid_inscription(Date date_valid_inscription) {
-		this.date_valid_inscription = date_valid_inscription;
-	}
-
 	public TypeInscription getType_inscription() {
 		return type_inscription;
 	}

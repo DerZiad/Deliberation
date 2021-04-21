@@ -124,6 +124,8 @@ public class Etudiant {
 	@Column(name = "registration_date")
 	private Date registration_date;
 
+	@Column(name = "email")
+	private String email;
 	/***
 	 * Inscription En ligne
 	 */
@@ -143,8 +145,8 @@ public class Etudiant {
 	public Etudiant(String massar_edu, String first_name_fr, String first_name_ar, String last_name_fr,
 			String last_name_ar, String cne, String nationality, Gender gender, Date birth_date, String birth_place,
 			String city, String province, Integer bac_year, String bac_type, String mention, String high_school,
-			String bac_place, String academy, Date registration_date, InscriptionEnLigne inscription_en_ligne,
-			User user) {
+			String bac_place, String academy, Date registration_date, String email,
+			InscriptionEnLigne inscription_en_ligne, User user) {
 		super();
 		this.massar_edu = massar_edu;
 		this.first_name_fr = first_name_fr;
@@ -165,6 +167,7 @@ public class Etudiant {
 		this.bac_place = bac_place;
 		this.academy = academy;
 		this.registration_date = registration_date;
+		this.email = email;
 		this.inscription_en_ligne = inscription_en_ligne;
 		this.user = user;
 	}
@@ -172,7 +175,7 @@ public class Etudiant {
 	public Etudiant(long id_etudiant, String massar_edu, String first_name_fr, String first_name_ar,
 			String last_name_fr, String last_name_ar, String cne, String nationality, Gender gender, Date birth_date,
 			String birth_place, String city, String province, Integer bac_year, String bac_type, String mention,
-			String high_school, String bac_place, String academy, Date registration_date,
+			String high_school, String bac_place, String academy, Date registration_date, String email,
 			InscriptionEnLigne inscription_en_ligne, User user) {
 		super();
 		this.id_etudiant = id_etudiant;
@@ -195,6 +198,7 @@ public class Etudiant {
 		this.bac_place = bac_place;
 		this.academy = academy;
 		this.registration_date = registration_date;
+		this.email = email;
 		this.inscription_en_ligne = inscription_en_ligne;
 		this.user = user;
 	}
@@ -359,6 +363,14 @@ public class Etudiant {
 		this.registration_date = registration_date;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public InscriptionEnLigne getInscription_en_ligne() {
 		return inscription_en_ligne;
 	}
@@ -374,7 +386,5 @@ public class Etudiant {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
-	
 
 }

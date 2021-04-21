@@ -21,7 +21,7 @@ public class InscriptionAdministrative {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_inscription_administrative")
-	private long id_inscription_administrative;
+	private Long id_inscription_administrative;
 
 	@ManyToOne(targetEntity = AnneeAcademique.class, cascade = CascadeType.ALL)
 	private AnneeAcademique annee_academique;
@@ -53,12 +53,6 @@ public class InscriptionAdministrative {
 	@Lob
 	private byte[] cin;
 
-	@Lob
-	private byte[] document1;
-
-	@Lob
-	private byte[] document2;
-
 	private String encodedPhoto;
 
 	private String encodedBac;
@@ -72,45 +66,14 @@ public class InscriptionAdministrative {
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<DocumentDePlus> documents;
 
-	@OneToMany(targetEntity = Adresse.class,cascade = CascadeType.ALL,mappedBy = "inscription_administrative")
-	private List<Adresse> adresses;
-
 	public InscriptionAdministrative() {
 
 	}
 
-	public InscriptionAdministrative(AnneeAcademique annee_academique, Date date_pre_inscription,
-			Date date_valid_inscription, String operateur, boolean bourse, byte[] photo, byte[] bac, byte[] releve_note,
-			byte[] acte_naissance, byte[] cin, byte[] document1, byte[] document2, String encodedPhoto,
-			String encodedBac, String encodedRv, String encodedAn, String encodedCin, List<DocumentDePlus> documents,
-			List<Adresse> adresses) {
-		super();
-		this.annee_academique = annee_academique;
-		this.date_pre_inscription = date_pre_inscription;
-		this.date_valid_inscription = date_valid_inscription;
-		this.operateur = operateur;
-		this.bourse = bourse;
-		this.photo = photo;
-		this.bac = bac;
-		this.releve_note = releve_note;
-		this.acte_naissance = acte_naissance;
-		this.cin = cin;
-		this.document1 = document1;
-		this.document2 = document2;
-		this.encodedPhoto = encodedPhoto;
-		this.encodedBac = encodedBac;
-		this.encodedRv = encodedRv;
-		this.encodedAn = encodedAn;
-		this.encodedCin = encodedCin;
-		this.documents = documents;
-		this.adresses = adresses;
-	}
-
-	public InscriptionAdministrative(long id_inscription_administrative, AnneeAcademique annee_academique,
+	public InscriptionAdministrative(Long id_inscription_administrative, AnneeAcademique annee_academique,
 			Date date_pre_inscription, Date date_valid_inscription, String operateur, boolean bourse, byte[] photo,
-			byte[] bac, byte[] releve_note, byte[] acte_naissance, byte[] cin, byte[] document1, byte[] document2,
-			String encodedPhoto, String encodedBac, String encodedRv, String encodedAn, String encodedCin,
-			List<DocumentDePlus> documents, List<Adresse> adresses) {
+			byte[] bac, byte[] releve_note, byte[] acte_naissance, byte[] cin, String encodedPhoto, String encodedBac,
+			String encodedRv, String encodedAn, String encodedCin, List<DocumentDePlus> documents) {
 		super();
 		this.id_inscription_administrative = id_inscription_administrative;
 		this.annee_academique = annee_academique;
@@ -123,22 +86,42 @@ public class InscriptionAdministrative {
 		this.releve_note = releve_note;
 		this.acte_naissance = acte_naissance;
 		this.cin = cin;
-		this.document1 = document1;
-		this.document2 = document2;
 		this.encodedPhoto = encodedPhoto;
 		this.encodedBac = encodedBac;
 		this.encodedRv = encodedRv;
 		this.encodedAn = encodedAn;
 		this.encodedCin = encodedCin;
 		this.documents = documents;
-		this.adresses = adresses;
 	}
 
-	public long getId_inscription_administrative() {
+	public InscriptionAdministrative(AnneeAcademique annee_academique, Date date_pre_inscription,
+			Date date_valid_inscription, String operateur, boolean bourse, byte[] photo, byte[] bac, byte[] releve_note,
+			byte[] acte_naissance, byte[] cin, String encodedPhoto, String encodedBac, String encodedRv,
+			String encodedAn, String encodedCin, List<DocumentDePlus> documents) {
+		super();
+		this.annee_academique = annee_academique;
+		this.date_pre_inscription = date_pre_inscription;
+		this.date_valid_inscription = date_valid_inscription;
+		this.operateur = operateur;
+		this.bourse = bourse;
+		this.photo = photo;
+		this.bac = bac;
+		this.releve_note = releve_note;
+		this.acte_naissance = acte_naissance;
+		this.cin = cin;
+		this.encodedPhoto = encodedPhoto;
+		this.encodedBac = encodedBac;
+		this.encodedRv = encodedRv;
+		this.encodedAn = encodedAn;
+		this.encodedCin = encodedCin;
+		this.documents = documents;
+	}
+
+	public Long getId_inscription_administrative() {
 		return id_inscription_administrative;
 	}
 
-	public void setId_inscription_administrative(long id_inscription_administrative) {
+	public void setId_inscription_administrative(Long id_inscription_administrative) {
 		this.id_inscription_administrative = id_inscription_administrative;
 	}
 
@@ -222,22 +205,6 @@ public class InscriptionAdministrative {
 		this.cin = cin;
 	}
 
-	public byte[] getDocument1() {
-		return document1;
-	}
-
-	public void setDocument1(byte[] document1) {
-		this.document1 = document1;
-	}
-
-	public byte[] getDocument2() {
-		return document2;
-	}
-
-	public void setDocument2(byte[] document2) {
-		this.document2 = document2;
-	}
-
 	public String getEncodedPhoto() {
 		return encodedPhoto;
 	}
@@ -284,14 +251,6 @@ public class InscriptionAdministrative {
 
 	public void setDocuments(List<DocumentDePlus> documents) {
 		this.documents = documents;
-	}
-
-	public List<Adresse> getAdresses() {
-		return adresses;
-	}
-
-	public void setAdresses(List<Adresse> adresses) {
-		this.adresses = adresses;
 	}
 
 }
