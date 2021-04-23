@@ -5,7 +5,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="http://kwonnam.pe.kr/jsp/template-inheritance"
 	prefix="layout"%>
-<layout:extends name="../layout.jsp">
+<layout:extends name="layout.jsp">
 	<layout:put block="content" type="REPLACE">
 
 		<div class="main-card mb-3 card">
@@ -172,9 +172,13 @@
 						</div>
 						<div class="col-md-3">
 							<div class="position-relative form-group">
-								<label for="establishment" class="">établissement</label><input
-									name="establishment" id="establishment" placeholder=""
-									type="text" class="form-control">
+								<label for="professeur_id" class="">Etablissement</label> <select name="etablissement" id="exampleSelect"
+									class="form-control">
+									<c:forEach var="etablissement" items="${etablissements }">
+										<option value="${etablissement.id_etablissement}">
+											${etablissement.nom_etablissement}</option>
+									</c:forEach>
+								</select>
 							</div>
 						</div>
 					</div>
@@ -184,16 +188,6 @@
 								<label for="email" class="">Email</label><input
 									name="email" id="email" placeholder=""
 									type="text" class="form-control">
-							</div>
-						</div>
-						
-					</div>
-					<div class="form-row">
-						<div class="col-md-3">
-							<div class="position-relative form-group">
-								<label for="password" class="">Password</label><input
-									name="password" id="password" placeholder=""
-									type="password" class="form-control">
 							</div>
 						</div>
 						

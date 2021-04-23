@@ -1,25 +1,23 @@
 package com.ziad.principale.controllers;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
 import com.ziad.enums.Gender;
-import com.ziad.models.Etudiant;
+import com.ziad.models.Etablissement;
 import com.ziad.models.Historique;
 import com.ziad.models.InscriptionEnLigne;
-import com.ziad.models.User;
-import com.ziad.repositories.EtudiantRepository;
+import com.ziad.repositories.EtablissementRepository;
 import com.ziad.repositories.HistoriqueRepository;
 import com.ziad.repositories.InscriptionEnLigneRepository;
-import com.ziad.repositories.UserRepository;
 
 @Service
 @Primary
@@ -32,9 +30,9 @@ public class InscriptionService implements InscriptionInterface {
 
 	@Autowired
 	private HistoriqueRepository historique_repository;
-
+	
 	@Autowired
-	private UserRepository user_repository;
+	private EtablissementRepository etablissement_repository;
 	
 	
 	private final static String SERVER_LINK = "http://localhost:8080";
@@ -44,8 +42,9 @@ public class InscriptionService implements InscriptionInterface {
 	public void createEtudiant(String last_name_fr, String last_name_ar, String first_name_fr, String first_name_ar,
 			String massar_edu, String cne, String nationality, Gender gender, String birth_date, String birth_place,
 			String city, String province, Integer bac_year, String bac_type, String mention, String high_school,
-			String bac_place, String academy,String email) throws EntityNotFoundException{
+			String bac_place, String academy,String email,Long id_etablissement) throws EntityNotFoundException,MessagingException{
 		InscriptionEnLigne inscription_en_ligne = new InscriptionEnLigne();
+		Etablissement etablissement = etablissement_repository.getOne(id_etablissement);
 		inscription_en_ligne.setLast_name_fr(last_name_fr);
 		inscription_en_ligne.setLast_name_ar(last_name_ar);
 		inscription_en_ligne.setFirst_name_fr(first_name_fr);
@@ -67,10 +66,11 @@ public class InscriptionService implements InscriptionInterface {
 		inscription_en_ligne.setRegistration_date(new java.util.Date());
 		inscription_en_ligne.setEmail(email);
 		inscription_en_ligne.setAccepted(0);
+		inscription_en_ligne.setEtablissement(etablissement);
 		inscription_en_ligne_repository.save(inscription_en_ligne);
 		historique_repository
 				.save(new Historique("etudiant " + first_name_fr + " " + last_name_fr + " créé", new java.util.Date()));
-		mailer.sendEmail(inscription_en_ligne.getEmail(),SERVER_LINK + "/student/confirmation/" + inscription_en_ligne.getId_inscription_en_ligne(),"Confirmation email");	
+		mailer.sendEmail(inscription_en_ligne.getFirst_name_fr() + " " + inscription_en_ligne.getLast_name_fr(),inscription_en_ligne.getEmail(),"Veuillez confirmer votre inscription en ligne","Confirmation email",SERVER_LINK + "/student/confirmation/" + inscription_en_ligne.getId_inscription_en_ligne());	
 	}
 
 
@@ -95,5 +95,13 @@ public class InscriptionService implements InscriptionInterface {
 		InscriptionEnLigne inscription_en_ligne = inscription_en_ligne_repository.getOne(id_inscription_en_ligne);
 		inscription_en_ligne.setAccepted(1);
 		inscription_en_ligne_repository.save(inscription_en_ligne);
+	}
+
+
+	@Override
+	public List<Etablissement> listerEtablissements() throws DataNotFoundExceptions {
+		List<Etablissement> etablissements = etablissement_repository.findAll();
+		if(etablissements.size() == 0) throw new DataNotFoundExceptions("La liste des établissements est vide");
+		return etablissements;
 	}
 }

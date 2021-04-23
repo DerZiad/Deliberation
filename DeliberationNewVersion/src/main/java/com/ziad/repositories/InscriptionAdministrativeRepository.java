@@ -4,8 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.ziad.models.InscriptionAdministrative;
+import com.ziad.models.compositeid.ComposedInscriptionAdministrative;
 @Repository
-public interface InscriptionAdministrativeRepository extends JpaRepository<InscriptionAdministrative, Long>{
+public interface InscriptionAdministrativeRepository extends JpaRepository<InscriptionAdministrative, ComposedInscriptionAdministrative>{
 	/*
 	@Query("select s from InscriptionAdministrative s")
 	List<InscriptionAdministrative> getAllInscriptionsAdministrative();

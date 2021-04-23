@@ -12,9 +12,9 @@
 			<div class="card-body">
 				<h5 class="card-title">Liste des inscriptions d'étudiants</h5>
 				<div class="tab">
-					<c:forEach var="f" items="${f}">
+					<c:forEach var="filiere" items="${filieres}">
 						<button class="mb-2 mr-2 btn btn-primary"
-							onclick="openCity(event, '${f.nom_filiere}')">${f.nom_filiere}</button>
+							onclick="openCity(event, '${filiere.nom_filiere}')">${filiere.nom_filiere}</button>
 					</c:forEach>
 				</div>
 				<div class="col-md-6">
@@ -34,9 +34,9 @@
 					</div>
 
 				</div>
-				<c:forEach var="f" items="${f}">
+				<c:forEach var="filiere" items="${filieres}">
 
-					<div id="${f.nom_filiere}" class="tabcontent">
+					<div id="${filiere.nom_filiere}" class="tabcontent">
 						<table class="mb-0 table table-hover" id="myTable">
 							<thead>
 								<tr>
@@ -50,38 +50,42 @@
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach var="i" items="${Inscription}">
+								<c:forEach var="inscriptionAssociative"
+									items="${InscriptionAssociative}">
 									<tr>
-										<c:if test="${f.id_filiere==i.filiere.id_filiere }">
+										<c:if
+											test="${filiere.id_filiere==inscriptionAssociative.composite_association_id.filiere.id_filiere }">
 											<td
-												onclick="window.location.href ='/admin/ProfilEtudiant/${i.composite_association_id.inscription_administrative.id_inscription_administrative}'">
-												<a style="color: black"> ${i.composite_association_id.etudiant.first_name_fr}
-													${i.composite_association_id.etudiant.last_name_fr}</a>
-											</td>
-											<td
-												onclick="window.location.href ='/admin/ProfilEtudiant/${i.composite_association_id.inscription_administrative.id_inscription_administrative}'">
-												<a style="color: black"> ${i.composite_association_id.inscription_administrative.annee_academique.annee_academique}</a>
-											</td>
-											<td
-												onclick="window.location.href ='/admin/ProfilEtudiant/${i.composite_association_id.inscription_administrative.id_inscription_administrative}'">
+												onclick="window.location.href ='/admin/ProfilEtudiant/${inscriptionAssociative.composite_association_id.filiere.id_filiere}/${inscriptionAssociative.composite_association_id.etudiant.id_etudiant }">
 												<a style="color: black">
-													${i.composite_association_id.inscription_administrative.date_pre_inscription.toString().substring(0,10)}</a>
+													${inscriptionAssociative.composite_association_id.etudiant.first_name_fr}
+													${inscriptionAssociative.composite_association_id.etudiant.last_name_fr}</a>
 											</td>
 											<td
-												onclick="window.location.href ='/admin/ProfilEtudiant/${i.composite_association_id.inscription_administrative.id_inscription_administrative}'">
+												onclick="window.location.href ='/admin/ProfilEtudiant/${inscriptionAssociative.composite_association_id.filiere.id_filiere}/${inscriptionAssociative.composite_association_id.etudiant.id_etudiant }">
 												<a style="color: black">
-													${i.composite_association_id.inscription_administrative.date_valid_inscription.toString().substring(0,10)}</a>
+													${inscriptionAssociative.annee_academique.annee_academique}</a>
+											</td>
+											<td
+												onclick="window.location.href ='/admin/ProfilEtudiant/${inscriptionAssociative.composite_association_id.filiere.id_filiere}/${inscriptionAssociative.composite_association_id.etudiant.id_etudiant }">
+												<a style="color: black">
+													${inscriptionAssociative.date_pre_inscription.toString().substring(0,10)}</a>
+											</td>
+											<td
+												onclick="window.location.href ='/admin/ProfilEtudiant/${inscriptionAssociative.composite_association_id.filiere.id_filiere}/${inscriptionAssociative.composite_association_id.etudiant.id_etudiant }">
+												<a style="color: black">
+													${inscriptionAssociative.date_valid_inscription.toString().substring(0,10)}</a>
 											</td>
 
 
 
 											<td><i class="fa fa-fw" aria-hidden="true"
 												title="Copy to use pencil-square-o"><a
-													href="PageModifierInscriptionAdministrative?id=${i.composite_association_id.inscription_administrative.id_inscription_administrative}"
+													href="PageModifierInscriptionAdministrative/${inscriptionAssociative.composite_association_id.filiere.id_filiere}/${inscriptionAssociative.composite_association_id.etudiant.id_etudiant }"
 													style="font-size: 20px;"></a></i></td>
 											<td><i class="fa fa-fw" aria-hidden="true"
 												title="Copy to use trash"> <a
-													href="SupprimerInscriptionAdministrative/${i.composite_association_id.inscription_administrative.id_inscription_administrative}"
+													href="SupprimerInscriptionAdministrative/${inscriptionAssociative.composite_association_id.filiere.id_filiere}/${inscriptionAssociative.composite_association_id.etudiant.id_etudiant }"
 													style="color: red; font-size: 20px;"></a>
 											</i></td>
 										</c:if>

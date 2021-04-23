@@ -97,20 +97,6 @@
 				<li><a href="/admin/student/list" class="${listStudent}"> <i
 						class="metismenu-icon pe-7s-study"></i> Liste des étudiants
 				</a></li>
-				<li><a href="#" aria-expanded="false"> <i
-						class="metismenu-icon pe-7s-id"></i> Inscription EnLigne <i
-						class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-				</a>
-					<ul class="mm-collapse" style="height: 7.04px;">
-						<li><a href="/admin/student/InscriptionEnLigne"
-							class="${InscriptionEnLigne}"> <i
-								class="metismenu-icon pe-7s-add-user"></i>Ajouter I. En ligne
-						</a></li>
-						<li><a href="/admin/student/ListInscriptionEnligne"
-							class="${listInscriptions}"> <i
-								class="metismenu-icon pe-7s-menu"></i>Liste I. en ligne
-						</a></li>
-					</ul></li>
 
 				<li><a href="#" aria-expanded="false"> <i
 						class="metismenu-icon pe-7s-id"></i> Inscription Administrative <i
@@ -123,7 +109,7 @@
 								class="metismenu-icon pe-7s-add-user"></i>Ajouter I.
 								Administrative
 						</a></li>
-						<li><a href="/inscription/ListInscriptionAdministrative"
+						<li><a href="/admin/inscription/ListInscriptionAdministrative"
 							class="${listAdministartive}"> <i
 								class="metismenu-icon pe-7s-menu"></i> Listes I. Administratives
 						</a></li>
@@ -134,11 +120,11 @@
 						class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
 				</a>
 					<ul class="mm-collapse" style="height: 7.04px;">
-						<li><a href="/inscription/MenuPedagogique"
+						<li><a href="/admin/inscription/MenuPedagogique"
 							class="${InscriptionPedagogique}"> <i
 								class="metismenu-icon pe-7s-add-user"></i>Ajouter I. Pédagogique
 						</a></li>
-						<li><a href="/inscription/menuListPedagogique"
+						<li><a href="/admin/inscription/menuListPedagogique"
 							class="${listPedagogique}"> <i
 								class="metismenu-icon pe-7s-menu"></i>Listes I. Pedagogique
 						</a></li>

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,14 +15,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.ziad.models.compositeid.ComposedInscriptionAdministrative;
+
 @Entity
 @Table(name = "InscriptionAdministrative")
 public class InscriptionAdministrative {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id_inscription_administrative")
-	private Long id_inscription_administrative;
+	@EmbeddedId
+	private ComposedInscriptionAdministrative composite_association_id;
 
 	@ManyToOne(targetEntity = AnneeAcademique.class, cascade = CascadeType.ALL)
 	private AnneeAcademique annee_academique;
@@ -70,30 +71,6 @@ public class InscriptionAdministrative {
 
 	}
 
-	public InscriptionAdministrative(Long id_inscription_administrative, AnneeAcademique annee_academique,
-			Date date_pre_inscription, Date date_valid_inscription, String operateur, boolean bourse, byte[] photo,
-			byte[] bac, byte[] releve_note, byte[] acte_naissance, byte[] cin, String encodedPhoto, String encodedBac,
-			String encodedRv, String encodedAn, String encodedCin, List<DocumentDePlus> documents) {
-		super();
-		this.id_inscription_administrative = id_inscription_administrative;
-		this.annee_academique = annee_academique;
-		this.date_pre_inscription = date_pre_inscription;
-		this.date_valid_inscription = date_valid_inscription;
-		this.operateur = operateur;
-		this.bourse = bourse;
-		this.photo = photo;
-		this.bac = bac;
-		this.releve_note = releve_note;
-		this.acte_naissance = acte_naissance;
-		this.cin = cin;
-		this.encodedPhoto = encodedPhoto;
-		this.encodedBac = encodedBac;
-		this.encodedRv = encodedRv;
-		this.encodedAn = encodedAn;
-		this.encodedCin = encodedCin;
-		this.documents = documents;
-	}
-
 	public InscriptionAdministrative(AnneeAcademique annee_academique, Date date_pre_inscription,
 			Date date_valid_inscription, String operateur, boolean bourse, byte[] photo, byte[] bac, byte[] releve_note,
 			byte[] acte_naissance, byte[] cin, String encodedPhoto, String encodedBac, String encodedRv,
@@ -117,12 +94,29 @@ public class InscriptionAdministrative {
 		this.documents = documents;
 	}
 
-	public Long getId_inscription_administrative() {
-		return id_inscription_administrative;
-	}
-
-	public void setId_inscription_administrative(Long id_inscription_administrative) {
-		this.id_inscription_administrative = id_inscription_administrative;
+	public InscriptionAdministrative(ComposedInscriptionAdministrative composite_association_id,
+			AnneeAcademique annee_academique, Date date_pre_inscription, Date date_valid_inscription, String operateur,
+			boolean bourse, byte[] photo, byte[] bac, byte[] releve_note, byte[] acte_naissance, byte[] cin,
+			String encodedPhoto, String encodedBac, String encodedRv, String encodedAn, String encodedCin,
+			List<DocumentDePlus> documents) {
+		super();
+		this.composite_association_id = composite_association_id;
+		this.annee_academique = annee_academique;
+		this.date_pre_inscription = date_pre_inscription;
+		this.date_valid_inscription = date_valid_inscription;
+		this.operateur = operateur;
+		this.bourse = bourse;
+		this.photo = photo;
+		this.bac = bac;
+		this.releve_note = releve_note;
+		this.acte_naissance = acte_naissance;
+		this.cin = cin;
+		this.encodedPhoto = encodedPhoto;
+		this.encodedBac = encodedBac;
+		this.encodedRv = encodedRv;
+		this.encodedAn = encodedAn;
+		this.encodedCin = encodedCin;
+		this.documents = documents;
 	}
 
 	public AnneeAcademique getAnnee_academique() {
@@ -251,6 +245,30 @@ public class InscriptionAdministrative {
 
 	public void setDocuments(List<DocumentDePlus> documents) {
 		this.documents = documents;
+	}
+
+	public Etudiant getEtudiant() {
+		return composite_association_id.getEtudiant();
+	}
+
+	public void setEtudiant(Etudiant etudiant) {
+		composite_association_id.setEtudiant(etudiant);
+	}
+
+	public Filiere getFiliere() {
+		return composite_association_id.getFiliere();
+	}
+
+	public void setFiliere(Filiere filiere) {
+		composite_association_id.setFiliere(filiere);
+	}
+
+	public ComposedInscriptionAdministrative getComposite_association_id() {
+		return composite_association_id;
+	}
+
+	public void setComposite_association_id(ComposedInscriptionAdministrative composite_association_id) {
+		this.composite_association_id = composite_association_id;
 	}
 
 }

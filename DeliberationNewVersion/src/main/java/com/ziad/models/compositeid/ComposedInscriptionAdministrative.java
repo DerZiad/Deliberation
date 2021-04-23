@@ -11,7 +11,7 @@ import com.ziad.models.Filiere;
 import com.ziad.models.InscriptionAdministrative;
 
 @Embeddable
-public class ComposedInscriptionAdministrativveEtudiantFiliereId implements Serializable {
+public class ComposedInscriptionAdministrative implements Serializable {
 	/**
 	 * 
 	 * Classe qui se compose des 3 Etudiants
@@ -22,20 +22,16 @@ public class ComposedInscriptionAdministrativveEtudiantFiliereId implements Seri
 	@OneToOne(cascade = CascadeType.ALL)
 	private Etudiant etudiant;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	private InscriptionAdministrative inscription_administrative;
-
 	@OneToOne(cascade = CascadeType.DETACH)
 	private Filiere filiere;
-	public ComposedInscriptionAdministrativveEtudiantFiliereId() {
-		
+
+	public ComposedInscriptionAdministrative() {
+
 	}
-	
-	public ComposedInscriptionAdministrativveEtudiantFiliereId(Etudiant etudiant,
-			InscriptionAdministrative inscription_administrative, Filiere filiere) {
+
+	public ComposedInscriptionAdministrative(Etudiant etudiant, Filiere filiere) {
 		super();
 		this.etudiant = etudiant;
-		this.inscription_administrative = inscription_administrative;
 		this.filiere = filiere;
 	}
 
@@ -45,14 +41,6 @@ public class ComposedInscriptionAdministrativveEtudiantFiliereId implements Seri
 
 	public void setEtudiant(Etudiant etudiant) {
 		this.etudiant = etudiant;
-	}
-
-	public InscriptionAdministrative getInscription_administrative() {
-		return inscription_administrative;
-	}
-
-	public void setInscription_administrative(InscriptionAdministrative inscription_administrative) {
-		this.inscription_administrative = inscription_administrative;
 	}
 
 	public Filiere getFiliere() {
