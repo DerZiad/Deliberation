@@ -7,11 +7,14 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,6 +45,8 @@ import com.ziad.repositories.HistoriqueRepository;
 import com.ziad.repositories.InscriptionAdministrativeRepository;
 import com.ziad.repositories.InscriptionEnLigneRepository;
 import com.ziad.repositories.InscriptionPedagogiqueRepository;
+import com.ziad.services.CSVReaderOException;
+import com.ziad.services.ExcelToDbService;
 
 @Service
 @Primary
@@ -65,7 +70,8 @@ public class InscriptionAdministrativeNormalService implements CrudInscriptionAd
 	private AnnneAcademiqueRepository annee_academique_repository;
 	@Autowired
 	private InscriptionAdministrativeRepository inscription_admistrative_repository;
-
+	@Autowired
+	private ExcelToDbService excel_service;
 	@Override
 	public ArrayList<Object> prepareInscriptionDatas() throws DataNotFoundExceptions {
 		List<InscriptionEnLigne> etudiants = inscriptionEnLigne.getAllInscriptionsEnLigneAccepted();
@@ -253,9 +259,8 @@ public class InscriptionAdministrativeNormalService implements CrudInscriptionAd
 
 	@Override
 	public void modifierInscriptionAdministrative(Date date_pre_inscription, Date date_valid_inscription,
-			Long id_etudiant, Long id_filiere,MultipartFile photo, MultipartFile bac,
-			MultipartFile relevee_note, MultipartFile acte_de_naissance, MultipartFile cin, Long id_annee_academique)
-			throws IOException {
+			Long id_etudiant, Long id_filiere, MultipartFile photo, MultipartFile bac, MultipartFile relevee_note,
+			MultipartFile acte_de_naissance, MultipartFile cin, Long id_annee_academique) throws IOException {
 		Etudiant etudiant = etudiantRepository.getOne(id_etudiant);
 		Filiere filiere = filiereRepository.getOne(id_filiere);
 
@@ -306,6 +311,150 @@ public class InscriptionAdministrativeNormalService implements CrudInscriptionAd
 		besoins.add(filiereRepository.findAll());
 		besoins.add(annee_academique_repository.findAll());
 		return besoins;
+	}
+	@Override
+	public List<String> uploadInscriptionAdministrative(MultipartFile file) throws CSVReaderOException,IOException,FormatReaderException{
+		List<String> erreurs = new ArrayList<String>();
+		Iterator<Row> rows = excel_service.readInscriptionAdministrative(file);
+		rows.next();
+		while(rows.hasNext()) {
+			try {
+				Row row = rows.next();
+				String annee_academique_chaine = row.getCell(0).getStringCellValue();
+				String massar = row.getCell(1).getStringCellValue();
+				String nom = row.getCell(2).getStringCellValue();
+				String prenom = row.getCell(3).getStringCellValue();
+				String filiere = row.getCell(4).getStringCellValue();
+				Double bourse = row.getCell(5).getNumericCellValue();
+
+				/***
+				 * Recherche la filiere , j'utilise pas de jointure car l'utilisateur peut
+				 * entrer la lettre de la filiere en miniscule
+				 */
+				List<Filiere> filieres = filiereRepository.findAll();
+				List<Filiere> filieres_filtred = filieres.stream()
+						.filter(filiereI -> filiereI.getNom_filiere().toLowerCase().equals(filiere.toLowerCase()))
+						.collect(Collectors.toList());
+				Filiere filiereObject = filieres_filtred.get(0);
+
+				/**
+				 * Meme chose pour inscription en ligne et annee academique
+				 */
+				List<InscriptionEnLigne> inscriptions_en_lignes = inscriptionEnLigne.findAll();
+				List<InscriptionEnLigne> inscriptions_en_lignes_filtered = inscriptions_en_lignes.stream()
+						.filter(inscription -> inscription.getFirst_name_fr().toLowerCase().equals(nom.toLowerCase())
+								&& inscription.getLast_name_fr().toLowerCase().equals(prenom.toLowerCase())
+								&& inscription.getMassar_edu().toLowerCase().equals(massar.toLowerCase()))
+						.collect(Collectors.toList());
+
+				InscriptionEnLigne inscrptionEnLigneObject = inscriptions_en_lignes_filtered.get(0);
+				Integer annee = convertAnnee(annee_academique_chaine);
+				List<AnneeAcademique> annees_academiques = annee_academique_repository.findAll();
+				List<AnneeAcademique> annees_academiques_filtered = annees_academiques.stream()
+						.filter(annee_academique -> annee_academique.getAnnee_academique() == annee)
+						.collect(Collectors.toList());
+				AnneeAcademique annee_academique = null;
+				if (annees_academiques_filtered.size() != 0) {
+					annee_academique = annees_academiques_filtered.get(0);
+				} else {
+					annee_academique = new AnneeAcademique(annee, new ArrayList<InscriptionAdministrative>());
+					annee_academique_repository.save(annee_academique);
+				}
+
+				InscriptionAdministrative inscription_administrative = new InscriptionAdministrative();
+				Etudiant etudiant = new Etudiant();
+
+				ComposedInscriptionAdministrative id_compose = new ComposedInscriptionAdministrative(etudiant, filiereObject);
+
+				etudiant.setAcademy(inscrptionEnLigneObject.getAcademy());
+				etudiant.setBac_place(inscrptionEnLigneObject.getBac_place());
+				etudiant.setBac_type(inscrptionEnLigneObject.getBac_type());
+				etudiant.setBac_year(inscrptionEnLigneObject.getBac_year());
+				etudiant.setBirth_date(inscrptionEnLigneObject.getBirth_date());
+				etudiant.setBirth_place(inscrptionEnLigneObject.getBirth_place());
+				etudiant.setCity(inscrptionEnLigneObject.getCity());
+				etudiant.setCne(inscrptionEnLigneObject.getCne());
+				etudiant.setFirst_name_ar(inscrptionEnLigneObject.getFirst_name_ar());
+				etudiant.setFirst_name_fr(inscrptionEnLigneObject.getFirst_name_fr());
+				etudiant.setGender(inscrptionEnLigneObject.getGender());
+				etudiant.setHigh_school(inscrptionEnLigneObject.getHigh_school());
+				etudiant.setLast_name_ar(inscrptionEnLigneObject.getLast_name_ar());
+				etudiant.setLast_name_fr(inscrptionEnLigneObject.getLast_name_fr());
+				etudiant.setMassar_edu(inscrptionEnLigneObject.getMassar_edu());
+				etudiant.setMention(inscrptionEnLigneObject.getMention());
+				etudiant.setNationality(inscrptionEnLigneObject.getNationality());
+				etudiant.setProvince(inscrptionEnLigneObject.getProvince());
+				etudiant.setRegistration_date(inscrptionEnLigneObject.getRegistration_date());
+				etudiant.setEmail(inscrptionEnLigneObject.getEmail());
+				/**
+				 * Créeation de l'utilistaeur
+				 */
+				User user = new User();
+				user.setUsername(etudiant.getEmail());
+				// On met le mot de passe son prenom pour le changer apres
+				user.setPassword(passwordEncoder.encode(inscrptionEnLigneObject.getLast_name_fr().toLowerCase()));
+				user.setActive(1);
+				user.addRole(Role.ETUDIANT);
+				etudiant.setUser(user);
+				etudiant.setInscription_en_ligne(inscrptionEnLigneObject);
+				inscrptionEnLigneObject.setEtudiant(etudiant);
+				etudiant.setInscription_en_ligne(inscrptionEnLigneObject);
+				etudiantRepository.save(etudiant);
+				inscriptionEnLigne.save(inscrptionEnLigneObject);
+
+				// --------------------partie creation d inscrip
+				// administrative----------------------------//
+
+				inscription_administrative.setAnnee_academique(annee_academique);
+				inscription_administrative.setDate_pre_inscription(inscrptionEnLigneObject.getRegistration_date());
+				LocalDate ld = LocalDate.now();
+				ZoneId defaultZoneId = ZoneId.systemDefault();
+				java.util.Date date = Date.from(ld.atStartOfDay(defaultZoneId).toInstant());
+				inscription_administrative.setDate_valid_inscription(date);
+				inscription_administrative.setComposite_association_id(id_compose);
+				inscriptionAdministrative.save(inscription_administrative);
+
+				/*
+				 * Inscription pédagogique automatique
+				 */
+				List<Etape> etapes = filiereObject.getEtapes();
+				Etape firststep = etapes.get(0);
+
+				for (Semestre semestre : firststep.getSemestres()) {
+					for (Modulee module : semestre.getModules()) {
+						for (Element element : module.getElements()) {
+							ComposedEtudiantElementInscriptionPedagogique compsedId = new ComposedEtudiantElementInscriptionPedagogique(
+									etudiant, element);
+							InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(compsedId, "", 0d, 0d,
+									TypeInscription.ELEMENT);
+							this.inscriptionPedagogiqueRepository.save(inscription_pedagogique);
+						}
+					}
+				}
+
+			} catch (IndexOutOfBoundsException e) {
+				erreurs.add("Votre fichier ne respecte pas le format des élements");
+				break;
+			} catch (FormatReaderException e1) {
+				erreurs.add(e1.getMessage());
+			} catch (NumberFormatException e2) {
+				erreurs.add("La bourse doit être 1 ou 0");
+			}
+		}
+		return erreurs;
+	}
+
+	private Integer convertAnnee(String annnee) throws FormatReaderException {
+		Integer indexofslash = annnee.indexOf("/");
+		if (indexofslash == -1)
+			throw new FormatReaderException("Le format de la date est aaaa/aaaa");
+		Integer first_part = null;
+		try {
+			first_part = Integer.parseInt(annnee.substring(0, indexofslash));
+		} catch (NumberFormatException e) {
+			throw new FormatReaderException("La date doit être un entier");
+		}
+		return first_part;
 	}
 
 }

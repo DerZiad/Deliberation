@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
+import com.ziad.services.CSVReaderOException;
 
 public interface CrudInscriptionAdministrative {
 
@@ -30,4 +32,7 @@ public interface CrudInscriptionAdministrative {
 			throws IOException;
 
 	public ArrayList<Object> getInscriptionAdministrative(Long id_filiere,Long id_etudiant) throws EntityNotFoundException;
+
+
+	public List<String> uploadInscriptionAdministrative(MultipartFile file) throws CSVReaderOException,IOException,FormatReaderException;
 }

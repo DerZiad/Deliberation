@@ -24,6 +24,7 @@ import com.ziad.models.Etudiant;
 import com.ziad.models.Filiere;
 import com.ziad.models.InscriptionAdministrative;
 import com.ziad.models.InscriptionEnLigne;
+import com.ziad.services.CSVReaderOException;
 
 @Controller
 @RequestMapping("/admin")
@@ -111,6 +112,20 @@ public class InscriptionAdministrativeController {
 		model.addObject("filieres",(List<Filiere>)besoins.get(2));
 		model.addObject("annees_academiques",(List<AnneeAcademique>)besoins.get(3));
 
+		return model;
+	}
+	
+	@GetMapping("/inscription/uploadinscription")
+	public ModelAndView PageUploadInscriptionAdministrative() {
+		ModelAndView model = new ModelAndView("inscription_administrative/UploadInscriptionAdministrative");
+		model.addObject("InscriptionAdministartive", "mm-active");
+		return model;
+	}
+	
+	@PostMapping("/inscription/uploadinscription")
+	public ModelAndView sinscrireparExcel(@RequestParam("excel") MultipartFile file) throws FormatReaderException,IOException,CSVReaderOException{
+		ModelAndView model = new ModelAndView("inscription_administrative/UploadInscriptionAdministrative");
+		inscription_metier.uploadInscriptionAdministrative(file);
 		return model;
 	}
 }
