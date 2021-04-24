@@ -8,13 +8,12 @@ import javax.persistence.OneToOne;
 
 import com.ziad.models.Etudiant;
 import com.ziad.models.Filiere;
-import com.ziad.models.InscriptionAdministrative;
 
 @Embeddable
 public class ComposedInscriptionAdministrative implements Serializable {
 	/**
 	 * 
-	 * Classe qui se compose des 3 Etudiants
+	 * Classe qui se compose des cla
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;

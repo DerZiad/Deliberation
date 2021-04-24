@@ -5,7 +5,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
-<layout:extends name="layout.jsp">
+<layout:extends name="../layout.jsp">
 	<layout:put block="content" type="REPLACE">
 
 		<div class="main-card mb-3 card">

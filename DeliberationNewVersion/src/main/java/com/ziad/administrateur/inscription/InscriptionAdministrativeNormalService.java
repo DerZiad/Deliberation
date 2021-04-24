@@ -8,7 +8,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -43,7 +42,6 @@ import com.ziad.repositories.HistoriqueRepository;
 import com.ziad.repositories.InscriptionAdministrativeRepository;
 import com.ziad.repositories.InscriptionEnLigneRepository;
 import com.ziad.repositories.InscriptionPedagogiqueRepository;
-import com.ziad.repositories.ModuleRepository;
 
 @Service
 @Primary
@@ -59,8 +57,6 @@ public class InscriptionAdministrativeNormalService implements CrudInscriptionAd
 	private InscriptionEnLigneRepository inscriptionEnLigne;
 	@Autowired
 	private InscriptionPedagogiqueRepository inscriptionPedagogiqueRepository;
-	@Autowired
-	private ModuleRepository moduleRepository;
 	@Autowired
 	private HistoriqueRepository historiqueRepository;
 	@Autowired
@@ -90,8 +86,7 @@ public class InscriptionAdministrativeNormalService implements CrudInscriptionAd
 		Etudiant etudiant = new Etudiant();
 		Filiere filiere = filiereRepository.getOne(id_filiere);
 
-		ComposedInscriptionAdministrative id_compose = new ComposedInscriptionAdministrative(
-				etudiant,filiere);
+		ComposedInscriptionAdministrative id_compose = new ComposedInscriptionAdministrative(etudiant, filiere);
 
 		InscriptionEnLigne inscription_en_ligne = inscriptionEnLigne.getOne(id_inscription_en_ligne);
 		etudiant.setAcademy(inscription_en_ligne.getAcademy());
@@ -157,7 +152,7 @@ public class InscriptionAdministrativeNormalService implements CrudInscriptionAd
 		}
 		inscription_administrative.setComposite_association_id(id_compose);
 		inscriptionAdministrative.save(inscription_administrative);
-		
+
 		/*
 		 * Inscription pédagogique automatique
 		 */
@@ -179,13 +174,13 @@ public class InscriptionAdministrativeNormalService implements CrudInscriptionAd
 	}
 
 	@Override
-	public void deleteInscriptionAdministrative(Long id_etudiant,Long id_filiere) throws EntityNotFoundException {
-		
+	public void deleteInscriptionAdministrative(Long id_etudiant, Long id_filiere) throws EntityNotFoundException {
+
 		Etudiant etudiant = etudiantRepository.getOne(id_etudiant);
 		Filiere filiere = filiereRepository.getOne(id_filiere);
-	
-		
-		ComposedInscriptionAdministrative inscription_administrative = new ComposedInscriptionAdministrative(etudiant,filiere);
+
+		ComposedInscriptionAdministrative inscription_administrative = new ComposedInscriptionAdministrative(etudiant,
+				filiere);
 		InscriptionAdministrative inscription_adminisrative = inscriptionAdministrative
 				.getOne(inscription_administrative);
 		inscription_admistrative_repository.delete(inscription_adminisrative);
@@ -257,15 +252,14 @@ public class InscriptionAdministrativeNormalService implements CrudInscriptionAd
 	}
 
 	@Override
-	public void modifierInscriptionAdministrative(Date date_pre_inscription,
-			Date date_valid_inscription, Long id_etudiant, Long id_filiere, String operateur, MultipartFile photo,
-			MultipartFile bac, MultipartFile relevee_note, MultipartFile acte_de_naissance, MultipartFile cin,
-			Long id_annee_academique) throws IOException {
+	public void modifierInscriptionAdministrative(Date date_pre_inscription, Date date_valid_inscription,
+			Long id_etudiant, Long id_filiere,MultipartFile photo, MultipartFile bac,
+			MultipartFile relevee_note, MultipartFile acte_de_naissance, MultipartFile cin, Long id_annee_academique)
+			throws IOException {
 		Etudiant etudiant = etudiantRepository.getOne(id_etudiant);
 		Filiere filiere = filiereRepository.getOne(id_filiere);
 
-		ComposedInscriptionAdministrative composed_id = new ComposedInscriptionAdministrative(
-				etudiant, filiere);
+		ComposedInscriptionAdministrative composed_id = new ComposedInscriptionAdministrative(etudiant, filiere);
 		InscriptionAdministrative inscription_administrative = inscription_admistrative_repository.getOne(composed_id);
 		AnneeAcademique annee_academique = annee_academique_repository.getOne(id_annee_academique);
 
@@ -289,11 +283,29 @@ public class InscriptionAdministrativeNormalService implements CrudInscriptionAd
 			inscription_administrative.setPhoto(photo.getBytes());
 		}
 		inscription_admistrative_repository.save(inscription_administrative);
-		historiqueRepository.save(new Historique("documents de l'étudiant "
-				+ inscription_administrative.getEtudiant().getFirst_name_fr() + " "
-				+ inscription_administrative.getEtudiant().getLast_name_fr() + " modifié à l'administration",
+		historiqueRepository.save(new Historique(
+				"documents de l'étudiant " + inscription_administrative.getEtudiant().getFirst_name_fr() + " "
+						+ inscription_administrative.getEtudiant().getLast_name_fr() + " modifié à l'administration",
 				new java.util.Date()));
 
+	}
+
+	@Override
+	public ArrayList<Object> getInscriptionAdministrative(Long id_filiere, Long id_etudiant)
+			throws EntityNotFoundException {
+		Filiere filiere = filiereRepository.getOne(id_filiere);
+		Etudiant etudiant = etudiantRepository.getOne(id_etudiant);
+
+		ComposedInscriptionAdministrative inscription_administrative_id = new ComposedInscriptionAdministrative(
+				etudiant, filiere);
+		InscriptionAdministrative inscription_administrative = inscription_admistrative_repository
+				.getOne(inscription_administrative_id);
+		ArrayList<Object> besoins = new ArrayList<Object>();
+		besoins.add(inscription_administrative);
+		besoins.add(inscriptionEnLigne.findAll());
+		besoins.add(filiereRepository.findAll());
+		besoins.add(annee_academique_repository.findAll());
+		return besoins;
 	}
 
 }

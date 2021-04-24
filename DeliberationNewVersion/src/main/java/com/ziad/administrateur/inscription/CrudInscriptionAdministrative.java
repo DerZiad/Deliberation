@@ -24,8 +24,10 @@ public interface CrudInscriptionAdministrative {
 	public ArrayList<Object> listerInscriptionsAdministratives()
 			throws DataNotFoundExceptions, UnsupportedEncodingException;
 
-	public void modifierInscriptionAdministrative(Date date_pre_inscription,
-			Date date_valid_inscription, Long id_etudiant, Long id_filiere, String operateur, MultipartFile photo,
-			MultipartFile bac, MultipartFile relevee_note, MultipartFile acte_de_naissance, MultipartFile cin,
-			Long id_annee_academique) throws IOException;
+	public void modifierInscriptionAdministrative(Date date_pre_inscription, Date date_valid_inscription,
+			Long id_etudiant, Long id_filiere, MultipartFile photo, MultipartFile bac,
+			MultipartFile relevee_note, MultipartFile acte_de_naissance, MultipartFile cin, Long id_annee_academique)
+			throws IOException;
+
+	public ArrayList<Object> getInscriptionAdministrative(Long id_filiere,Long id_etudiant) throws EntityNotFoundException;
 }
