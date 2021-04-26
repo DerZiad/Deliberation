@@ -1,5 +1,6 @@
 package com.ziad.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -18,7 +19,7 @@ import com.ziad.enums.Gender;
 
 @Entity
 @Table(name = "InscriptionEnLigne")
-public class InscriptionEnLigne {
+public class InscriptionEnLigne implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

@@ -1,5 +1,6 @@
 package com.ziad.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ import com.ziad.enums.TypeSemestre;
 
 @Entity
 @Table(name = "Semestre")
-public class Semestre {
+public class Semestre implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_semestre")

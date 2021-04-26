@@ -1,5 +1,6 @@
 package com.ziad.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -11,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Historique")
-public class Historique {
+public class Historique implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

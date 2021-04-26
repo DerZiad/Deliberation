@@ -23,21 +23,23 @@
 							<th class="th-sm">Date de naissance</th>
 							<th class="th-sm">Type du Bac</th>
 							<th class="th-sm">Mention</th>
+							<th class="th-sm">Inscription Pédagogique</th>
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach var="student" items="${students}">
+						<c:forEach var="inscription" items="${inscriptions}">
 							<tr>
-								<td><a style="color: black" href="#">${student.cne}</a></td>
-								<td><a style="color: black" href="#">${student.last_name_fr}</a></td>
-								<td><a style="color: black" href="#">${student.first_name_fr}</a></td>
-								<td><a style="color: black" href="#">${student.gender}</a></td>
-								<td><a style="color: black" href="#">${student.nationality}</a></td>
-								<c:set var="date" value="${student.birth_date}"></c:set>
+								<td><a style="color: black" href="#">${inscription.etudiant.cne}</a></td>
+								<td><a style="color: black" href="#">${inscription.etudiant.last_name_fr}</a></td>
+								<td><a style="color: black" href="#">${inscription.etudiant.first_name_fr}</a></td>
+								<td><a style="color: black" href="#">${inscription.etudiant.gender}</a></td>
+								<td><a style="color: black" href="#">${inscription.etudiant.nationality}</a></td>
+								<c:set var="date" value="${inscription.etudiant.birth_date}"></c:set>
 								<c:set var="birth_date" value="${fn:substring(date,0,10)}"></c:set>
 								<td><a style="color: black" href="#">${birth_date}</a></td>
-								<td><a style="color: black" href="#">${student.bac_type}</a></td>
-								<td><a style="color: black" href="#">${student.mention}</a></td>
+								<td><a style="color: black" href="#">${inscription.etudiant.bac_type}</a></td>
+								<td><a style="color: black" href="#">${inscription.etudiant.mention}</a></td>
+								<td><a style="color: black" href="/admin/inscription/PageInscriptionPedagogiqueIndividuelle/${ inscription.filiere.id_filiere}/${inscription.etudiant.id_etudiant}">Ajouter inscription Pédagogique</a></td>
 							</tr>
 						</c:forEach>
 					</tbody>

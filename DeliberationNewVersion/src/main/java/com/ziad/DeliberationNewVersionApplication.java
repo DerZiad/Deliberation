@@ -106,7 +106,7 @@ public class DeliberationNewVersionApplication implements CommandLineRunner {
 		//ie.setEtudiant(etudiant);
 		
 		etudiant_repository.save(etudiant);*/
-		AnneeAcademique anneeAcademique = new AnneeAcademique(2019,new ArrayList<InscriptionAdministrative>());
+		AnneeAcademique anneeAcademique = new AnneeAcademique(2019);
 		annee_academique_repo.save(anneeAcademique);
 		Etudiant etudiant = new Etudiant(principal_password, principal_password, principal_password, principal_password, principal_password, principal_password, principal_password, null, null, principal_password, principal_password, principal_password, null, principal_password, principal_password, principal_password, principal_password, principal_password, null, principal_password, null, null);
 		etudiant_repository.save(etudiant);

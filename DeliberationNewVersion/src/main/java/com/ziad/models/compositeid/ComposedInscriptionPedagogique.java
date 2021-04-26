@@ -10,7 +10,7 @@ import com.ziad.models.Element;
 import com.ziad.models.Etudiant;
 
 @Embeddable
-public class ComposedEtudiantElementInscriptionPedagogique implements Serializable {
+public class ComposedInscriptionPedagogique implements Serializable {
 
 	/**
 	 * Class identity key
@@ -21,10 +21,10 @@ public class ComposedEtudiantElementInscriptionPedagogique implements Serializab
 	@OneToOne(targetEntity = Element.class,cascade = CascadeType.PERSIST)
 	private Element element;
 	
-	public ComposedEtudiantElementInscriptionPedagogique() {
+	public ComposedInscriptionPedagogique() {
 		
 	}
-	public ComposedEtudiantElementInscriptionPedagogique(Etudiant etudiant, Element element) {
+	public ComposedInscriptionPedagogique(Etudiant etudiant, Element element) {
 		super();
 		this.etudiant = etudiant;
 		this.element = element;

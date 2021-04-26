@@ -1,4 +1,4 @@
-package com.ziad.administrateur.inscription;
+package com.ziad.administrateur.inscription.administrative;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

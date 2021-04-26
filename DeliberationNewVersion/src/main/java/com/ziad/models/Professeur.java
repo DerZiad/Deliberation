@@ -1,5 +1,6 @@
 package com.ziad.models;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -22,7 +23,7 @@ import com.ziad.enums.Role;
 
 @Entity
 @Table(name = "Professeur")
-public class Professeur {
+public class Professeur implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

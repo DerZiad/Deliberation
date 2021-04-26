@@ -1,5 +1,6 @@
 package com.ziad.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import org.hibernate.annotations.NotFoundAction;
 
 @Entity
 @Table(name = "Etablissement")
-public class Etablissement {
+public class Etablissement implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

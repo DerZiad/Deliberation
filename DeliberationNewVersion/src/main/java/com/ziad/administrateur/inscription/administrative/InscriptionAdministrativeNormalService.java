@@ -1,4 +1,4 @@
-package com.ziad.administrateur.inscription;
+package com.ziad.administrateur.inscription.administrative;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -36,7 +36,7 @@ import com.ziad.models.InscriptionPedagogique;
 import com.ziad.models.Modulee;
 import com.ziad.models.Semestre;
 import com.ziad.models.User;
-import com.ziad.models.compositeid.ComposedEtudiantElementInscriptionPedagogique;
+import com.ziad.models.compositeid.ComposedInscriptionPedagogique;
 import com.ziad.models.compositeid.ComposedInscriptionAdministrative;
 import com.ziad.repositories.AnnneAcademiqueRepository;
 import com.ziad.repositories.EtudiantRepository;
@@ -72,6 +72,7 @@ public class InscriptionAdministrativeNormalService implements CrudInscriptionAd
 	private InscriptionAdministrativeRepository inscription_admistrative_repository;
 	@Autowired
 	private ExcelToDbService excel_service;
+
 	@Override
 	public ArrayList<Object> prepareInscriptionDatas() throws DataNotFoundExceptions {
 		List<InscriptionEnLigne> etudiants = inscriptionEnLigne.getAllInscriptionsEnLigneAccepted();
@@ -168,10 +169,9 @@ public class InscriptionAdministrativeNormalService implements CrudInscriptionAd
 		for (Semestre semestre : firststep.getSemestres()) {
 			for (Modulee module : semestre.getModules()) {
 				for (Element element : module.getElements()) {
-					ComposedEtudiantElementInscriptionPedagogique compsedId = new ComposedEtudiantElementInscriptionPedagogique(
-							etudiant, element);
-					InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(compsedId, "", 0d, 0d,
-							TypeInscription.ELEMENT);
+					ComposedInscriptionPedagogique compsedId = new ComposedInscriptionPedagogique(etudiant, element);
+					InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(compsedId,
+							annee_academique, false, TypeInscription.ELEMENT);
 					this.inscriptionPedagogiqueRepository.save(inscription_pedagogique);
 				}
 			}
@@ -312,12 +312,14 @@ public class InscriptionAdministrativeNormalService implements CrudInscriptionAd
 		besoins.add(annee_academique_repository.findAll());
 		return besoins;
 	}
+
 	@Override
-	public List<String> uploadInscriptionAdministrative(MultipartFile file) throws CSVReaderOException,IOException,FormatReaderException{
+	public List<String> uploadInscriptionAdministrative(MultipartFile file)
+			throws CSVReaderOException, IOException, FormatReaderException {
 		List<String> erreurs = new ArrayList<String>();
 		Iterator<Row> rows = excel_service.readInscriptionAdministrative(file);
 		rows.next();
-		while(rows.hasNext()) {
+		while (rows.hasNext()) {
 			try {
 				Row row = rows.next();
 				String annee_academique_chaine = row.getCell(0).getStringCellValue();
@@ -357,14 +359,15 @@ public class InscriptionAdministrativeNormalService implements CrudInscriptionAd
 				if (annees_academiques_filtered.size() != 0) {
 					annee_academique = annees_academiques_filtered.get(0);
 				} else {
-					annee_academique = new AnneeAcademique(annee, new ArrayList<InscriptionAdministrative>());
+					annee_academique = new AnneeAcademique(annee);
 					annee_academique_repository.save(annee_academique);
 				}
 
 				InscriptionAdministrative inscription_administrative = new InscriptionAdministrative();
 				Etudiant etudiant = new Etudiant();
 
-				ComposedInscriptionAdministrative id_compose = new ComposedInscriptionAdministrative(etudiant, filiereObject);
+				ComposedInscriptionAdministrative id_compose = new ComposedInscriptionAdministrative(etudiant,
+						filiereObject);
 
 				etudiant.setAcademy(inscrptionEnLigneObject.getAcademy());
 				etudiant.setBac_place(inscrptionEnLigneObject.getBac_place());
@@ -423,10 +426,10 @@ public class InscriptionAdministrativeNormalService implements CrudInscriptionAd
 				for (Semestre semestre : firststep.getSemestres()) {
 					for (Modulee module : semestre.getModules()) {
 						for (Element element : module.getElements()) {
-							ComposedEtudiantElementInscriptionPedagogique compsedId = new ComposedEtudiantElementInscriptionPedagogique(
-									etudiant, element);
-							InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(compsedId, "", 0d, 0d,
-									TypeInscription.ELEMENT);
+							ComposedInscriptionPedagogique compsedId = new ComposedInscriptionPedagogique(etudiant,
+									element);
+							InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(compsedId,
+									annee_academique, false, TypeInscription.ELEMENT);
 							this.inscriptionPedagogiqueRepository.save(inscription_pedagogique);
 						}
 					}

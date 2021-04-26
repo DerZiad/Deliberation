@@ -1,5 +1,7 @@
 package com.ziad.models;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -19,7 +21,7 @@ import com.ziad.models.compositeid.ComposeEtudiantElementId;
  * ***/
 @Entity
 @Table(name = "note_element")
-public class NoteElement {
+public class NoteElement implements Serializable{
 
 	/******
 	 * 

@@ -1,5 +1,6 @@
 package com.ziad.models;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import com.ziad.models.compositeid.ComposedInscriptionAdministrative;
 
 @Entity
 @Table(name = "InscriptionAdministrative")
-public class InscriptionAdministrative {
+public class InscriptionAdministrative implements Serializable{
 
 	@EmbeddedId
 	private ComposedInscriptionAdministrative composite_association_id;
