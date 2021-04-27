@@ -1,8 +1,10 @@
-package com.ziad.administrateur.etablissement;
+package com.ziad.advices;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
 
 @ControllerAdvice
 public class DataNotFoundAdvice {

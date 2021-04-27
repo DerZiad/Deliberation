@@ -2,6 +2,8 @@ package com.ziad.administrateur.etablissement;
 
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +47,7 @@ public class EtablissementController {
 	}
 
 	@GetMapping("/etablissement/profile/{id}")
-	public ModelAndView etablissementProfile(@PathVariable("id") Long id) throws InvalidEntries {
+	public ModelAndView etablissementProfile(@PathVariable("id") Long id) throws EntityNotFoundException {
 		ModelAndView model = new ModelAndView("/Etablissement/EtablissementProfile");
 		Etablissement etablissement = etablissement_metier.getEtablissementById(id);
 		model.addObject("etablissement", etablissement);
@@ -54,20 +56,20 @@ public class EtablissementController {
 
 	@PostMapping("/etablissement/modifier/{id}")
 	public ModelAndView etablissementModify(@PathVariable("id") Long id, @RequestParam("name") String name)
-			throws InvalidEntries {
+			throws EntityNotFoundException {
 		etablissement_metier.modifierEtablissmentById(id, name);
 		return new ModelAndView("redirect:/admin/etablissement/profile/" + id);
 	}
 
 	@PostMapping("/etablissement/supprimer/{id}")
-	public ModelAndView etablissemntDelete(@PathVariable("id") Long id) throws InvalidEntries {
+	public ModelAndView etablissemntDelete(@PathVariable("id") Long id) throws EntityNotFoundException {
 		etablissement_metier.suprimerEtablissement(id);
 		return new ModelAndView("redirect:/admin/etablissement/liste");
 	}
 
 	@GetMapping("/etablissement/profile/{id}/filiere/liste")
 	public ModelAndView etablissementFiliereListe(@PathVariable("id") Long id)
-			throws InvalidEntries, DataNotFoundExceptions {
+			throws EntityNotFoundException, DataNotFoundExceptions {
 		ModelAndView model = new ModelAndView("/Etablissement/EtablissementProfilesFiliereListe");
 		List<Filiere> filieres = etablissement_metier.getFilieresListByEtablissement(id);
 		model.addObject("filieres", filieres);
@@ -78,7 +80,7 @@ public class EtablissementController {
 
 	@GetMapping("/etablissement/profile/{id}/professeur/liste")
 	public ModelAndView etablissementProfesseurListe(@PathVariable("id") Long id)
-			throws InvalidEntries, DataNotFoundExceptions {
+			throws EntityNotFoundException, DataNotFoundExceptions {
 		ModelAndView model = new ModelAndView("/Etablissement/EtablissementProfilesProfesseurListe");
 		List<Professeur> listes_de_professeurs = etablissement_metier.getProfesseursListByEtablissement(id);
 		model.addObject("professeurs", listes_de_professeurs);
@@ -89,7 +91,7 @@ public class EtablissementController {
 	
 	@GetMapping("/etablissement/profile/{id}/etudiant/liste")
 	public ModelAndView etablissementEtudiantListe(@PathVariable("id") Long id)
-			throws InvalidEntries, DataNotFoundExceptions {
+			throws EntityNotFoundException, DataNotFoundExceptions {
 		ModelAndView model = new ModelAndView("/Etablissement/EtablissementProfilesProfesseurListe");
 		List<Professeur> listes_de_professeurs = etablissement_metier.getProfesseursListByEtablissement(id);
 		model.addObject("professeurs", listes_de_professeurs);

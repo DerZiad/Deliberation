@@ -1,5 +1,7 @@
 package com.ziad.administrateur.module;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,8 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.ziad.administrateur.etablissement.InvalidEntries;
 
 @Controller
 @RequestMapping("/admin")
@@ -23,7 +23,7 @@ public class ElementController {
 	private ElementAlgo metier;
 
 	@GetMapping("/module/profile/{id}/element/create")
-	public ModelAndView createModule(@PathVariable("id") Long id) throws InvalidEntries {
+	public ModelAndView createModule(@PathVariable("id") Long id) throws EntityNotFoundException {
 		ModelAndView model = new ModelAndView(PATH_ELEMENTCREATE);
 		metier.createElementsModule(id, model);
 		return model;
@@ -38,7 +38,7 @@ public class ElementController {
 	}
 
 	@GetMapping("/module/profile/{id}/element/{idelement}/delete")
-	public ModelAndView deleteElement(@PathVariable("id") Long id,@PathVariable("idelement") Long idelement) throws InvalidEntries {
+	public ModelAndView deleteElement(@PathVariable("id") Long id,@PathVariable("idelement") Long idelement) throws EntityNotFoundException {
 		metier.deleteElementsModule(idelement);
 		return new ModelAndView("redirect:/admin/module/profile/" + id + "/element/create");
 	}
@@ -46,7 +46,7 @@ public class ElementController {
 	@PostMapping("/module/profile/{id}/element/modify")
 	public ModelAndView modifyElement(@PathVariable("id") Long id,@RequestParam("idelement") Long idelement,
 			@RequestParam(name = "id_professeur",required = false) Long idprofesseur, @RequestParam("coefficient") Double coefficient,
-			@RequestParam("validation") Double validation, @RequestParam("name") String nom) throws InvalidEntries {
+			@RequestParam("validation") Double validation, @RequestParam("name") String nom) throws EntityNotFoundException {
 		ModelAndView model = new ModelAndView("redirect:/admin/module/profile/"+id+"/element/create");
 		metier.modifyElementsModule(idelement, idprofesseur,id, nom,coefficient, validation, model);
 		return model;

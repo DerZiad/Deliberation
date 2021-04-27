@@ -39,7 +39,7 @@
 								<td><a style="color: black" href="#">${birth_date}</a></td>
 								<td><a style="color: black" href="#">${inscription.etudiant.bac_type}</a></td>
 								<td><a style="color: black" href="#">${inscription.etudiant.mention}</a></td>
-								<td><a style="color: black" href="/admin/inscription/PageInscriptionPedagogiqueIndividuelle/${ inscription.filiere.id_filiere}/${inscription.etudiant.id_etudiant}">Ajouter inscription Pédagogique</a></td>
+								<td><a class="btn btn-danger" style="color: black" href="/admin/inscription/PageInscriptionPedagogiqueIndividuelle/${ inscription.filiere.id_filiere}/${inscription.etudiant.id_etudiant}">Ajouter inscription Pédagogique</a></td>
 							</tr>
 						</c:forEach>
 					</tbody>

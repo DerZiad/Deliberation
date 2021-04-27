@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
-import com.ziad.administrateur.etablissement.InvalidEntries;
 import com.ziad.models.Etablissement;
 import com.ziad.models.Filiere;
 
@@ -40,7 +39,7 @@ public class FiliereController {
 	public ModelAndView getFiliereCreate(@RequestParam("name") String nom_filiere,
 			@RequestParam("etablissement") Long etablissement_id,
 			@RequestParam(name="professeur",required = false) Long id_professeur,
-			@RequestParam("semester_number") Integer semester_number) throws InvalidEntries,EntityNotFoundException {
+			@RequestParam("semester_number") Integer semester_number) throws EntityNotFoundException {
 		filiere_metier.createFiliere(etablissement_id, nom_filiere,id_professeur,semester_number);
 		return new ModelAndView("redirect:/admin/filiere/liste");
 	}
@@ -55,7 +54,7 @@ public class FiliereController {
 	}
 
 	@GetMapping("/filiere/profile/{id}")
-	public ModelAndView getFiliereProfile(@PathVariable("id") Long id) throws InvalidEntries, DataNotFoundExceptions {
+	public ModelAndView getFiliereProfile(@PathVariable("id") Long id) throws EntityNotFoundException, DataNotFoundExceptions {
 		ModelAndView model = new ModelAndView("Filiere/FiliereProfile");
 		Filiere filiere = filiere_metier.getFiliereProfile(model, id);
 		model.addObject("professeurs",filiere_metier.listerResponsableFiliere());
@@ -80,13 +79,13 @@ public class FiliereController {
 	@PostMapping("/filiere/profile/{id}")
 	public ModelAndView modifyFiliere(@PathVariable("id") Long id, @RequestParam("name") String name,
 			@RequestParam("etablissement_id") Long etablissement_id,
-			@RequestParam("semester_number") Integer semester_number) throws InvalidEntries {
+			@RequestParam("semester_number") Integer semester_number) throws EntityNotFoundException {
 		filiere_metier.modifyFiliereProfile(id, name, etablissement_id, semester_number);
 		return new ModelAndView("redirect:/admin/filiere/profile/" + id);
 	}
 
 	@PostMapping("/filiere/supprimer/{id}")
-	public ModelAndView deleteFiliere(@PathVariable("id") Long id) throws InvalidEntries {
+	public ModelAndView deleteFiliere(@PathVariable("id") Long id) throws EntityNotFoundException {
 		filiere_metier.suprimerFiliere(id);
 		return new ModelAndView("redirect:/admin/filiere/liste");
 	}

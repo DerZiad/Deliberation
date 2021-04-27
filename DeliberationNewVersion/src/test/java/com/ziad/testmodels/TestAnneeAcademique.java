@@ -45,7 +45,7 @@ public class TestAnneeAcademique {
     
 	@Test
 	public void test_annee_academique() throws Exception {
-		AnneeAcademique anneacedemique = new AnneeAcademique(2021,new ArrayList<InscriptionAdministrative>());
+		AnneeAcademique anneacedemique = new AnneeAcademique(2021);
 		annee_academique_repository.save(anneacedemique);
 		/*AnneeAcademique aneeo = annee_academique_repository.getOne(1l);
 		//annee_academique_repository.delete(anneacedemique);

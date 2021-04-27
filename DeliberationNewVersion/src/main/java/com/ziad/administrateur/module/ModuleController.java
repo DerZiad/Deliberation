@@ -1,5 +1,7 @@
 package com.ziad.administrateur.module;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
-import com.ziad.administrateur.etablissement.InvalidEntries;
 
 @Controller
 @RequestMapping("/admin/module")
@@ -28,7 +29,7 @@ public class ModuleController {
 
 	@PostMapping("/creer")
 	public ModelAndView moduleCreate(@RequestParam(name = "semestre_id",required = false) Long semestre_id,
-			@RequestParam(name = "professeur_id",required = false) Long professeur_id, @RequestParam("name") String name,@RequestParam(name = "checktheelement",required = false) Integer compose_seul_element) throws InvalidEntries{
+			@RequestParam(name = "professeur_id",required = false) Long professeur_id, @RequestParam("name") String name,@RequestParam(name = "checktheelement",required = false) Integer compose_seul_element) throws EntityNotFoundException{
 		metier.creerModule(semestre_id, professeur_id, name,compose_seul_element);
 		return new ModelAndView("redirect:/admin/module/liste");
 	}
@@ -41,7 +42,7 @@ public class ModuleController {
 	}
 
 	@GetMapping("/profile/{id}")
-	public ModelAndView moduleProfile(@PathVariable("id") Long id) throws InvalidEntries{
+	public ModelAndView moduleProfile(@PathVariable("id") Long id) throws EntityNotFoundException{
 		ModelAndView model = new ModelAndView("Module/ModuleProfile");
 		metier.getProfilModuleById(model, id);
 		return model;
@@ -49,13 +50,13 @@ public class ModuleController {
 
 	@PostMapping("/profile/{id}")
 	public ModelAndView modifyModule(@PathVariable("id") Long id, @RequestParam("name") String name,
-			@RequestParam("semestre_id") Long semestre_id, @RequestParam(name="professeur_id",required = false) Long professeur_id) throws InvalidEntries{
+			@RequestParam("semestre_id") Long semestre_id, @RequestParam(name="professeur_id",required = false) Long professeur_id) throws EntityNotFoundException{
 		metier.modifyModule(id, name, semestre_id, professeur_id);
 		return new ModelAndView("redirect:/admin/module/profile/" + id);
 	}
 
 	@GetMapping("/supprimer/{id}")
-	public ModelAndView deleteModule(@PathVariable("id") Long id) throws InvalidEntries{
+	public ModelAndView deleteModule(@PathVariable("id") Long id) throws EntityNotFoundException{
 		metier.deleteModule(id);
 		return new ModelAndView("redirect:/admin/module/liste");
 	}

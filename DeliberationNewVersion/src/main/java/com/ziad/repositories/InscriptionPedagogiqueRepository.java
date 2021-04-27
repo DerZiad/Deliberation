@@ -1,24 +1,23 @@
 package com.ziad.repositories;
 
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.ziad.models.Etudiant;
 import com.ziad.models.InscriptionPedagogique;
+import com.ziad.models.Semestre;
 @Repository
 public interface InscriptionPedagogiqueRepository extends JpaRepository<InscriptionPedagogique, Long>{
-	/*
-	@Query("select s from InscriptionPedagogique s")
-	List<InscriptionPedagogique> getAllInscriptionsPedagogique();
 	
-	@Query("select s from InscriptionPedagogique s where semestre=:x")
-	List<InscriptionPedagogique> getInscriptionsPedagogiqueBySemestre(@Param("x")Semestre semestre);
-	
-	
-	@Query("select s from InscriptionPedagogique s where etudiant=:x")
+	@Query("select s from InscriptionPedagogique s where s.id_inscription_pedagogique.etudiant=:x")
 	List<InscriptionPedagogique> getInscriptionsPedagogiqueByEtudiant(@Param("x")Etudiant etudiant);
 	
-	
+	/*
 	@Transactional
 	@Modifying
 	@Query("update InscriptionPedagogique s set s.note_semestre=:n, s.validation=:v  where s.id_ip=:id")

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
@@ -31,7 +32,13 @@ public class InscriptionPedagogiqueController {
 	private final static String ATTRIBUT_LIST_MODULES = "modules";
 	private final static String ATTRIBUT_LIST_ELEMENTS = "elements";
 	private final static String ATTRIBUT_FILIERE = "filiere";
-
+	
+	@GetMapping("/inscription/listerInscriptions/{id_etudiant}")
+	public ModelAndView listerInscriptionsPedagogique(@PathVariable("id_etudiant")Long id_etudiant) {
+		return null;
+	}
+	
+	
 	@SuppressWarnings("unchecked")
 	@GetMapping("/inscription/PageInscriptionPedagogiqueIndividuelle/{id_inscription_filiere}/{id_inscription_etudiant}")
 	public ModelAndView PageInscriptionPedagogiqueIndividuelle(
@@ -56,13 +63,6 @@ public class InscriptionPedagogiqueController {
 		inscription_pedagogique_metier.enregistrerInformation(id_filiere, id_etudiant, request);
 		return model;
 	}
-
-	@GetMapping("/test")
-	public ModelAndView test() {
-		ModelAndView model = new ModelAndView("inscription_pedagogique/test");
-		model.addObject("test", 9);
-
-		return model;
-	}
-
+	
+	
 }

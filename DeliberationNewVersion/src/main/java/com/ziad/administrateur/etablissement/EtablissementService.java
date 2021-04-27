@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -58,31 +60,21 @@ public class EtablissementService implements EtablissementInterface {
 		return etablissements_listes;
 	}
 
-	public Etablissement getEtablissementById(Long id) throws InvalidEntries {
+	public Etablissement getEtablissementById(Long id) throws EntityNotFoundException {
 		Etablissement etablissement = etablissementRepository.getOne(id);
-		if (etablissement == null)
-			throw new InvalidEntries("Ne modifie pas l'id s'il vous plait");
 		return etablissement;
 	}
 
-	public void suprimerEtablissement(Long id) throws InvalidEntries {
+	public void suprimerEtablissement(Long id) throws EntityNotFoundException {
 		Etablissement etablissement = etablissementRepository.getOne(id);
-		if (etablissement == null)
-			throw new InvalidEntries();
 		String name = etablissement.getNom_etablissement();
 		historiqueRepository.save(new Historique("etablissement " + name + " supprimé", new Date()));
 		etablissementRepository.deleteById(id);
 	}
 
-	public List<Filiere> getFilieresListByEtablissement(Long id) throws InvalidEntries, DataNotFoundExceptions {
+	public List<Filiere> getFilieresListByEtablissement(Long id) throws EntityNotFoundException, DataNotFoundExceptions {
 		Etablissement etablissement = etablissementRepository.getOne(id);
-		/**
-		 * je teste si le serveur a recu une Id non valide d'apres l'administrateur
-		 * 
-		 */
-		if (etablissement == null)
-			throw new InvalidEntries();
-		//List<Filiere> listes_de_filieres = filiere_repository.getFilieresByEtablissement(etablissement);
+
 		List<Filiere> listes_de_filieres = etablissement.getFilieres();
 		if (listes_de_filieres.size() == 0)
 			/**
@@ -94,11 +86,8 @@ public class EtablissementService implements EtablissementInterface {
 		return listes_de_filieres;
 	}
 
-	public List<Professeur> getProfesseursListByEtablissement(Long id) throws InvalidEntries, DataNotFoundExceptions {
+	public List<Professeur> getProfesseursListByEtablissement(Long id) throws EntityNotFoundException, DataNotFoundExceptions {
 		Etablissement etablissement = etablissementRepository.getOne(id);
-
-		if (etablissement == null)
-			throw new InvalidEntries();
 		/**
 		 * On récupere la liste des filieres , si il n'ya pas de filiere , pas la peine
 		 * de continuer throw new DataNotFoundException
@@ -117,15 +106,7 @@ public class EtablissementService implements EtablissementInterface {
 			List<Etape> etapes = filiere.getEtapes();
 			for (Etape etape : etapes) {
 				List<Semestre> semestres = etape.getSemestres();
-				for (Semestre semestre : semestres) {
-					List<Modulee> modules = semestre.getModules();
-					for (Modulee module : modules) {
-						List<Element> elements = module.getElements();
-						for (Element element : elements) {
-							listes_de_professeurs.addAll(element.getProfesseurs());
-						}
-					}
-				}
+				listerSemestre(listes_de_professeurs, semestres);
 			}
 		}
 		if (listes_de_professeurs.size() == 0)
@@ -133,11 +114,21 @@ public class EtablissementService implements EtablissementInterface {
 		return listes_de_professeurs;
 	}
 
+	private void listerSemestre(List<Professeur> listes_de_professeurs, List<Semestre> semestres) {
+		for (Semestre semestre : semestres) {
+			List<Modulee> modules = semestre.getModules();
+			for (Modulee module : modules) {
+				List<Element> elements = module.getElements();
+				for (Element element : elements) {
+					listes_de_professeurs.addAll(element.getProfesseurs());
+				}
+			}
+		}
+	}
+
 	@Override
-	public void modifierEtablissmentById(Long id, String name) throws InvalidEntries {
+	public void modifierEtablissmentById(Long id, String name) throws EntityNotFoundException {
 		Etablissement etablissement = etablissementRepository.getOne(id);
-		if (etablissement == null)
-			throw new InvalidEntries();
 		historiqueRepository.save(new Historique(
 				"etablissement " + etablissement.getNom_etablissement() + " modifié en " + name, new Date()));
 		etablissement.setNom_etablissement(name);
@@ -145,11 +136,8 @@ public class EtablissementService implements EtablissementInterface {
 	}
 
 	@Override
-	public List<Etudiant> getEtudiantListByEtablissement(Long id) throws InvalidEntries, DataNotFoundExceptions {
+	public List<Etudiant> getEtudiantListByEtablissement(Long id) throws EntityNotFoundException, DataNotFoundExceptions {
 		Etablissement etablissement = etablissementRepository.getOne(id);
-
-		if (etablissement == null)
-			throw new InvalidEntries();
 		/**
 		 * On récupere la liste des filieres , si il n'ya pas de filiere , pas la peine
 		 * de continuer throw new DataNotFoundException
@@ -168,15 +156,7 @@ public class EtablissementService implements EtablissementInterface {
 			List<Etape> etapes = filiere.getEtapes();
 			for (Etape etape : etapes) {
 				List<Semestre> semestres = etape.getSemestres();
-				for (Semestre semestre : semestres) {
-					List<Modulee> modules = semestre.getModules();
-					for (Modulee module : modules) {
-						List<Element> elements = module.getElements();
-						for (Element element : elements) {
-							listes_de_professeurs.addAll(element.getProfesseurs());
-						}
-					}
-				}
+				listerSemestre(listes_de_professeurs, semestres);
 			}
 		}
 		if (listes_de_professeurs.size() == 0)

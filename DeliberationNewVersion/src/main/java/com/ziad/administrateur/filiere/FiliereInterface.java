@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
-import com.ziad.administrateur.etablissement.InvalidEntries;
 import com.ziad.models.Etablissement;
 import com.ziad.models.Filiere;
 import com.ziad.models.Professeur;
@@ -19,15 +18,15 @@ public interface FiliereInterface {
 	public List<Etablissement> getEtablissement() throws DataNotFoundExceptions;
 
 	public void createFiliere(Long id_etablissement, String nom_filiere, Long id_professeur,Integer semester_number)
-			throws InvalidEntries,EntityNotFoundException;
+			throws EntityNotFoundException;
 
 	public List<Filiere> getFiliereList() throws DataNotFoundExceptions;
 
-	public Filiere getFiliereProfile(ModelAndView model,Long id) throws InvalidEntries,DataNotFoundExceptions;
+	public Filiere getFiliereProfile(ModelAndView model,Long id) throws EntityNotFoundException,DataNotFoundExceptions;
 
-	public void modifyFiliereProfile(Long id_filiere, String name, Long etablissement_id, Integer semester_number) throws InvalidEntries;
+	public void modifyFiliereProfile(Long id_filiere, String name, Long etablissement_id, Integer semester_number) throws EntityNotFoundException;
 	
-	public void suprimerFiliere(Long id) throws InvalidEntries;
+	public void suprimerFiliere(Long id) throws EntityNotFoundException;
 	
 	public Filiere listerEtapes(Long id_filire) throws DataNotFoundExceptions;
 	

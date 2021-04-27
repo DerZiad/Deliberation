@@ -3,13 +3,14 @@ package com.ziad.administrateur.module;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
-import com.ziad.administrateur.etablissement.InvalidEntries;
 import com.ziad.models.Element;
 import com.ziad.models.Historique;
 import com.ziad.models.Modulee;
@@ -44,7 +45,7 @@ public class ModuleImplementation implements ModuleMetier {
 
 	@Override
 	public void creerModule(Long semestre_id, Long professeur_id, String name,Integer compose_seul_element)
-			throws InvalidEntries {
+			throws EntityNotFoundException {
 		Modulee module = new Modulee();
 		if(semestre_id != null) {
 			Semestre semestre = semestreRepository.getOne(semestre_id);
@@ -85,10 +86,8 @@ public class ModuleImplementation implements ModuleMetier {
 	}
 
 	@Override
-	public void getProfilModuleById(ModelAndView model, Long id) throws InvalidEntries {
+	public void getProfilModuleById(ModelAndView model, Long id) throws EntityNotFoundException {
 		Modulee module = moduleRepository.getOne(id);
-		if (module == null)
-			throw new InvalidEntries("Veuillez ne pas modifier l'id de module");
 		model.addObject("module", module);
 		List<Semestre> semestres = semestreRepository.findAll();
 		model.addObject("semestres", semestres);
@@ -99,11 +98,9 @@ public class ModuleImplementation implements ModuleMetier {
 
 	@Override
 	public void modifyModule(Long id, String name, Long semestre_id, Long professeur_id)
-			throws InvalidEntries {
+			throws EntityNotFoundException {
 		
 		Modulee module = moduleRepository.findById(id).get();
-		if (module == null)
-			throw new InvalidEntries("Module n'est pas trouve");
 		Professeur professeur = null;
 		if(professeur_id != null) {
 			professeur = professeurRepository.findById(professeur_id).get();
@@ -139,10 +136,8 @@ public class ModuleImplementation implements ModuleMetier {
 	}
 
 	@Override
-	public void deleteModule(Long id) throws InvalidEntries {
+	public void deleteModule(Long id) throws EntityNotFoundException {
 		Modulee module = moduleRepository.getOne(id);
-		if (module == null)
-			throw new InvalidEntries("Veuillez ne pas modifier id de module");
 		moduleRepository.delete(module);
 		historiqueRepository
 				.save(new Historique("Module " + module.getLibelle_module() + " supprimé", new java.util.Date()));

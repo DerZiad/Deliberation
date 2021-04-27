@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
-import com.ziad.administrateur.etablissement.InvalidEntries;
 import com.ziad.enums.TypeSemestre;
 import com.ziad.models.Etablissement;
 import com.ziad.models.Etape;
@@ -54,10 +53,8 @@ public class FiliereService implements FiliereInterface {
 
 	@Override
 	public void createFiliere(Long id_etablissement, String nom_filiere, Long id_professeur, Integer semester_number)
-			throws InvalidEntries, EntityNotFoundException {
+			throws EntityNotFoundException {
 		Etablissement etablissement = etablissementRepository.getOne(id_etablissement);
-		if (etablissement == null)
-			throw new InvalidEntries("S'il vous plait ne modifie pas l'id de l'etablissement");
 		Filiere filiere = new Filiere();
 		filiere.setNom_filiere(nom_filiere);
 		filiere.setEtablissements(etablissement);
@@ -95,10 +92,8 @@ public class FiliereService implements FiliereInterface {
 	}
 
 	@Override
-	public Filiere getFiliereProfile(ModelAndView model, Long id) throws InvalidEntries, DataNotFoundExceptions {
+	public Filiere getFiliereProfile(ModelAndView model, Long id) throws EntityNotFoundException,DataNotFoundExceptions {
 		Filiere filiere = filiereRepository.getOne(id);
-		if (filiere == null)
-			throw new InvalidEntries("Les données saisies sont invalides");
 		model.addObject("filiere", filiere);
 		List<Etablissement> etablissements = etablissementRepository.findAll();
 		if (etablissements.size() == 0)
@@ -118,10 +113,8 @@ public class FiliereService implements FiliereInterface {
 
 	@Override
 	public void modifyFiliereProfile(Long id_filiere, String name, Long etablissement_id, Integer semester_number)
-			throws InvalidEntries {
+			throws EntityNotFoundException {
 		Filiere filiere = filiereRepository.getOne(id_filiere);
-		if (filiere == null)
-			throw new InvalidEntries("Ne modifie l'id de filière s'il vous plait");
 		List<Semestre> old_semestres = semestreRepository.getSemestresByFiliere(filiere);
 		int old_semester_num = (old_semestres == null) ? 0 : old_semestres.size();
 		historiqueRepository.save(new Historique("filiere " + filiere.getNom_filiere() + " modifié en " + name
@@ -165,10 +158,8 @@ public class FiliereService implements FiliereInterface {
 	}
 
 	@Override
-	public void suprimerFiliere(Long id) throws InvalidEntries {
+	public void suprimerFiliere(Long id) throws EntityNotFoundException {
 		Filiere filiere = filiereRepository.getOne(id);
-		if (filiere == null)
-			throw new InvalidEntries("L'id de la filiere ne doit pas être modifié");
 		String name = filiere.getNom_filiere();
 		historiqueRepository.save(new Historique("filiere " + name + " supprimée", new Date()));
 		filiereRepository.delete(filiere);
