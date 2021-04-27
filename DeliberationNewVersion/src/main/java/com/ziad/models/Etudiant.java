@@ -20,15 +20,12 @@ import com.ziad.enums.Gender;
 @Table(name = "Etudiant")
 public class Etudiant implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_etudiant")
-	private long id_etudiant;
+	private Long id_etudiant;
 
 	@Column(name = "massar_edu", unique = true)
 	private String massar_edu;
@@ -124,23 +121,18 @@ public class Etudiant implements Serializable{
 	@Column(name = "academy")
 	private String academy;
 
-	/**
-	 * date d'inscription
-	 */
 	@Column(name = "registration_date")
 	private Date registration_date;
 
 	@Column(name = "email")
 	private String email;
-	/***
-	 * Inscription En ligne
-	 */
+	
+	/**
+	 * Relation
+	 * */
 	@OneToOne(cascade = CascadeType.ALL)
 	private InscriptionEnLigne inscription_en_ligne;
 
-	/**
-	 * USER
-	 */
 	@OneToOne(cascade = CascadeType.ALL)
 	private User user;
 
@@ -178,7 +170,7 @@ public class Etudiant implements Serializable{
 		this.user = user;
 	}
 
-	public Etudiant(long id_etudiant, String massar_edu, String first_name_fr, String first_name_ar,
+	public Etudiant(Long id_etudiant, String massar_edu, String first_name_fr, String first_name_ar,
 			String last_name_fr, String last_name_ar, String cne, String nationality, Gender gender, Date birth_date,
 			String birth_place, String city, String province, Integer bac_year, String bac_type, String mention,
 			String high_school, String bac_place, String academy, Date registration_date, String email,
@@ -209,11 +201,11 @@ public class Etudiant implements Serializable{
 		this.user = user;
 	}
 
-	public long getId_etudiant() {
+	public Long getId_etudiant() {
 		return id_etudiant;
 	}
 
-	public void setId_etudiant(long id_etudiant) {
+	public void setId_etudiant(Long id_etudiant) {
 		this.id_etudiant = id_etudiant;
 	}
 

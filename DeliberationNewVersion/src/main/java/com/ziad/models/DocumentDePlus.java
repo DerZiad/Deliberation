@@ -14,6 +14,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "document_en_plus")
 public class DocumentDePlus implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
@@ -23,7 +26,10 @@ public class DocumentDePlus implements Serializable{
 
 	private String encoded_document;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	/**
+	 * Relations
+	 * **/
+	@ManyToOne(cascade = CascadeType.DETACH)
 	private InscriptionAdministrative inscription_administrative;
 	
 	public DocumentDePlus(int id, byte[] document, String encoded_document,

@@ -1,6 +1,7 @@
 package com.ziad.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -16,14 +17,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-
 import com.ziad.enums.Role;
 
 @Entity
 @Table(name = "Professeur")
 public class Professeur implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,48 +41,45 @@ public class Professeur implements Serializable{
 
 	@Column(name = "email_professeur")
 	private String email_professeur;
-
+	
+	
+	/**
+	 * Relations
+	 * */
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user", foreignKey = @ForeignKey(name = "fk_user"))
-	@NotFound(action = NotFoundAction.IGNORE)
 	private User user;
 
 	@OneToMany(targetEntity = Modulee.class, mappedBy = "responsable_module", cascade = CascadeType.ALL)
-	private List<Modulee> modules;
+	private List<Modulee> modules = new ArrayList<Modulee>();
 
 	@ManyToMany(targetEntity = Element.class, mappedBy = "professeurs", cascade = CascadeType.ALL)
-	private List<Element> elements;
+	private List<Element> elements = new ArrayList<Element>();
 
 	@OneToMany(targetEntity = Filiere.class, mappedBy = "responsable_filiere", cascade = CascadeType.ALL)
-	private List<Filiere> filieres;
+	private List<Filiere> filieres = new ArrayList<Filiere>();
 
 	public Professeur() {
 
 	}
 
-	public Professeur(String nom_professeur, String prenom_professeur, String email_professeur, User user,
-			List<Modulee> modules, List<Element> elements, List<Filiere> filieres) {
+	public Professeur(String nom_professeur, String prenom_professeur, String email_professeur, User user) {
 		super();
 		this.nom_professeur = nom_professeur;
 		this.prenom_professeur = prenom_professeur;
 		this.email_professeur = email_professeur;
 		this.user = user;
-		this.modules = modules;
-		this.elements = elements;
-		this.filieres = filieres;
+
 	}
 
 	public Professeur(long id_professeur, String nom_professeur, String prenom_professeur, String email_professeur,
-			User user, List<Modulee> modules, List<Element> elements, List<Filiere> filieres) {
+			User user) {
 		super();
 		this.id_professeur = id_professeur;
 		this.nom_professeur = nom_professeur;
 		this.prenom_professeur = prenom_professeur;
 		this.email_professeur = email_professeur;
 		this.user = user;
-		this.modules = modules;
-		this.elements = elements;
-		this.filieres = filieres;
 	}
 
 	public long getId_professeur() {

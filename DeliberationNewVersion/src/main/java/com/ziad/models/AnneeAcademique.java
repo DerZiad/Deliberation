@@ -16,9 +16,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "anneeacademique")
 public class AnneeAcademique implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -27,7 +25,12 @@ public class AnneeAcademique implements Serializable {
 
 	@Column(name = "annee_academique")
 	private int annee_academique;
-
+	
+	/**
+	 * Relations
+	 * 
+	 */
+	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "annee_academique")
 	private List<InscriptionAdministrative> liste_inscription_administrative = new ArrayList<InscriptionAdministrative>();
 

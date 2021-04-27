@@ -17,10 +17,15 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Element")
 public class Element implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_element")
-	private long id_element;
+	private Long id_element;
 
 	@Column(name = "libelle_element")
 	private String libelle_element;
@@ -32,49 +37,40 @@ public class Element implements Serializable{
 	private Double validation = 10d;
 
 	/**
-	 * Modules Inscrit dedant
-	 * 
-	 */
-
-	@ManyToOne(targetEntity = Modulee.class, cascade = CascadeType.PERSIST)
+	 * Relations
+	 * */
+	@ManyToOne(targetEntity = Modulee.class, cascade = CascadeType.DETACH)
 	private Modulee module;
 
-	/*
-	 *  
-	 * */
-	@ManyToMany(targetEntity = Professeur.class, cascade = CascadeType.PERSIST)
-	private List<Professeur> professeurs;
+	@ManyToMany(targetEntity = Professeur.class, cascade = CascadeType.DETACH)
+	private List<Professeur> professeurs = new ArrayList<Professeur>();
 
 	public Element() {
-		professeurs = new ArrayList<Professeur>();
+
 	}
 
-	public Element(String libelle_element, Double coeficient, Double validation, Modulee module,
-			List<Professeur> professeurs) {
+	public Element(String libelle_element, Double coeficient, Double validation, Modulee module) {
 		super();
 		this.libelle_element = libelle_element;
 		this.coeficient = coeficient;
 		this.validation = validation;
 		this.module = module;
-		this.professeurs = professeurs;
 	}
 
-	public Element(long id_element, String libelle_element, Double coeficient, Double validation, Modulee module,
-			List<Professeur> professeurs) {
+	public Element(Long id_element, String libelle_element, Double coeficient, Double validation, Modulee module) {
 		super();
 		this.id_element = id_element;
 		this.libelle_element = libelle_element;
 		this.coeficient = coeficient;
 		this.validation = validation;
 		this.module = module;
-		this.professeurs = professeurs;
 	}
 
-	public long getId_element() {
+	public Long getId_element() {
 		return id_element;
 	}
 
-	public void setId_element(long id_element) {
+	public void setId_element(Long id_element) {
 		this.id_element = id_element;
 	}
 

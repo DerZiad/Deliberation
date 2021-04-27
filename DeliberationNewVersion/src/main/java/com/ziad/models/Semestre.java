@@ -22,46 +22,52 @@ import com.ziad.enums.TypeSemestre;
 
 @Entity
 @Table(name = "Semestre")
-public class Semestre implements Serializable{
+public class Semestre implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id_semestre")
-	private long id_semestre;
+	private Long id_semestre;
+	
 	@Column(name = "validation")
 	private Double validation = 10d;
+	
 	@Column(name = "libelle_semestre")
 	private String libelle_semestre;
-
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "etape", foreignKey = @ForeignKey(name = "fk_etape"))
-	private Etape etape;
 
 	@Enumerated(value = EnumType.STRING)
 	private TypeSemestre type_semestre;
 
+	/**
+	 * Relations
+	 */
+	@ManyToOne(cascade = CascadeType.DETACH)
+	@JoinColumn(name = "etape", foreignKey = @ForeignKey(name = "fk_etape"))
+	private Etape etape;
+
 	@Column(name = "ordre")
 	private int ordre;
-	
-	@OneToMany(mappedBy = "semestre",cascade = CascadeType.ALL)
+
+	@OneToMany(mappedBy = "semestre", cascade = CascadeType.ALL)
 	private List<Modulee> modules = new ArrayList<Modulee>();
 
 	public Semestre() {
 
 	}
 
-	public Semestre(Double validation, String libelle_semestre, Etape etape, TypeSemestre type_semestre, int ordre,
-			List<Modulee> modules) {
+	public Semestre(Double validation, String libelle_semestre, Etape etape, TypeSemestre type_semestre, int ordre) {
 		super();
 		this.validation = validation;
 		this.libelle_semestre = libelle_semestre;
 		this.etape = etape;
 		this.type_semestre = type_semestre;
 		this.ordre = ordre;
-		this.modules = modules;
 	}
 
-	public Semestre(long id_semestre, Double validation, String libelle_semestre, Etape etape,
-			TypeSemestre type_semestre, int ordre, List<Modulee> modules) {
+	public Semestre(Long id_semestre, Double validation, String libelle_semestre, Etape etape,
+			TypeSemestre type_semestre, int ordre) {
 		super();
 		this.id_semestre = id_semestre;
 		this.validation = validation;
@@ -69,14 +75,13 @@ public class Semestre implements Serializable{
 		this.etape = etape;
 		this.type_semestre = type_semestre;
 		this.ordre = ordre;
-		this.modules = modules;
 	}
 
-	public long getId_semestre() {
+	public Long getId_semestre() {
 		return id_semestre;
 	}
 
-	public void setId_semestre(long id_semestre) {
+	public void setId_semestre(Long id_semestre) {
 		this.id_semestre = id_semestre;
 	}
 
@@ -127,7 +132,5 @@ public class Semestre implements Serializable{
 	public void setModules(List<Modulee> modules) {
 		this.modules = modules;
 	}
-
-	
 
 }

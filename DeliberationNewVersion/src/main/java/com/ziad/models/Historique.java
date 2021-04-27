@@ -13,11 +13,12 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Historique")
 public class Historique implements Serializable{
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
-	private long id_historique;
+	private Long id_historique;
 
 	@Column(name = "historique")
 	private String historique;
@@ -29,7 +30,7 @@ public class Historique implements Serializable{
 
 	}
 	
-	public Historique(long id_historique, String historique, Date date) {
+	public Historique(Long id_historique, String historique, Date date) {
 		super();
 		this.id_historique = id_historique;
 		this.historique = historique;
@@ -42,11 +43,11 @@ public class Historique implements Serializable{
 		this.date = date;
 	}
 
-	public long getId_historique() {
+	public Long getId_historique() {
 		return id_historique;
 	}
 
-	public void setId_historique(long id_historique) {
+	public void setId_historique(Long id_historique) {
 		this.id_historique = id_historique;
 	}
 

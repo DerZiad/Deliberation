@@ -23,6 +23,8 @@ import com.ziad.models.compositeid.ComposeEtudiantElementId;
 @Table(name = "note_element")
 public class NoteElement implements Serializable{
 
+	private static final long serialVersionUID = 1L;
+
 	/******
 	 * 
 	 * 

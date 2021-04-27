@@ -10,7 +10,7 @@ public class FluxDonneeAdvice {
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	public ModelAndView surveillerInvalidDatas(MissingServletRequestParameterException exception) {
 		ModelAndView model = new ModelAndView("403");
-		model.addObject("exception", "Erreur du Serveur , veuillez ressayer plus tard");
+		model.addObject("exception", "Erreur du type de recu");
 		return model;
 	}
 }

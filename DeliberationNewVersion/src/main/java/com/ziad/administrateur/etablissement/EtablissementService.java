@@ -44,7 +44,7 @@ public class EtablissementService implements EtablissementInterface {
 	private HistoriqueRepository historiqueRepository;
 
 	public void createEtablissement(String name) {
-		Etablissement etablissement = new Etablissement(name, new ArrayList<Filiere>());
+		Etablissement etablissement = new Etablissement(name);
 		etablissementRepository.save(etablissement);
 
 		/**

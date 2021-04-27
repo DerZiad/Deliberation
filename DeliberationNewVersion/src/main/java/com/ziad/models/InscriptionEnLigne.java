@@ -21,10 +21,12 @@ import com.ziad.enums.Gender;
 @Table(name = "InscriptionEnLigne")
 public class InscriptionEnLigne implements Serializable{
 
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_inscription_en_ligne")
-	private long id_inscription_en_ligne;
+	private Long id_inscription_en_ligne;
 
 	@Column(name = "email")
 	private String email;
@@ -135,10 +137,10 @@ public class InscriptionEnLigne implements Serializable{
 	 */
 	@Column(name = "accepted")
 	private int accepted;
+	
 	/**
-	 * Etablissement
-	 * 
-	 **/
+	 * Relations
+	 * */
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private Etablissement etablissement;
 
@@ -146,7 +148,7 @@ public class InscriptionEnLigne implements Serializable{
 
 	}
 
-	public InscriptionEnLigne(long id_inscription_en_ligne, String email, Etudiant etudiant, String massar_edu,
+	public InscriptionEnLigne(Long id_inscription_en_ligne, String email, Etudiant etudiant, String massar_edu,
 			String first_name_fr, String first_name_ar, String last_name_fr, String last_name_ar, String cne,
 			String nationality, Gender gender, Date birth_date, String birth_place, String city, String province,
 			Integer bac_year, String bac_type, String mention, String high_school, String bac_place, String academy,
@@ -209,11 +211,11 @@ public class InscriptionEnLigne implements Serializable{
 		this.etablissement = etablissement;
 	}
 
-	public long getId_inscription_en_ligne() {
+	public Long getId_inscription_en_ligne() {
 		return id_inscription_en_ligne;
 	}
 
-	public void setId_inscription_en_ligne(long id_inscription_en_ligne) {
+	public void setId_inscription_en_ligne(Long id_inscription_en_ligne) {
 		this.id_inscription_en_ligne = id_inscription_en_ligne;
 	}
 

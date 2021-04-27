@@ -13,12 +13,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-
 @Entity
 @Table(name = "Etablissement")
 public class Etablissement implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,9 +26,11 @@ public class Etablissement implements Serializable{
 
 	@Column(name = "name")
 	private String nom_etablissement;
-
+	
+	/**
+	 * Relations
+	 * */
 	@OneToMany(targetEntity = Filiere.class, mappedBy = "etablissement", cascade = CascadeType.ALL)
-	@NotFound(action = NotFoundAction.IGNORE)
 	private List<Filiere> filieres = new ArrayList<Filiere>();
 	
 	@OneToMany(mappedBy = "etablissement",cascade = CascadeType.ALL)
@@ -39,36 +40,16 @@ public class Etablissement implements Serializable{
 
 	}
 
-	public Etablissement(long id_etablissement, String nom_etablissement, List<Filiere> filieres) {
+	public Etablissement(long id_etablissement, String nom_etablissement) {
 		super();
 		this.id_etablissement = id_etablissement;
 		this.nom_etablissement = nom_etablissement;
-		this.filieres = filieres;
 	}
 
 
-	public Etablissement(long id_etablissement, String nom_etablissement, List<Filiere> filieres,
-			List<InscriptionEnLigne> inscriptions_en_lignes) {
-		super();
-		this.id_etablissement = id_etablissement;
-		this.nom_etablissement = nom_etablissement;
-		this.filieres = filieres;
-		this.inscriptions_en_lignes = inscriptions_en_lignes;
-	}
-
-	public Etablissement(String nom_etablissement, List<Filiere> filieres) {
+	public Etablissement(String nom_etablissement) {
 		super();
 		this.nom_etablissement = nom_etablissement;
-		this.filieres = filieres;
-	}
-	
-	
-	public Etablissement(String nom_etablissement, List<Filiere> filieres,
-			List<InscriptionEnLigne> inscriptions_en_lignes) {
-		super();
-		this.nom_etablissement = nom_etablissement;
-		this.filieres = filieres;
-		this.inscriptions_en_lignes = inscriptions_en_lignes;
 	}
 
 	public long getId_etablissement() {
@@ -101,6 +82,10 @@ public class Etablissement implements Serializable{
 
 	public void setInscriptions_en_lignes(List<InscriptionEnLigne> inscriptions_en_lignes) {
 		this.inscriptions_en_lignes = inscriptions_en_lignes;
+	}
+	
+	public void addFiliere(Filiere filiere) {
+		filieres.add(filiere);
 	}
 
 }

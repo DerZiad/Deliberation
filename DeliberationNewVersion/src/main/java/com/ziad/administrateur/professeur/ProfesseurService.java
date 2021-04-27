@@ -44,8 +44,7 @@ public class ProfesseurService implements ProfesseurInterface {
 		user.setActive(1);
 		user.setUsername(last_name.toLowerCase());
 		user.setPassword(passwordEncoder.encode(last_name.toLowerCase()));
-		Professeur professeur = new Professeur(first_name, last_name, email, user, new ArrayList<Modulee>(),
-				new ArrayList<Element>(), new ArrayList<Filiere>());
+		Professeur professeur = new Professeur(first_name, last_name, email, user);
 		user.addRole(Role.PROFESSEUR);
 		professeurRepository.save(professeur);
 		historiqueRepository

@@ -8,9 +8,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -21,6 +18,8 @@ import com.ziad.models.compositeid.ComposedInscriptionAdministrative;
 @Entity
 @Table(name = "InscriptionAdministrative")
 public class InscriptionAdministrative implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
 	private ComposedInscriptionAdministrative composite_association_id;
@@ -64,8 +63,8 @@ public class InscriptionAdministrative implements Serializable{
 	private String encodedAn;
 
 	private String encodedCin;
-
-	@OneToMany(cascade = CascadeType.ALL)
+	
+	@OneToMany(cascade = CascadeType.ALL,mappedBy = "inscription_administrative")
 	private List<DocumentDePlus> documents;
 
 	public InscriptionAdministrative() {

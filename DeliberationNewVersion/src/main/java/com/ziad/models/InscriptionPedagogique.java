@@ -1,7 +1,6 @@
 package com.ziad.models;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,8 +10,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.ManyToAny;
 
 import com.ziad.enums.TypeInscription;
 import com.ziad.models.compositeid.ComposedInscriptionPedagogique;
@@ -25,6 +22,11 @@ import com.ziad.models.compositeid.ComposedInscriptionPedagogique;
 @Entity
 @Table(name = "InscriptionPedagogique")
 public class InscriptionPedagogique implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
 	private ComposedInscriptionPedagogique id_inscription_pedagogique;

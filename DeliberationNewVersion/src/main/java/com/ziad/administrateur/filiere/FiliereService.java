@@ -68,12 +68,9 @@ public class FiliereService implements FiliereInterface {
 		int years = (int) (semester_number / 2) + semester_number % 2;
 		int ordre = 0;
 		for (int i = 1; i <= years; i++) {
-			Etape etape = new Etape((i == 1) ? "1 ère Année" : i + " ème Année", false, 10d, filiere,
-					new ArrayList<Semestre>());
-			Semestre semestre1 = new Semestre(10d, "Semestre " + ++ordre, etape, TypeSemestre.HIVER, ordre,
-					new ArrayList<com.ziad.models.Modulee>());
-			Semestre semestre2 = new Semestre(10d, "Semestre " + ++ordre, etape, TypeSemestre.PRINTEMPS, ordre,
-					new ArrayList<com.ziad.models.Modulee>());
+			Etape etape = new Etape((i == 1) ? "1 ère Année" : i + " ème Année", false, 10d, filiere);
+			Semestre semestre1 = new Semestre(10d, "Semestre " + ++ordre, etape, TypeSemestre.HIVER, ordre);
+			Semestre semestre2 = new Semestre(10d, "Semestre " + ++ordre, etape, TypeSemestre.PRINTEMPS, ordre);
 			etapeRepository.save(etape);
 			semestreRepository.save(semestre1);
 			if (i != years || (i == years && semester_number % 2 == 0))
@@ -142,12 +139,9 @@ public class FiliereService implements FiliereInterface {
 		long years = (long) (semester_number / 2) + semester_number % 2;
 		if (old_semester_num != semester_number)
 			for (int i = 1; i <= years; i++) {
-				Etape etape = new Etape((i == 1) ? "1 ère Année" : i + " ème Année", false, 10d, filiere,
-						new ArrayList<Semestre>());
-				Semestre semestre1 = new Semestre(10d, "Semesetre " + i, etape, TypeSemestre.HIVER, 1,
-						new ArrayList<com.ziad.models.Modulee>());
-				Semestre semestre2 = new Semestre(10d, "Semestre " + (2 * i), etape, TypeSemestre.PRINTEMPS, 2,
-						new ArrayList<com.ziad.models.Modulee>());
+				Etape etape = new Etape((i == 1) ? "1 ère Année" : i + " ème Année", false, 10d, filiere);
+				Semestre semestre1 = new Semestre(10d, "Semesetre " + i, etape, TypeSemestre.HIVER, 1);
+				Semestre semestre2 = new Semestre(10d, "Semestre " + (2 * i), etape, TypeSemestre.PRINTEMPS, 2);
 				etape.addSemestre(semestre1);
 				etape.addSemestre(semestre2);
 				etapeRepository.save(etape);

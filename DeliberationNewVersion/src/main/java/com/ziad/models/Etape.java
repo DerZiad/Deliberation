@@ -19,18 +19,27 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Etape")
 public class Etape implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_etape")
 	private int id_etape;
+	
 	@Column(name = "libelle_etape")
 	private String libelle_etape;
+	
 	@Column(name = "diplomante")
 	private boolean diplomante;
+	
 	@Column(name = "validation")
 	private Double validation = 10d;
-
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	
+	/**
+	 * Relations
+	 * */
+	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "filiere", foreignKey = @ForeignKey(name = "fk_filiere"))
 	private Filiere filiere;
 
@@ -41,25 +50,21 @@ public class Etape implements Serializable{
 
 	}
 
-	public Etape(String libelle_etape, boolean diplomante, Double validation, Filiere filiere,
-			List<Semestre> semestres) {
+	public Etape(String libelle_etape, boolean diplomante, Double validation, Filiere filiere) {
 		super();
 		this.libelle_etape = libelle_etape;
 		this.diplomante = diplomante;
 		this.validation = validation;
 		this.filiere = filiere;
-		this.semestres = semestres;
 	}
 
-	public Etape(int id_etape, String libelle_etape, boolean diplomante, Double validation, Filiere filiere,
-			List<Semestre> semestres) {
+	public Etape(int id_etape, String libelle_etape, boolean diplomante, Double validation, Filiere filiere) {
 		super();
 		this.id_etape = id_etape;
 		this.libelle_etape = libelle_etape;
 		this.diplomante = diplomante;
 		this.validation = validation;
 		this.filiere = filiere;
-		this.semestres = semestres;
 	}
 
 	public int getId_etape() {
