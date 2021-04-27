@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
+import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Etablissement;
 import com.ziad.models.Filiere;
 import com.ziad.models.Professeur;

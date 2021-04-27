@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
+import com.ziad.exceptions.DataNotFoundExceptions;
 
 @Controller
 @RequestMapping("/admin/module")
 public class ModuleController {
 	
 	@Autowired
-	private ModuleMetier metier;
+	private ModuleInterface metier;
 
 	@GetMapping("/creer")
 	public ModelAndView moduleCreatePage() {

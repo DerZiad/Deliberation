@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
+import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Element;
 import com.ziad.models.Historique;
 import com.ziad.models.Modulee;
@@ -23,7 +23,7 @@ import com.ziad.repositories.SemestreRepository;
 
 @Primary
 @Service
-public class ModuleImplementation implements ModuleMetier {
+public class ModuleService implements ModuleInterface {
 
 	@Autowired
 	private ModuleRepository moduleRepository;

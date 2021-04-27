@@ -5,11 +5,11 @@ import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
-import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
+import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Element;
 import com.ziad.models.Professeur;
 
-public interface ProfesseurImplementation {
+public interface ProfesseurInterface {
 	
 	public void createProfesseur(String first_name, String last_name, String email);
 	

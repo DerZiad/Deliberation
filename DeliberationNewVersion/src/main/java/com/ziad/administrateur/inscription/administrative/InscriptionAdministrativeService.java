@@ -21,9 +21,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
 import com.ziad.enums.Role;
 import com.ziad.enums.TypeInscription;
+import com.ziad.exceptions.CSVReaderOException;
+import com.ziad.exceptions.DataNotFoundExceptions;
+import com.ziad.exceptions.FormatReaderException;
 import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Element;
 import com.ziad.models.Etape;
@@ -45,12 +47,11 @@ import com.ziad.repositories.HistoriqueRepository;
 import com.ziad.repositories.InscriptionAdministrativeRepository;
 import com.ziad.repositories.InscriptionEnLigneRepository;
 import com.ziad.repositories.InscriptionPedagogiqueRepository;
-import com.ziad.services.CSVReaderOException;
-import com.ziad.services.ExcelToDbService;
+import com.ziad.utilities.ExcelReader;
 
 @Service
 @Primary
-public class InscriptionAdministrativeNormalService implements CrudInscriptionAdministrative {
+public class InscriptionAdministrativeService implements InscritpionAdministrativeInterface {
 
 	@Autowired
 	private InscriptionAdministrativeRepository inscriptionAdministrative;
@@ -71,7 +72,7 @@ public class InscriptionAdministrativeNormalService implements CrudInscriptionAd
 	@Autowired
 	private InscriptionAdministrativeRepository inscription_admistrative_repository;
 	@Autowired
-	private ExcelToDbService excel_service;
+	private ExcelReader excel_service;
 
 	@Override
 	public ArrayList<Object> prepareInscriptionDatas() throws DataNotFoundExceptions {

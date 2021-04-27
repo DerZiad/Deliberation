@@ -1,4 +1,4 @@
-package com.ziad.principale.controllers;
+package com.ziad.exceptions;
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;

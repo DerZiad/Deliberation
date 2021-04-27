@@ -1,4 +1,4 @@
-package com.ziad.administrateur.etablissement;
+package com.ziad.exceptions;
 
 public class DataNotFoundExceptions extends Exception {
 

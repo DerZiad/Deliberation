@@ -18,19 +18,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
+import com.ziad.exceptions.CSVReaderOException;
+import com.ziad.exceptions.DataNotFoundExceptions;
+import com.ziad.exceptions.FormatReaderException;
 import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Etudiant;
 import com.ziad.models.Filiere;
 import com.ziad.models.InscriptionAdministrative;
 import com.ziad.models.InscriptionEnLigne;
-import com.ziad.services.CSVReaderOException;
 
 @Controller
 @RequestMapping("/admin")
 public class InscriptionAdministrativeController {
 	@Autowired
-	private CrudInscriptionAdministrative inscription_metier;
+	private InscritpionAdministrativeInterface inscription_metier;
 	
 	private final static String ATTRIBUT_LIST_ETUDIANTS = "etudiants";
 	private final static String ATTRIBUT_LIST_FILIERES = "filieres";

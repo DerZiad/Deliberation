@@ -1,4 +1,4 @@
-package com.ziad.services;
+package com.ziad.utilities.adaptater;
 
 import java.lang.reflect.Type;
 

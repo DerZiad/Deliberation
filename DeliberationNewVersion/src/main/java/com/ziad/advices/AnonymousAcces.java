@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ziad.principale.controllers.AnonymousException;
+import com.ziad.exceptions.AnonymousException;
 
 @ControllerAdvice
 public class AnonymousAcces {

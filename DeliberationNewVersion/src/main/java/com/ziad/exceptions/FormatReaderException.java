@@ -1,4 +1,4 @@
-package com.ziad.administrateur.inscription.administrative;
+package com.ziad.exceptions;
 
 public class FormatReaderException extends Exception{
 

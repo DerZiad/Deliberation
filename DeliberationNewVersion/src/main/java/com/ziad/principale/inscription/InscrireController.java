@@ -1,4 +1,4 @@
-package com.ziad.principale.controllers;
+package com.ziad.principale.inscription;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
 import com.ziad.enums.Gender;
+import com.ziad.exceptions.DataNotFoundExceptions;
 
 @Controller
 public class InscrireController {

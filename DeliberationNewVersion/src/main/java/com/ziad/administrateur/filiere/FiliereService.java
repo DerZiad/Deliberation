@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
 import com.ziad.enums.TypeSemestre;
+import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Etablissement;
 import com.ziad.models.Etape;
 import com.ziad.models.Filiere;

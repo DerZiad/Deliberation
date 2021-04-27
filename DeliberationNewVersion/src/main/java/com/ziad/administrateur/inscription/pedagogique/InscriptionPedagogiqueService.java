@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
 import com.ziad.enums.TypeInscription;
+import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Element;
 import com.ziad.models.Etape;
 import com.ziad.models.Etudiant;
@@ -32,7 +32,7 @@ import com.ziad.repositories.InscriptionAdministrativeRepository;
 import com.ziad.repositories.InscriptionPedagogiqueRepository;
 import com.ziad.repositories.ModuleRepository;
 import com.ziad.repositories.SemestreRepository;
-import com.ziad.services.JSONConverter;
+import com.ziad.utilities.JSONConverter;
 
 @Service
 @Primary

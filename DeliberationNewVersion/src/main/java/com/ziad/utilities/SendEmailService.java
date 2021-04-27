@@ -1,4 +1,4 @@
-package com.ziad.principale.controllers;
+package com.ziad.utilities;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;

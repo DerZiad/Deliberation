@@ -1,4 +1,4 @@
-package com.ziad.services;
+package com.ziad.exceptions;
 
 public class CSVReaderOException extends Exception{
 	

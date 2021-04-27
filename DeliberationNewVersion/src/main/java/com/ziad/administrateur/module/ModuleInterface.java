@@ -4,9 +4,9 @@ import javax.persistence.EntityNotFoundException;
 
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
+import com.ziad.exceptions.DataNotFoundExceptions;
 
-public interface ModuleMetier {
+public interface ModuleInterface {
 
 	public void makeFirstPage(ModelAndView model);
 

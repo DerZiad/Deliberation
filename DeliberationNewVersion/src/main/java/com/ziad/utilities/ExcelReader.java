@@ -1,4 +1,4 @@
-package com.ziad.services;
+package com.ziad.utilities;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -9,9 +9,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ziad.exceptions.CSVReaderOException;
+
 
 @Service
-public class ExcelToDbService {
+public class ExcelReader {
 
 	
 	public Iterator<Row> readInscriptionAdministrative(MultipartFile file) throws CSVReaderOException,IOException{

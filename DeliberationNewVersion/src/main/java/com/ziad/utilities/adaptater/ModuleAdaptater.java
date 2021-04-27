@@ -1,4 +1,4 @@
-package com.ziad.services;
+package com.ziad.utilities.adaptater;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

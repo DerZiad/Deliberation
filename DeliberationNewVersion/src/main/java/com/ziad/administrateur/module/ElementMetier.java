@@ -18,7 +18,7 @@ import com.ziad.repositories.ProfesseurRepository;
 
 @Service
 @Primary
-public class ElementMetier implements ElementAlgo {
+public class ElementMetier implements ElementInterface {
 	@Autowired
 	private ModuleRepository moduleRepository;
 	@Autowired

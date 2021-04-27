@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
+import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Element;
 import com.ziad.models.Filiere;
 import com.ziad.models.Professeur;
@@ -23,7 +23,7 @@ import com.ziad.models.Professeur;
 @RequestMapping("/admin")
 public class ProfesseurController {
 	@Autowired
-	private ProfesseurImplementation professeur_metier;
+	private ProfesseurInterface professeur_metier;
 
 	/**
 	 * Chemin au Html
@@ -134,8 +134,8 @@ public class ProfesseurController {
 	public ModelAndView ajouterElementsProfesseur(@PathVariable("id_professeur") Long id_professeur) throws DataNotFoundExceptions{
 		ModelAndView model = new ModelAndView(PAGE_AJOUT_ELEMENTS);
 		HashMap<String, Object> composates = professeur_metier.listerFilieresElements();
-		model.addObject(ATTRIBUT_ELEMENTS_PROFESSEUR,((List<Element>)composates.get(ProfesseurImplementation.ATTRIBUT_ELEMENTS)));
-		model.addObject(ATTRIBUT_FILIERES_PROFESSEUR,((List<Element>)composates.get(ProfesseurImplementation.ATTRIBUT_FILIERES)));
+		model.addObject(ATTRIBUT_ELEMENTS_PROFESSEUR,((List<Element>)composates.get(ProfesseurInterface.ATTRIBUT_ELEMENTS)));
+		model.addObject(ATTRIBUT_FILIERES_PROFESSEUR,((List<Element>)composates.get(ProfesseurInterface.ATTRIBUT_FILIERES)));
 		return model;
 	}
 	@SuppressWarnings("unchecked")
@@ -143,8 +143,8 @@ public class ProfesseurController {
 	public ModelAndView filterElementsProfesseur(@PathVariable("id_filiere")Long id_filiere) throws DataNotFoundExceptions{
 		ModelAndView model = new ModelAndView(PAGE_AJOUT_ELEMENTS);
 		HashMap<String, Object> composates = professeur_metier.filterElement(id_filiere);
-		model.addObject(ATTRIBUT_ELEMENTS_PROFESSEUR,((List<Element>)composates.get(ProfesseurImplementation.ATTRIBUT_ELEMENTS)));
-		model.addObject(ATTRIBUT_FILIERES_PROFESSEUR,((List<Filiere>)composates.get(ProfesseurImplementation.ATTRIBUT_FILIERES)));
+		model.addObject(ATTRIBUT_ELEMENTS_PROFESSEUR,((List<Element>)composates.get(ProfesseurInterface.ATTRIBUT_ELEMENTS)));
+		model.addObject(ATTRIBUT_FILIERES_PROFESSEUR,((List<Filiere>)composates.get(ProfesseurInterface.ATTRIBUT_FILIERES)));
 		return model;
 	}
 

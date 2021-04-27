@@ -1,12 +1,12 @@
-package com.ziad.principale.controllers;
+package com.ziad.principale.inscription;
 
 import java.util.List;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 
-import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
 import com.ziad.enums.Gender;
+import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Etablissement;
 
 public interface InscriptionInterface {

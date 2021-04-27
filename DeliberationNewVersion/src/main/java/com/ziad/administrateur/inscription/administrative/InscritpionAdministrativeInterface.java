@@ -10,10 +10,11 @@ import javax.persistence.EntityNotFoundException;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
-import com.ziad.services.CSVReaderOException;
+import com.ziad.exceptions.CSVReaderOException;
+import com.ziad.exceptions.DataNotFoundExceptions;
+import com.ziad.exceptions.FormatReaderException;
 
-public interface CrudInscriptionAdministrative {
+public interface InscritpionAdministrativeInterface {
 
 	public void createInscriptionAdministrative(Long id_annee_academique, Long id_inscription_en_ligne, Long id_filiere,
 			MultipartFile photo, MultipartFile bac, MultipartFile relevee_de_note, MultipartFile acte_naissance,

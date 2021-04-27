@@ -4,7 +4,7 @@ import javax.persistence.EntityNotFoundException;
 
 import org.springframework.web.servlet.ModelAndView;
 
-public interface ElementAlgo {
+public interface ElementInterface {
 	public void modifyElementsModule(Long idelement, Long idprofesseur, Long idmodule, String libelle_element,
 			Double coeficient, Double validation, ModelAndView model) throws EntityNotFoundException;
 	public void deleteElementsModule(Long id) throws EntityNotFoundException;

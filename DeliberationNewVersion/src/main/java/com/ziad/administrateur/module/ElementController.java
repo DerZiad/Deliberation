@@ -20,7 +20,7 @@ public class ElementController {
 	public static final String PATH_ELEMENTPROFILE = "Element/ElementProfile";
 
 	@Autowired
-	private ElementAlgo metier;
+	private ElementInterface metier;
 
 	@GetMapping("/module/profile/{id}/element/create")
 	public ModelAndView createModule(@PathVariable("id") Long id) throws EntityNotFoundException {

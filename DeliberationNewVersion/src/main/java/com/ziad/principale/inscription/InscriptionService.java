@@ -1,4 +1,4 @@
-package com.ziad.principale.controllers;
+package com.ziad.principale.inscription;
 
 import java.util.Date;
 import java.util.List;
@@ -10,14 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
 import com.ziad.enums.Gender;
+import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Etablissement;
 import com.ziad.models.Historique;
 import com.ziad.models.InscriptionEnLigne;
 import com.ziad.repositories.EtablissementRepository;
 import com.ziad.repositories.HistoriqueRepository;
 import com.ziad.repositories.InscriptionEnLigneRepository;
+import com.ziad.utilities.SendEmailService;
 
 @Service
 @Primary

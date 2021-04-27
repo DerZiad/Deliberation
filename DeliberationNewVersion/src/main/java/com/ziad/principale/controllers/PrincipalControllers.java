@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ziad.exceptions.AnonymousException;
 import com.ziad.security.authentification.enums.MonRole;
 
 @Controller

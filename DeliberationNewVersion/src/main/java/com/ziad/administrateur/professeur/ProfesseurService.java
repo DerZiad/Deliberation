@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.ziad.administrateur.etablissement.DataNotFoundExceptions;
 import com.ziad.enums.Role;
+import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Element;
 import com.ziad.models.Filiere;
 import com.ziad.models.Historique;
@@ -26,7 +26,7 @@ import com.ziad.repositories.ProfesseurRepository;
 
 @Service
 @Primary
-public class ProfesseurService implements ProfesseurImplementation {
+public class ProfesseurService implements ProfesseurInterface {
 	@Autowired
 	private ProfesseurRepository professeurRepository;
 	@Autowired

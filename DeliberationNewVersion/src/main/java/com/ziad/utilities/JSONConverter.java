@@ -1,4 +1,4 @@
-package com.ziad.services;
+package com.ziad.utilities;
 
 import java.util.List;
 
@@ -9,6 +9,9 @@ import com.google.gson.GsonBuilder;
 import com.ziad.models.Element;
 import com.ziad.models.Modulee;
 import com.ziad.models.Semestre;
+import com.ziad.utilities.adaptater.ElementAdaptater;
+import com.ziad.utilities.adaptater.ModuleAdaptater;
+import com.ziad.utilities.adaptater.SemestreAdaptater;
 
 @Service
 public class JSONConverter{
