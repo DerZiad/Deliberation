@@ -132,5 +132,8 @@ public class Semestre implements Serializable {
 	public void setModules(List<Modulee> modules) {
 		this.modules = modules;
 	}
+	public void addModule(Modulee module) {
+		modules.add(module);
+	}
 
 }

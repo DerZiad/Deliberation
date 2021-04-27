@@ -39,10 +39,10 @@ public class Element implements Serializable{
 	/**
 	 * Relations
 	 * */
-	@ManyToOne(targetEntity = Modulee.class, cascade = CascadeType.DETACH)
+	@ManyToOne(targetEntity = Modulee.class, cascade = {CascadeType.PERSIST,CascadeType.DETACH})
 	private Modulee module;
 
-	@ManyToMany(targetEntity = Professeur.class, cascade = CascadeType.DETACH)
+	@ManyToMany(targetEntity = Professeur.class, cascade = {CascadeType.PERSIST,CascadeType.DETACH})
 	private List<Professeur> professeurs = new ArrayList<Professeur>();
 
 	public Element() {

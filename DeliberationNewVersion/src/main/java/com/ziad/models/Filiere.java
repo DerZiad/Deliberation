@@ -34,10 +34,10 @@ public class Filiere implements Serializable {
 	@OneToMany(targetEntity = Etape.class, cascade = CascadeType.ALL, mappedBy = "filiere")
 	private List<Etape> etapes = new ArrayList<Etape>();
 
-	@ManyToOne(targetEntity = Etablissement.class, cascade = CascadeType.DETACH)
+	@ManyToOne(targetEntity = Etablissement.class, cascade = {CascadeType.PERSIST,CascadeType.DETACH})
 	private Etablissement etablissement;
 
-	@ManyToOne(targetEntity = Professeur.class, cascade = CascadeType.DETACH)
+	@ManyToOne(targetEntity = Professeur.class, cascade = {CascadeType.PERSIST,CascadeType.DETACH})
 	private Professeur responsable_filiere;
 
 	public Filiere() {

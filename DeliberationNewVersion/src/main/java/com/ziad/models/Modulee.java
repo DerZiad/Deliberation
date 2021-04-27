@@ -47,11 +47,11 @@ public class Modulee implements Serializable {
 	@OneToMany(targetEntity = Element.class, mappedBy = "module", cascade = CascadeType.ALL)
 	private List<Element> elements = new ArrayList<Element>();
 
-	@ManyToOne(targetEntity = Semestre.class, cascade = CascadeType.DETACH)
+	@ManyToOne(targetEntity = Semestre.class, cascade = {CascadeType.PERSIST,CascadeType.DETACH})
 	@JoinColumn(name = "semestre", foreignKey = @ForeignKey(name = "fk_semestre"))
 	private Semestre semestre;
 
-	@ManyToOne(targetEntity = Professeur.class, cascade = CascadeType.DETACH)
+	@ManyToOne(targetEntity = Professeur.class, cascade = {CascadeType.PERSIST,CascadeType.DETACH})
 	private Professeur responsable_module;
 
 	public Modulee() {
