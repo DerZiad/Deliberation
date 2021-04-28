@@ -7,8 +7,6 @@
 	prefix="layout"%>
 <layout:extends name="../layout.jsp">
 	<layout:put block="content" type="REPLACE">
-		<script
-			src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 		<div class="main-card mb-3 card">
 			<div class="card-body">
 				<h5 class="card-title">Création d'une Inscirption Pedagogique</h5>

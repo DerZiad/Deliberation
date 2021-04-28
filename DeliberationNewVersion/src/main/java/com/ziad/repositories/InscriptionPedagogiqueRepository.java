@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Element;
 import com.ziad.models.Etudiant;
 import com.ziad.models.InscriptionPedagogique;
@@ -22,4 +23,6 @@ public interface InscriptionPedagogiqueRepository
 	@Query("select s from InscriptionPedagogique s where s.id_inscription_pedagogique.element=:x")
 	List<InscriptionPedagogique> getInscriptionsPedagogiqueByElement(@Param("x") Element element);
 
+	@Query("select e from InscriptionPedagogique s,Etudiant e where s.id_inscription_pedagogique.element=:x and s.annee_academique =:a")
+	List<Etudiant> getEtudiantsByElementAndAnneeAcademique(@Param("x") Element element,@Param("a")AnneeAcademique annee);
 }

@@ -22,7 +22,6 @@
 								<label for="Nom Etudiant" class="">Nom Etudiant</label> <select
 									name="id_inscription_en_ligne" id="exampleSelect" class="form-control"
 									required>
-									<option default>Choisir étudiant</option>
 									<c:forEach var="etudiant" items="${etudiants}">
 										<option value="${etudiant.id_inscription_en_ligne}">${etudiant.first_name_fr }
 											${etudiant.last_name_fr }</option>

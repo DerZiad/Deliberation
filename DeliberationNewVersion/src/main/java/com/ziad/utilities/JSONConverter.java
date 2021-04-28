@@ -11,7 +11,9 @@ import com.ziad.models.Element;
 import com.ziad.models.InscriptionPedagogique;
 import com.ziad.models.Modulee;
 import com.ziad.models.Semestre;
+import com.ziad.utilities.adaptater.AnneeAcademiqueAdaptater;
 import com.ziad.utilities.adaptater.ElementAdaptater;
+import com.ziad.utilities.adaptater.InscriptionPedagogiqueAdaptater;
 import com.ziad.utilities.adaptater.ModuleAdaptater;
 import com.ziad.utilities.adaptater.SemestreAdaptater;
 
@@ -39,12 +41,12 @@ public class JSONConverter{
 	}
 	
 	public String convertAnneesAcademiques(List<AnneeAcademique> annees) {
-		Gson gson = gsonBuilder.registerTypeAdapter(AnneeAcademique.class, new AnneeAcademique()).create();
+		Gson gson = gsonBuilder.registerTypeAdapter(AnneeAcademique.class, new AnneeAcademiqueAdaptater()).create();
 		return gson.toJson(annees);
 	}
 	
 	public String convertInscriptionsPedagogiques(List<InscriptionPedagogique> inscription_pedagogiques) {
-		Gson gson = gsonBuilder.registerTypeAdapter(InscriptionPedagogique.class, new InscriptionPedagogique()).create();
+		Gson gson = gsonBuilder.registerTypeAdapter(InscriptionPedagogique.class,new InscriptionPedagogiqueAdaptater()).create();
 		return gson.toJson(inscription_pedagogiques);
 	}
 }

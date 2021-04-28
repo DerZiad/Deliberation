@@ -1,26 +1,25 @@
-package com.ziad.professeurespace;
+package com.ziad.professeurespace.notes;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
-import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.ziad.enums.TypeNote;
+import com.ziad.exceptions.CSVReaderOException;
 import com.ziad.exceptions.DataNotFoundExceptions;
-import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Element;
 import com.ziad.models.Etudiant;
-import com.ziad.models.InscriptionPedagogique;
-import com.ziad.models.Professeur;
-import com.ziad.models.User;
+import com.ziad.models.NoteElement;
+import com.ziad.models.compositeid.ComposeEtudiantElementId;
 import com.ziad.repositories.AnnneAcademiqueRepository;
 import com.ziad.repositories.DocumentDePlusRepository;
 import com.ziad.repositories.ElementRepository;
@@ -36,12 +35,11 @@ import com.ziad.repositories.NoteElementRepository;
 import com.ziad.repositories.ProfesseurRepository;
 import com.ziad.repositories.SemestreRepository;
 import com.ziad.repositories.UserRepository;
-import com.ziad.utilities.ExcelExport;
-import com.ziad.utilities.JSONConverter;
+import com.ziad.utilities.ExcelReader;
 
 @Service
 @Primary
-public class ProfesseurService implements ProfesseurInterface {
+public class NoteService implements NoteInterface {
 	@Autowired
 	private AnnneAcademiqueRepository annee_academique;
 	@Autowired
@@ -75,42 +73,49 @@ public class ProfesseurService implements ProfesseurInterface {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	@Autowired
-	private JSONConverter converter;
-	
-	private ExcelExport generator_excel;
-	
-	public List<Element> listerElements() throws DataNotFoundExceptions {
-		List<Element> elements = elementRepository.findAll();
-		if (elements.size() == 0)
-			throw new DataNotFoundExceptions("Vous n'avez pas encore une liste des élements");
-		return elements;
-	}
-
-	public ArrayList<Object> listerEtudiants(Long id_element) throws DataNotFoundExceptions, EntityNotFoundException {
-		Element element = elementRepository.getOne(id_element);
-		List<InscriptionPedagogique> inscriptions_pedagogiques = inscriptionPedagogiqueRepository
-				.getInscriptionsPedagogiqueByElement(element);
-		if (inscriptions_pedagogiques.size() == 0)
-			throw new DataNotFoundExceptions("La liste des étudiants est vide");
-		ArrayList<Object> besoins = new ArrayList<Object>();
-		besoins.add(inscriptions_pedagogiques);
-		besoins.add(converter.convertInscriptionsPedagogiques(inscriptions_pedagogiques));
-		besoins.add(annee_academique.findAll());
-		besoins.add(converter.convertAnneesAcademiques(annee_academique.findAll()));
-		besoins.add(element);
-		return besoins;
-	}
+	private ExcelReader reader;
 
 	@Override
-	public void generateExcel(Long id_element, Long id_annee, String type,HttpServletResponse response) throws EntityNotFoundException,IOException {
+	public void readExcel(MultipartFile file, String type)
+			throws DataNotFoundExceptions, EntityNotFoundException, IOException, CSVReaderOException {
+
+		Iterator<Row> rows = reader.readInscriptionAdministrative(file);
+
+		Row first = rows.next();
+		String typenote = first.getCell(1).getStringCellValue();
+
+		Row second = rows.next();
+		Long id_element = (long) second.getCell(2).getNumericCellValue();
 		Element element = elementRepository.getOne(id_element);
-		AnneeAcademique annee = annee_academique.getOne(id_annee);
-		List<Etudiant> etudiants = inscriptionPedagogiqueRepository.getEtudiantsByElementAndAnneeAcademique(element, annee);
-		generator_excel = new ExcelExport(etudiants, type,element.getLibelle_element(),element.getId_element());
-		generator_excel.export(response);
-		
+
+		Row third = rows.next();
+		Double coefficient = (Double) third.getCell(1).getNumericCellValue();
+
+		while (rows.hasNext()) {
+			try {
+				Row row = rows.next();
+				String massar = row.getCell(0).getStringCellValue();
+				String nom = row.getCell(1).getStringCellValue();
+				String prenom = row.getCell(2).getStringCellValue();
+				Double note = row.getCell(5).getNumericCellValue();
+				List<Etudiant> etudiant = etudiantRepository.getStudentByNationality(massar, nom, prenom);
+				if (etudiant.size() != 1)
+					throw new DataNotFoundExceptions();
+				TypeNote note_type = null;
+				for (TypeNote type_object : TypeNote.values()) {
+					if (type_object.name() == typenote)
+						note_type = type_object;
+				}
+
+				NoteElement note_element = new NoteElement(new ComposeEtudiantElementId(element, etudiant.get(0)), note,
+						coefficient, note_type);
+				noteElementRepository.save(note_element);
+			} catch (Exception e) {
+
+			}
+
+		}
+
 	}
-	
-	
 
 }

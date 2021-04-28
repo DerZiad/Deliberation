@@ -5,9 +5,13 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
+import com.ziad.enums.TypeNote;
 import com.ziad.models.compositeid.ComposeEtudiantElementId;
+
 /*
  * 
  * 
@@ -21,7 +25,7 @@ import com.ziad.models.compositeid.ComposeEtudiantElementId;
  * ***/
 @Entity
 @Table(name = "note_element")
-public class NoteElement implements Serializable{
+public class NoteElement implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -41,15 +45,27 @@ public class NoteElement implements Serializable{
 	@Column(name = "coeficient")
 	private Double coeficient;
 
+	@Column(name = "Type_note")
+	@Enumerated(EnumType.STRING)
+	private TypeNote type;
+
 	public NoteElement() {
 
 	}
 
-	public NoteElement(ComposeEtudiantElementId id_noteelement, Double note_element, Double coeficient) {
+	public NoteElement(Double note_element, Double coeficient, TypeNote type) {
+		super();
+		this.note_element = note_element;
+		this.coeficient = coeficient;
+		this.type = type;
+	}
+
+	public NoteElement(ComposeEtudiantElementId id_noteelement, Double note_element, Double coeficient, TypeNote type) {
 		super();
 		this.id_noteelement = id_noteelement;
 		this.note_element = note_element;
 		this.coeficient = coeficient;
+		this.type = type;
 	}
 
 	public ComposeEtudiantElementId getId_noteelement() {
@@ -74,6 +90,14 @@ public class NoteElement implements Serializable{
 
 	public void setCoeficient(Double coeficient) {
 		this.coeficient = coeficient;
+	}
+
+	public TypeNote getType() {
+		return type;
+	}
+
+	public void setType(TypeNote type) {
+		this.type = type;
 	}
 
 }
