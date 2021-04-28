@@ -52,28 +52,4 @@ public class TestAnneeAcademique {
 		assertEquals(2021, aneeo.getAnnee_academique());*/
 		
 	}
-	
-	@Test
-	public void test_module_professeur() throws Exception{
-		String nom_professeur = "Ziad";
-		Professeur professeur = new Professeur("Ziad", null, null, null, null, null, null);
-		ArrayList<Modulee> modules = new ArrayList<Modulee>();
-		modules.add(new Modulee("Algebre", null, null, null, false, null, null, null));
-		modules.add(new Modulee("Algebre", null, null, null, false, null, null, null));
-		modules.add(new Modulee("Algebre", null, null, null, false, null, null, null));
-		modules.add(new Modulee("Algebre", null, null, null, false, null, null, null));
-		professeur.setModules(modules);
-		professeur_repository.save(professeur);
-		List<Professeur> professeurs = professeur_repository.findAll();
-		Professeur proff = null;
-		for (Professeur profff : professeurs) {
-			if(profff.getNom_professeur().equals("Ziad")) {
-				proff = profff;
-			}
-		}
-		System.out.println(proff.getModules().size());
-		
-		
-		
-	}
 }

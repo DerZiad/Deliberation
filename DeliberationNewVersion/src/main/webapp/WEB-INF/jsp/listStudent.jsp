@@ -39,14 +39,21 @@
 								<td><a style="color: black" href="#">${birth_date}</a></td>
 								<td><a style="color: black" href="#">${inscription.etudiant.bac_type}</a></td>
 								<td><a style="color: black" href="#">${inscription.etudiant.mention}</a></td>
-								<td><a class="btn btn-danger" style="color: black" href="/admin/inscription/PageInscriptionPedagogiqueIndividuelle/${ inscription.filiere.id_filiere}/${inscription.etudiant.id_etudiant}">Ajouter inscription Pédagogique</a></td>
+								<td><a
+									href="/admin/inscription/PageInscriptionPedagogiqueIndividuelle/${ inscription.filiere.id_filiere}/${inscription.etudiant.id_etudiant}"
+									style="font-size: 20px;"><i class="far fa-plus-square"
+										aria-hidden="true" title="edit"></i></a></td>
+								<td><a
+									href="/admin/inscriptionpedagogique/listerinscriptions/${inscription.etudiant.id_etudiant}"
+									style="color: red; font-size: 20px;"><i class="fas fa-list"
+										aria-hidden="true" title="list"></i></a></td>
 							</tr>
 						</c:forEach>
 					</tbody>
 				</table>
 			</div>
 		</div>
-<script>
+		<script>
 function sortTable() {
   var table, rows, switching, i, x, y, shouldSwitch;
   table = document.getElementById("myTable");
@@ -82,7 +89,7 @@ function sortTable() {
   }
 }
 </script>
-<script>
+		<script>
 function myFunction() {
   var input, filter, table, tr, td, i, txtValue;
   input = document.getElementById("myInput");

@@ -1,6 +1,5 @@
 package com.ziad.administrateur.professeur;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,7 +15,6 @@ import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Element;
 import com.ziad.models.Filiere;
 import com.ziad.models.Historique;
-import com.ziad.models.Modulee;
 import com.ziad.models.Professeur;
 import com.ziad.models.User;
 import com.ziad.repositories.ElementRepository;

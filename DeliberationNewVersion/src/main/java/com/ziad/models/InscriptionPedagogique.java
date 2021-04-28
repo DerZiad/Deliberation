@@ -92,5 +92,17 @@ public class InscriptionPedagogique implements Serializable {
 	public void setType_inscription(TypeInscription type_inscription) {
 		this.type_inscription = type_inscription;
 	}
+	public Element getElement() {
+		return id_inscription_pedagogique.getElement();
+	}
+	public Etudiant getEtudiant() {
+		return id_inscription_pedagogique.getEtudiant();
+	}
+	public void setElement(Element element) {
+		id_inscription_pedagogique.setElement(element);
+	}
+	public void setEtudiant(Etudiant etudiant) {
+		id_inscription_pedagogique.setEtudiant(etudiant);
+	}
 
 }

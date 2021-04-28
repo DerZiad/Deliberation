@@ -173,7 +173,7 @@ public class IntialiserBachelor {
 
 	private User createAdministrator() throws Exception {
 		System.out.println("[ + ] - Creating administrator");
-		User user = new User("admin", "test123", Role.ADMINISTRATEUR.getRole());
+		User user = new User("admin", passwordEncoder.encode("test123"), Role.ADMINISTRATEUR.getRole());
 		userRepository.save(user);
 		System.out.println("[ + ] - Administrator created successfully");
 		return user;

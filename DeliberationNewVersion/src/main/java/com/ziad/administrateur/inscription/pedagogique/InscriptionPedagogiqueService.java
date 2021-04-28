@@ -3,6 +3,7 @@ package com.ziad.administrateur.inscription.pedagogique;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
@@ -146,7 +147,26 @@ public class InscriptionPedagogiqueService implements InscriptionPedagogiqueInte
 		} catch (Exception e) {
 			throw new DataNotFoundExceptions("Les données sont introuvables");
 		}
-		
+
+	}
+
+	@Override
+	public List<InscriptionPedagogique> prepareInscriptionListpage(Long id_etudiant) throws DataNotFoundExceptions,EntityNotFoundException {
+		List<InscriptionPedagogique> listes_inscriptions = inscriptionPedagogiqueRepository.findAll();
+		List<InscriptionPedagogique> listes_inscriptions_filtred = listes_inscriptions.stream()
+				.filter(inscription -> inscription.getEtudiant().getId_etudiant() == id_etudiant)
+				.collect(Collectors.toList());
+		if(listes_inscriptions_filtred.size() <= 0 )throw new DataNotFoundExceptions("La liste des inscription est vide");
+		return listes_inscriptions_filtred;
+
+	}
+
+	@Override
+	public void suprimerInscriptionPedagogique(Long id_etudiant,Long id_element) throws EntityNotFoundException {
+		Etudiant etudiant = etudiantRepository.getOne(id_etudiant);
+		Element element = elementRepository.getOne(id_element);
+		ComposedInscriptionPedagogique composed = new ComposedInscriptionPedagogique(etudiant, element);
+		inscriptionPedagogiqueRepository.deleteById(composed);
 	}
 
 }

@@ -113,38 +113,7 @@
 							class="${listAdministartive}"> <i
 								class="metismenu-icon pe-7s-menu"></i> Listes I. Administratives
 						</a></li>
-					</ul></li>
-
-				<li><a href="#" aria-expanded="false"> <i
-						class="metismenu-icon pe-7s-id"></i> Inscription Pedagogique <i
-						class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-				</a>
-					<ul class="mm-collapse" style="height: 7.04px;">
-						<li><a href="/admin/inscription/MenuPedagogique"
-							class="${InscriptionPedagogique}"> <i
-								class="metismenu-icon pe-7s-add-user"></i>Ajouter I. Pédagogique
-						</a></li>
-						<li><a href="/admin/inscription/menuListPedagogique"
-							class="${listPedagogique}"> <i
-								class="metismenu-icon pe-7s-menu"></i>Listes I. Pedagogique
-						</a></li>
-					</ul></li>
-				
-				<li><a href="#" aria-expanded="false"> <i
-						class="metismenu-icon pe-7s-id"></i> Note Element de module <i
-						class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-				</a>
-					<ul class="mm-collapse" style="height: 7.04px;">
-						<li><a href="/admin/note/choix"
-					class="${choixElement}"> <i
-						class="metismenu-icon pe-7s-graph3"></i> Ajouter une Note
-				</a></li>
-						<li><a href="/admin/note/choixList"
-					class="${choixElementList}"> <i
-						class="metismenu-icon pe-7s-graph3"></i> List des Note
-				</a></li>
-					</ul></li>
-					
+					</ul></li>								
 					
 				
 				<li><a href="#" aria-expanded="false"> <i
