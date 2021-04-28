@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.ziad.enums.Role;
 import com.ziad.enums.TypeSemestre;
 import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Element;
@@ -34,6 +33,7 @@ import com.ziad.repositories.NoteElementRepository;
 import com.ziad.repositories.ProfesseurRepository;
 import com.ziad.repositories.SemestreRepository;
 import com.ziad.repositories.UserRepository;
+import com.ziad.security.authentification.enums.MonRole;
 
 @Service
 public class IntialiserBachelor {
@@ -116,8 +116,8 @@ public class IntialiserBachelor {
 
 		Professeur bekri = new Professeur("Ali", "Bekri", "ali.bekri@gmail.com",
 				new User("bekri", passwordEncoder.encode("test123"), ""));
-		bekri.getUser().addRole(Role.RESPONSABLE_FILIERE);
-		bekri.getUser().addRole(Role.PROFESSEUR);
+		bekri.getUser().addRole(MonRole.ROLERESPONSABLEFILIERE);
+		bekri.getUser().addRole(MonRole.ROLEPROFESSEUR);
 		Filiere filiere = new Filiere("Informatique", etablissement, bekri);
 		etablissement.addFiliere(filiere);
 
@@ -135,8 +135,8 @@ public class IntialiserBachelor {
 
 		Professeur oubelkacem = new Professeur("Ali", "Oubelkacem", "ali.oubelkacem@gmail.com",
 				new User("oubelkacem", passwordEncoder.encode("test123"), ""));
-		oubelkacem.getUser().addRole(Role.RESPONSABLE_MODULE);
-		oubelkacem.getUser().addRole(Role.PROFESSEUR);
+		oubelkacem.getUser().addRole(MonRole.ROLERESPONSABLEMODULE);
+		oubelkacem.getUser().addRole(MonRole.ROLEPROFESSEUR);
 		for (Etape etape : filiere.getEtapes()) {
 			for (Semestre semestre : etape.getSemestres()) {
 				for (int i = 0; i < 5; i++) {
@@ -152,8 +152,22 @@ public class IntialiserBachelor {
 
 		Professeur benhlima = new Professeur("Said", "Benhlima", "said.benhlima@gmail.com",
 				new User("benhlima", passwordEncoder.encode("test123"), ""));
-		benhlima.getUser().addRole(Role.PROFESSEUR);
+		benhlima.getUser().addRole(MonRole.ROLEPROFESSEUR);
 		professeurRepository.save(benhlima);
+		for (Etape etape : filiere.getEtapes()) {
+			for (Semestre semestre : etape.getSemestres()) {
+				for (int i = 0; i < 5; i++) {
+					Modulee module = new Modulee("Analyse 2", 1d, 10d, 4d, false, semestre, oubelkacem);
+					Element element = new Element("Analyse 2", 1d, 10d, module);
+					element.addProfesseur(oubelkacem);
+					module.addElement(element);
+					semestre.addModule(module);
+
+				}
+			}
+		}
+		
+		
 		etablissementRepository.save(etablissement);
 		System.out.println("[ + ] - University structure created succesfully");
 		List<User> users = Arrays.asList(benhlima.getUser(), bekri.getUser(), oubelkacem.getUser());
@@ -173,7 +187,7 @@ public class IntialiserBachelor {
 
 	private User createAdministrator() throws Exception {
 		System.out.println("[ + ] - Creating administrator");
-		User user = new User("admin", passwordEncoder.encode("test123"), Role.ADMINISTRATEUR.getRole());
+		User user = new User("admin", passwordEncoder.encode("test123"), MonRole.ROLEADMIN.getRole());
 		userRepository.save(user);
 		System.out.println("[ + ] - Administrator created successfully");
 		return user;

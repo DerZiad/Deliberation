@@ -1,4 +1,4 @@
-package com.ziad.administrateur.professeur;
+package com.ziad.administrateur.gestionprofesseur;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.ziad.enums.Role;
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Element;
 import com.ziad.models.Filiere;
@@ -21,10 +20,11 @@ import com.ziad.repositories.ElementRepository;
 import com.ziad.repositories.FiliereRepository;
 import com.ziad.repositories.HistoriqueRepository;
 import com.ziad.repositories.ProfesseurRepository;
+import com.ziad.security.authentification.enums.MonRole;
 
 @Service
 @Primary
-public class ProfesseurService implements ProfesseurInterface {
+public class GestionProfesseurService implements GestionProfesseurInterface {
 	@Autowired
 	private ProfesseurRepository professeurRepository;
 	@Autowired
@@ -43,7 +43,7 @@ public class ProfesseurService implements ProfesseurInterface {
 		user.setUsername(last_name.toLowerCase());
 		user.setPassword(passwordEncoder.encode(last_name.toLowerCase()));
 		Professeur professeur = new Professeur(first_name, last_name, email, user);
-		user.addRole(Role.PROFESSEUR);
+		user.addRole(MonRole.ROLEPROFESSEUR);
 		professeurRepository.save(professeur);
 		historiqueRepository
 				.save(new Historique("Professeur " + first_name + " " + last_name + " créé", new java.util.Date()));
@@ -57,7 +57,7 @@ public class ProfesseurService implements ProfesseurInterface {
 		professeur.setEmail_professeur(email);
 
 		User user = professeur.getUser();
-		user.addRole(Role.PROFESSEUR);
+		user.addRole(MonRole.ROLEPROFESSEUR);
 		historiqueRepository
 				.save(new Historique("Professeur " + first_name + " " + last_name + " modifié", new java.util.Date()));
 		professeurRepository.save(professeur);

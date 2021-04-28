@@ -9,23 +9,27 @@
 
 		<div class="main-card mb-3 card">
 			<div class="card-body">
-				<h5 class="card-title">Mes modules</h5>
+				<h5 class="card-title">Mes elements</h5>
 				<table class="mb-0 table table-striped">
 					<thead>
 						<tr>
 							<th>Nom</th>
+							<th>Module</th>
 							<th>Filière</th>
 							<th>Semestre</th>
 							<th>Etablissement</th>
+							<th>Etudiants</th>
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach var="module" items="${modules}">
+						<c:forEach var="element" items="${elements}">
 							<tr>
-								<td><a style="color: black" href="/prof/mymodule/profile/${module.id_module}">${module.libelle_module}</a></td>
-								<td><a style="color: black" href="/prof/mymodule/profile/${module.id_module}">${module.semestre.etape.filiere.nom_filiere}</a></td>
-								<td><a style="color: black" href="/prof/mymodule/profile/${module.id_module}">${module.semestre.libelle_semestre}</a></td>
-								<td><a style="color: black" href="/prof/mymodule/profile/${module.id_module}">${module.semestre.etape.filiere.etablissement.name}</a></td>
+								<td style="color: black">${element.libelle_element}</td>
+								<td style="color: black">${element.libelle_element}</td>
+								<td style="color: black">${element.module.semestre.etape.filiere.nom_filiere}</td>
+								<td style="color: black">${element.module.semestre.libelle_semestre}</td>
+								<td style="color: black"> ${element.module.semestre.etape.filiere.etablissement.nom_etablissement}</td>
+								<td><a style="color: black" href="/professeur/listerElements/${element.id_element}">Etudiants</a></td>
 							</tr>
 						</c:forEach>
 					</tbody>

@@ -12,7 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.ziad.enums.Role;
+import com.ziad.security.authentification.enums.MonRole;
 
 @Entity
 @Table(name = "user")
@@ -101,7 +101,7 @@ public class User implements Serializable{
 		this.roles = roles;
 	}
 
-	public void addRole(Role role) {
+	public void addRole(MonRole role) {
 		if (roles.length() == 0) {
 			roles = role.getRole();
 		} else {

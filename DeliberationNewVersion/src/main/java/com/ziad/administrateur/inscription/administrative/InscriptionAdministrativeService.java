@@ -21,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ziad.enums.Role;
 import com.ziad.enums.TypeInscription;
 import com.ziad.exceptions.CSVReaderOException;
 import com.ziad.exceptions.DataNotFoundExceptions;
@@ -47,6 +46,7 @@ import com.ziad.repositories.HistoriqueRepository;
 import com.ziad.repositories.InscriptionAdministrativeRepository;
 import com.ziad.repositories.InscriptionEnLigneRepository;
 import com.ziad.repositories.InscriptionPedagogiqueRepository;
+import com.ziad.security.authentification.enums.MonRole;
 import com.ziad.utilities.ExcelReader;
 
 @Service
@@ -125,7 +125,7 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 		// On met le mot de passe son prenom pour le changer apres
 		user.setPassword(passwordEncoder.encode(inscription_en_ligne.getLast_name_fr().toLowerCase()));
 		user.setActive(1);
-		user.addRole(Role.ETUDIANT);
+		user.addRole(MonRole.ROLEETUDIANT);
 		etudiant.setUser(user);
 		etudiant.setInscription_en_ligne(inscription_en_ligne);
 		inscription_en_ligne.setEtudiant(etudiant);
@@ -398,7 +398,7 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 				// On met le mot de passe son prenom pour le changer apres
 				user.setPassword(passwordEncoder.encode(inscrptionEnLigneObject.getLast_name_fr().toLowerCase()));
 				user.setActive(1);
-				user.addRole(Role.ETUDIANT);
+				user.addRole(MonRole.ROLEETUDIANT);
 				etudiant.setUser(user);
 				etudiant.setInscription_en_ligne(inscrptionEnLigneObject);
 				inscrptionEnLigneObject.setEtudiant(etudiant);

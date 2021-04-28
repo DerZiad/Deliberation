@@ -3,6 +3,8 @@ package com.ziad.professeurespace;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.Authentication;
@@ -10,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Element;
 import com.ziad.models.InscriptionPedagogique;
 import com.ziad.models.Professeur;
@@ -32,7 +35,7 @@ import com.ziad.repositories.UserRepository;
 
 @Service
 @Primary
-public class ProfesseurService {
+public class ProfesseurService implements ProfesseurInterface {
 	@Autowired
 	private AnnneAcademiqueRepository annee_academique;
 	@Autowired
@@ -66,35 +69,23 @@ public class ProfesseurService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	public ArrayList<Object> listerEtudiants() {
+	public List<Element> listerElements() throws DataNotFoundExceptions {
+		List<Element> elements = elementRepository.findAll();
+		if (elements.size() == 0)
+			throw new DataNotFoundExceptions("Vous n'avez pas encore une liste des élements");
+		return elements;
+	}
 
-		/**
-		 * Chercher le professeur de cette session
-		 */
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String username = authentication.getName();
-		User user = userRepository.getUserByUsername(username);
-		Professeur professeur = professeurRepository.getProfesseurByUser(user);
-
-		/**
-		 * Géner les inscriptions pédagogiques
-		 **/
-		List<InscriptionPedagogique> lists = new ArrayList<InscriptionPedagogique>();
-		for (Element element : professeur.getElements()) {
-			lists.addAll(inscriptionPedagogiqueRepository.getInscriptionsPedagogiqueByElement(element));
-		}
-
-		/**
-		 * Géneration du besoin
-		 */
-
+	public ArrayList<Object> listerEtudiants(Long id_element) throws DataNotFoundExceptions, EntityNotFoundException {
+		Element element = elementRepository.getOne(id_element);
+		List<InscriptionPedagogique> inscriptions_pedagogiques = inscriptionPedagogiqueRepository
+				.getInscriptionsPedagogiqueByElement(element);
+		if (inscriptions_pedagogiques.size() == 0)
+			throw new DataNotFoundExceptions("La liste des étudiants est vide");
 		ArrayList<Object> besoins = new ArrayList<Object>();
-		besoins.add(lists);
+		besoins.add(inscriptions_pedagogiques);
 		besoins.add(annee_academique.findAll());
-		besoins.add(professeur.getElements());
 		return besoins;
 	}
-	
-	
 
 }

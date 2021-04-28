@@ -1,4 +1,4 @@
-package com.ziad.administrateur.professeur;
+package com.ziad.administrateur.gestionprofesseur;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +9,7 @@ import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Element;
 import com.ziad.models.Professeur;
 
-public interface ProfesseurInterface {
+public interface GestionProfesseurInterface {
 	
 	public void createProfesseur(String first_name, String last_name, String email);
 	

@@ -26,6 +26,7 @@ import com.ziad.repositories.FiliereRepository;
 import com.ziad.repositories.HistoriqueRepository;
 import com.ziad.repositories.ProfesseurRepository;
 import com.ziad.repositories.SemestreRepository;
+import com.ziad.security.authentification.enums.MonRole;
 
 @Primary
 @Service
@@ -62,6 +63,8 @@ public class FiliereService implements FiliereInterface {
 		if (id_professeur != null) {
 			Professeur professeur = professeurRepository.getOne(id_professeur);
 			professeur.addFilere(filiere);
+			professeur.getUser().addRole(MonRole.ROLERESPONSABLEFILIERE);
+			professeurRepository.save(professeur);
 			filiere.setResponsable_filiere(professeur);
 		}
 

@@ -1,4 +1,4 @@
-package com.ziad.administrateur.professeur;
+package com.ziad.administrateur.gestionprofesseur;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,9 +21,9 @@ import com.ziad.models.Professeur;
 
 @Controller
 @RequestMapping("/admin")
-public class ProfesseurController {
+public class GestionProfesseurController {
 	@Autowired
-	private ProfesseurInterface professeur_metier;
+	private GestionProfesseurInterface professeur_metier;
 
 	/**
 	 * Chemin au Html
@@ -134,8 +134,8 @@ public class ProfesseurController {
 	public ModelAndView ajouterElementsProfesseur(@PathVariable("id_professeur") Long id_professeur) throws DataNotFoundExceptions{
 		ModelAndView model = new ModelAndView(PAGE_AJOUT_ELEMENTS);
 		HashMap<String, Object> composates = professeur_metier.listerFilieresElements();
-		model.addObject(ATTRIBUT_ELEMENTS_PROFESSEUR,((List<Element>)composates.get(ProfesseurInterface.ATTRIBUT_ELEMENTS)));
-		model.addObject(ATTRIBUT_FILIERES_PROFESSEUR,((List<Element>)composates.get(ProfesseurInterface.ATTRIBUT_FILIERES)));
+		model.addObject(ATTRIBUT_ELEMENTS_PROFESSEUR,((List<Element>)composates.get(GestionProfesseurInterface.ATTRIBUT_ELEMENTS)));
+		model.addObject(ATTRIBUT_FILIERES_PROFESSEUR,((List<Element>)composates.get(GestionProfesseurInterface.ATTRIBUT_FILIERES)));
 		return model;
 	}
 	@SuppressWarnings("unchecked")
@@ -143,8 +143,8 @@ public class ProfesseurController {
 	public ModelAndView filterElementsProfesseur(@PathVariable("id_filiere")Long id_filiere) throws DataNotFoundExceptions{
 		ModelAndView model = new ModelAndView(PAGE_AJOUT_ELEMENTS);
 		HashMap<String, Object> composates = professeur_metier.filterElement(id_filiere);
-		model.addObject(ATTRIBUT_ELEMENTS_PROFESSEUR,((List<Element>)composates.get(ProfesseurInterface.ATTRIBUT_ELEMENTS)));
-		model.addObject(ATTRIBUT_FILIERES_PROFESSEUR,((List<Filiere>)composates.get(ProfesseurInterface.ATTRIBUT_FILIERES)));
+		model.addObject(ATTRIBUT_ELEMENTS_PROFESSEUR,((List<Element>)composates.get(GestionProfesseurInterface.ATTRIBUT_ELEMENTS)));
+		model.addObject(ATTRIBUT_FILIERES_PROFESSEUR,((List<Filiere>)composates.get(GestionProfesseurInterface.ATTRIBUT_FILIERES)));
 		return model;
 	}
 

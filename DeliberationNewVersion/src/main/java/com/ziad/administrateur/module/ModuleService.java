@@ -20,6 +20,7 @@ import com.ziad.repositories.HistoriqueRepository;
 import com.ziad.repositories.ModuleRepository;
 import com.ziad.repositories.ProfesseurRepository;
 import com.ziad.repositories.SemestreRepository;
+import com.ziad.security.authentification.enums.MonRole;
 
 @Primary
 @Service
@@ -53,8 +54,9 @@ public class ModuleService implements ModuleInterface {
 		}
 		if(professeur_id != null) {
 			Professeur	professeur = professeurRepository.getOne(professeur_id);
+			professeur.getUser().addRole(MonRole.ROLERESPONSABLEMODULE);
+			professeurRepository.save(professeur);
 			module.setResponsable_module(professeur);
-
 		}
 		module.setLibelle_module(name);
 		try {

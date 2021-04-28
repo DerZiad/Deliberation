@@ -41,8 +41,8 @@
 				<li><a href="/" class="${dashboard}"> <i
 						class="metismenu-icon pe-7s-rocket"></i> Tableau de bords
 				</a></li>
-				<li><a href="/prof/mesmodules" class="${MesModules}"> <i
-						class="metismenu-icon pe-7s-rocket"></i> Mes Modules
+				<li><a href="/professeur/listerElements" class="mm-active"> <i
+						class="metismenu-icon pe-7s-rocket"></i> Mes Elements
 				</a></li>
 				<li><a href="/prof/mesetudiants" class="${MesEtudiants}"> <i
 						class="metismenu-icon pe-7s-rocket"></i> Mes Etudiants

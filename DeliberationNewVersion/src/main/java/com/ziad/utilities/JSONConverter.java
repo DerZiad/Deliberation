@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Element;
+import com.ziad.models.InscriptionPedagogique;
 import com.ziad.models.Modulee;
 import com.ziad.models.Semestre;
 import com.ziad.utilities.adaptater.ElementAdaptater;
@@ -34,5 +36,15 @@ public class JSONConverter{
 	public String convertElements(List<Element> elements) {
 		Gson gson = gsonBuilder.registerTypeAdapter(Element.class, new ElementAdaptater()).create();
 		return gson.toJson(elements);
+	}
+	
+	public String convertAnneesAcademiques(List<AnneeAcademique> annees) {
+		Gson gson = gsonBuilder.registerTypeAdapter(AnneeAcademique.class, new AnneeAcademique()).create();
+		return gson.toJson(annees);
+	}
+	
+	public String convertInscriptionsPedagogiques(List<InscriptionPedagogique> inscription_pedagogiques) {
+		Gson gson = gsonBuilder.registerTypeAdapter(InscriptionPedagogique.class, new InscriptionPedagogique()).create();
+		return gson.toJson(inscription_pedagogiques);
 	}
 }

@@ -17,7 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.ziad.enums.Role;
+import com.ziad.security.authentification.enums.MonRole;
 
 @Entity
 @Table(name = "Professeur")
@@ -158,9 +158,9 @@ public class Professeur implements Serializable{
 		elements.add(element);
 	}
 	public boolean isResponsableFiliere() {
-		return user.getRoles().contains(Role.RESPONSABLE_FILIERE.getRole());
+		return user.getRoles().contains(MonRole.ROLERESPONSABLEFILIERE.getRole());
 	}
 	public boolean isResponsableModule() {
-		return user.getRoles().contains(Role.RESPONSABLE_MODULE.getRole());
+		return user.getRoles().contains(MonRole.ROLERESPONSABLEMODULE.getRole());
 	}
 }

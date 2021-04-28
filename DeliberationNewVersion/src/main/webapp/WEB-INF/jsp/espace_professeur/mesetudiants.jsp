@@ -10,7 +10,17 @@
 
 		<div class="main-card mb-3 card">
 			<div class="card-body">
-				<h5 class="card-title">Mes étudiants</h5>
+				<h5 class="card-title">Mes étudiants</h5>		
+				<div class="col-md-6">
+							<div class="position-relative form-group">
+								<label for="name" class="">Années academiques</label>
+								<select name="etablissement" id="exampleSelect" class="form-control">
+									<c:forEach var="annee" items="${annees}">
+										<option value="${annee.id_annee_academique }">${etablissement.annee_academique }</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
 				<input type="text" onkeyup="myFunction()" id="myInput">
 				<table class="mb-0 table table-striped" id="myTable">
 					<thead>
@@ -19,26 +29,15 @@
 							<th class="th-sm">Nom</th>
 							<th class="th-sm">Prénom</th>
 							<th class="th-sm">Sexe</th>
-							<th class="th-sm">Nationalité</th>
-							<th class="th-sm">Date de naissance</th>
-							<th class="th-sm">Type du Bac</th>
-							<th class="th-sm">Mention</th>
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach var="student" items="${etudiants}">
+						<c:forEach var="inscription" items="${inscriptions}">
 							<tr>
-								<td><a style="color: black" href="#">${student.cne}</a></td>
-								<td><a style="color: black" href="#">${student.last_name_fr}</a></td>
-								<td><a style="color: black" href="#">${student.first_name_fr}</a></td>
-								<td><a style="color: black" href="#">${student.gender}</a></td>
-								<td><a style="color: black" href="#">${student.nationality}</a></td>
-								<c:set var="date" value="${student.birth_date}"></c:set>
-								<c:set var="birth_date" value="${fn:substring(date,0,10)}"></c:set>
-								<td><a style="color: black" href="#">${birth_date}</a></td>
-								<td><a style="color: black" href="#">${student.bac_type}</a></td>
-								<td><a style="color: black" href="#">${student.mention}</a></td>
-							</tr>
+								<td><a style="color: black" href="#">${inscription.etudiant.cne}</a></td>
+								<td><a style="color: black" href="#">${inscription.etudiant.last_name_fr}</a></td>
+								<td><a style="color: black" href="#">${inscription.etudiant.first_name_fr}</a></td>
+								<td><a style="color: black" href="#">${inscription.etudiant.gender}</a></td>
 						</c:forEach>
 					</tbody>
 				</table>
