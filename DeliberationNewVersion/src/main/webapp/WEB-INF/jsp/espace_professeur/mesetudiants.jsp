@@ -16,14 +16,6 @@
 					method="POST">
 					<div class="col-md-6">
 						<div class="position-relative form-group">
-							<c:forEach var="type" items="${types}">
-								<div>
-									<input type="radio" id="box" name="type" value="${type}"
-										checked> <label for="box">${type}</label>
-								</div>
-							</c:forEach>
-						</div>
-						<div class="position-relative form-group">
 							<label for="name" class="">Années academiques</label> <select
 								name="annee" id="exampleSelect" class="form-control">
 								<c:forEach var="annee" items="${annees}">

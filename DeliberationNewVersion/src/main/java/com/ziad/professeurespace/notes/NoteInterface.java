@@ -10,6 +10,6 @@ import com.ziad.exceptions.CSVReaderOException;
 import com.ziad.exceptions.DataNotFoundExceptions;
 
 public interface NoteInterface {
-	public void readExcel(MultipartFile file, String type)
+	public void readExcel(MultipartFile file, String type,Double coefficient)
 			throws DataNotFoundExceptions, EntityNotFoundException, IOException, CSVReaderOException;
 }

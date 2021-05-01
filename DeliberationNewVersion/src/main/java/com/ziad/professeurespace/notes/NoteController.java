@@ -23,22 +23,22 @@ public class NoteController {
 
 	@Autowired
 	private NoteInterface note_metier;
-	
+
 	private final static String ATTRIBUT_TYPES = "types";
-	
-	
+
 	@GetMapping("/ajouter")
 	public ModelAndView createPageNote() {
 		ModelAndView model = new ModelAndView("espace_professeur/ajouterNote");
-		model.addObject(ATTRIBUT_TYPES,TypeNote.values());
+		model.addObject(ATTRIBUT_TYPES, TypeNote.values());
 		return model;
 	}
 
 	@PostMapping("/ajouter")
-	public ModelAndView uploadNote(@RequestParam("file") MultipartFile file, @RequestParam("type") String type_exam)
+	public ModelAndView uploadNote(@RequestParam("file") MultipartFile file, @RequestParam("type") String type_exam,
+			@RequestParam("coeficient") Double coefficient)
 			throws DataNotFoundExceptions, EntityNotFoundException, IOException, CSVReaderOException {
 		ModelAndView model = new ModelAndView("espace_professeur/ajouterNote");
-		note_metier.readExcel(file, type_exam);
+		note_metier.readExcel(file, type_exam,coefficient);
 		return model;
 	}
 }

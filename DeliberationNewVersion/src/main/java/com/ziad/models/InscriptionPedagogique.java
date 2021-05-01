@@ -1,6 +1,7 @@
 package com.ziad.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,16 +10,23 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.ziad.enums.TypeInscription;
 import com.ziad.models.compositeid.ComposedInscriptionPedagogique;
 
-/**
+/*
  * 
- * Classe Associative
  * 
- */
+ * 
+ * 
+ *    Classe associative entre etudiant et module qui contient ses notes
+ * 
+ * 
+ * 
+ * 
+ * ***/
 @Entity
 @Table(name = "InscriptionPedagogique")
 public class InscriptionPedagogique implements Serializable {
@@ -40,6 +48,14 @@ public class InscriptionPedagogique implements Serializable {
 	@Column(name = "type_inscription")
 	@Enumerated(value = EnumType.STRING)
 	private TypeInscription type_inscription;
+	
+	/**
+	 * 
+	 * Relations demandé
+	 * 
+	 * **/
+	@OneToMany(mappedBy = "inscription_pedagogique",cascade = CascadeType.ALL)
+	private ArrayList<NoteElement> notes =  new ArrayList<NoteElement>();
 
 	public InscriptionPedagogique() {
 
@@ -104,5 +120,18 @@ public class InscriptionPedagogique implements Serializable {
 	public void setEtudiant(Etudiant etudiant) {
 		id_inscription_pedagogique.setEtudiant(etudiant);
 	}
+	
+	public void addNote(NoteElement noteElement) {
+		notes.add(noteElement);
+	}
 
+	public ArrayList<NoteElement> getNotes() {
+		return notes;
+	}
+
+	public void setNotes(ArrayList<NoteElement> notes) {
+		this.notes = notes;
+	}
+	
+	
 }

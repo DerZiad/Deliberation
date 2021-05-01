@@ -23,12 +23,17 @@
 											checked> <label for="box">${type}</label>
 									</div>
 								</c:forEach>
-								<div class="position-relative form-group">
-									<label for="type" class="">Excel</label>
-									<div>
-										<input type="file" id="file" name="file" value="">
-									</div>
+							</div>
+							<div class="position-relative form-group">
+								<label for="type" class="">Excel</label>
+								<div>
+									<input type="file" id="file" name="file" value="">
 								</div>
+							</div>
+							<div class="position-relative form-group">
+								<label for="name" class="">Coefficient: </label><input
+									name="coeficient" id="name" placeholder="Coefficient"
+									type="number" class="form-control" value="">
 							</div>
 						</div>
 						<button class="mt-2 btn btn-primary col-md-12" id="valider"

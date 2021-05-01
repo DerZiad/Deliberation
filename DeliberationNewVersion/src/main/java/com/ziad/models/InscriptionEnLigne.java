@@ -19,7 +19,7 @@ import com.ziad.enums.Gender;
 
 @Entity
 @Table(name = "InscriptionEnLigne")
-public class InscriptionEnLigne implements Serializable{
+public class InscriptionEnLigne implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -137,10 +137,10 @@ public class InscriptionEnLigne implements Serializable{
 	 */
 	@Column(name = "accepted")
 	private int accepted;
-	
+
 	/**
 	 * Relations
-	 * */
+	 */
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private Etablissement etablissement;
 
@@ -153,31 +153,10 @@ public class InscriptionEnLigne implements Serializable{
 			String nationality, Gender gender, Date birth_date, String birth_place, String city, String province,
 			Integer bac_year, String bac_type, String mention, String high_school, String bac_place, String academy,
 			Date registration_date, int accepted, Etablissement etablissement) {
-		super();
+		this(email, etudiant, massar_edu, first_name_fr, first_name_ar, last_name_fr, last_name_ar, cne, nationality,
+				gender, birth_date, birth_place, city, province, bac_year, bac_type, mention, high_school, bac_place,
+				academy, registration_date, accepted, etablissement);
 		this.id_inscription_en_ligne = id_inscription_en_ligne;
-		this.email = email;
-		this.etudiant = etudiant;
-		this.massar_edu = massar_edu;
-		this.first_name_fr = first_name_fr;
-		this.first_name_ar = first_name_ar;
-		this.last_name_fr = last_name_fr;
-		this.last_name_ar = last_name_ar;
-		this.cne = cne;
-		this.nationality = nationality;
-		this.gender = gender;
-		this.birth_date = birth_date;
-		this.birth_place = birth_place;
-		this.city = city;
-		this.province = province;
-		this.bac_year = bac_year;
-		this.bac_type = bac_type;
-		this.mention = mention;
-		this.high_school = high_school;
-		this.bac_place = bac_place;
-		this.academy = academy;
-		this.registration_date = registration_date;
-		this.accepted = accepted;
-		this.etablissement = etablissement;
 	}
 
 	public InscriptionEnLigne(String email, Etudiant etudiant, String massar_edu, String first_name_fr,

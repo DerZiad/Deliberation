@@ -4,7 +4,7 @@
 	prefix="layout"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<layout:extends name="../layout.jsp">
+<layout:extends name="layout-resp.jsp">
 	<layout:put block="content" type="REPLACE">
 		<div class="row">
 			<div class="col-md-3">
@@ -19,14 +19,14 @@
 					<div class="card-body">
 						<h5 class="card-title">Modification</h5>
 						<form
-							action="/professeur/responsablemodule/element/${element.idElement}"
+							action="/professeur/responsablemodule/element/${element.id_element}"
 							method="POST">
 							<div class="position-relative form-group">
 								<p>${element.libelle_element }</p>
 							</div>
 							<div class="position-relative form-group">
 								<label for="coefficient" class="">Coefficient: </label><input
-									name="coefficient" id="coeficient" placeholder="Coefficient"
+									name="coeficient" id="coeficient" placeholder="Coefficient"
 									type="text" class="form-control" value="${element.coeficient }">
 							</div>
 							<div class="position-relative form-group">

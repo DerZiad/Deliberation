@@ -19,6 +19,7 @@ import com.ziad.models.User;
 import com.ziad.repositories.ElementRepository;
 import com.ziad.repositories.ProfesseurRepository;
 import com.ziad.repositories.UserRepository;
+import com.ziad.utilities.JSONConverter;
 
 @Service
 @Primary
@@ -31,7 +32,8 @@ public class EditModuleService implements EditModuleInterface {
 
 	@Autowired
 	private ProfesseurRepository professeurRespository;
-
+	@Autowired
+	private JSONConverter converter;
 	@Override
 	public void saveInformations(Long idElement, Double validation, Double coeficient) throws EntityNotFoundException {
 		Element element = elementRepository.getOne(idElement);
@@ -62,6 +64,7 @@ public class EditModuleService implements EditModuleInterface {
 		List<Object> besoins = new ArrayList<Object>();
 		besoins.add(professeur.getModules());
 		besoins.add(elements);
+		besoins.add(converter.convertElements(elements));
 		return besoins;
 	}
 

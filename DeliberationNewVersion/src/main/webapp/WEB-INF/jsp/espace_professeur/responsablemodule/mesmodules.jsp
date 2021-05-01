@@ -15,12 +15,13 @@
 					<div class="position-relative form-group">
 						<label for="name" class="">Module</label> <select name="module"
 							id="exampleSelect" class="form-control">
-							<c:forEach var="etablissement" items="${modules}">
+							<c:forEach var="module" items="${modules}">
 								<option value="${module.id_module }">${module.libelle_module }</option>
 							</c:forEach>
 						</select>
 					</div>
 				</div>
+				<p>Elements</p>
 				<table class="mb-0 table table-striped">
 					<thead>
 						<tr>
@@ -32,7 +33,7 @@
 					<tbody id="elements">
 						<c:forEach var="element" items="${elements}">
 							<tr>
-								<td style="color: black">${element.libelle_element}</td>
+								<td><a style="color: black" href="/professeur/responsablemodule/element/${element.id_element}">${element.libelle_element}</a></td>
 								<td style="color: black">${element.coeficient}</td>
 								<td style="color: black">${element.validation}</td>
 
@@ -43,7 +44,7 @@
 			</div>
 		</div>
 		<script>
-			var elements = JSON.parse('${elements}');
+			var elements = JSON.parse('${elementsjson}');
 jQuery(document).ready(function(){
 	$('select[name=module]').change(function(){
 		var list_value = $('select[name=module]').val();
@@ -51,7 +52,7 @@ jQuery(document).ready(function(){
 		for (var i = 0;i<elements.length;i++) {
 			if(elements[i].id_element == list_value){
 				remplir = remplir + '<tr>' + '\n';
-				remplir = remplir + '<td style="color: black">' + elements[i].libelle_element + '</td> \n';
+				remplir = remplir + '<a style="color: black" href="/professeur/responsablemodule/element/' + elements[i].id_element + '">' + elements[i].libelle_element + '</td> \n';
 				remplir = remplir + '<td style="color: black">' + elements[i].coeficient + '</td> \n';
 				remplir = remplir + '<td style="color: black">' + elements[i].validation + '</td> \n';
 				remplir = remplir + '</tr>' + '\n';

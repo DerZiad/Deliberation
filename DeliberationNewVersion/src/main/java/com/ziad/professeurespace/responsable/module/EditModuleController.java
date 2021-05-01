@@ -27,6 +27,8 @@ public class EditModuleController {
 	private final static String ATTRIBUT_ELEMENT = "element";
 	private final static String ATTRIBUT_ELEMENTS = "elements";
 	private final static String ATTRIBUT_MODULES = "modules";
+	private final static String ATTRIBUT_ELEMENTS_JSON = "elementsjson";
+	
 	
 	@Autowired
 	private EditModuleInterface editMetier;
@@ -38,6 +40,7 @@ public class EditModuleController {
 		List<Object> besoins = editMetier.getModulesElementsProfesseur();
 		model.addObject(ATTRIBUT_MODULES,(List<Modulee>)besoins.get(0));
 		model.addObject(ATTRIBUT_ELEMENTS,(List<Element>)besoins.get(1));
+		model.addObject(ATTRIBUT_ELEMENTS_JSON,(String)besoins.get(2));
 		return model;
 	}
 

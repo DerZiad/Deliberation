@@ -18,8 +18,9 @@ import com.ziad.exceptions.CSVReaderOException;
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Element;
 import com.ziad.models.Etudiant;
+import com.ziad.models.InscriptionPedagogique;
 import com.ziad.models.NoteElement;
-import com.ziad.models.compositeid.ComposeEtudiantElementId;
+import com.ziad.models.compositeid.ComposedInscriptionPedagogique;
 import com.ziad.repositories.AnnneAcademiqueRepository;
 import com.ziad.repositories.DocumentDePlusRepository;
 import com.ziad.repositories.ElementRepository;
@@ -76,20 +77,13 @@ public class NoteService implements NoteInterface {
 	private ExcelReader reader;
 
 	@Override
-	public void readExcel(MultipartFile file, String type)
+	public void readExcel(MultipartFile file, String type,Double coefficient)
 			throws DataNotFoundExceptions, EntityNotFoundException, IOException, CSVReaderOException {
 
 		Iterator<Row> rows = reader.readInscriptionAdministrative(file);
-
-		Row first = rows.next();
-		String typenote = first.getCell(1).getStringCellValue();
-
 		Row second = rows.next();
 		Long id_element = (long) second.getCell(2).getNumericCellValue();
 		Element element = elementRepository.getOne(id_element);
-
-		Row third = rows.next();
-		Double coefficient = (Double) third.getCell(1).getNumericCellValue();
 
 		while (rows.hasNext()) {
 			try {
@@ -103,13 +97,14 @@ public class NoteService implements NoteInterface {
 					throw new DataNotFoundExceptions();
 				TypeNote note_type = null;
 				for (TypeNote type_object : TypeNote.values()) {
-					if (type_object.name() == typenote)
+					if (type_object.name() == type)
 						note_type = type_object;
 				}
-
-				NoteElement note_element = new NoteElement(new ComposeEtudiantElementId(element, etudiant.get(0)), note,
-						coefficient, note_type);
-				noteElementRepository.save(note_element);
+				InscriptionPedagogique inscription_pedagogique = inscriptionPedagogiqueRepository
+						.getOne(new ComposedInscriptionPedagogique(etudiant.get(0), element));
+				NoteElement note_element = new NoteElement(note, coefficient, note_type, inscription_pedagogique);
+				inscription_pedagogique.addNote(note_element);
+				inscriptionPedagogiqueRepository.save(inscription_pedagogique);
 			} catch (Exception e) {
 
 			}

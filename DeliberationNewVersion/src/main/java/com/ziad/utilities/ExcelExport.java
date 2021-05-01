@@ -18,16 +18,14 @@ public class ExcelExport {
 	private XSSFWorkbook workbook;
 	private XSSFSheet sheet;
 	private List<Etudiant> etudiants;
-	private String type;
 	private String nom_element;
 	private Long id_element;
 	
-	public ExcelExport(List<Etudiant> etudiants,String type,String nom_element,Long id_element) {
+	public ExcelExport(List<Etudiant> etudiants,String nom_element,Long id_element) {
 		super();
 		this.etudiants = etudiants;
 		workbook = new XSSFWorkbook();
 		sheet = workbook.createSheet("Etudiants");
-		this.type = type;
 		this.nom_element = nom_element;
 		this.id_element = id_element;
 	}
@@ -42,16 +40,7 @@ public class ExcelExport {
 
 	private void writeHeaderRow() {
 		
-		Row type_row = sheet.createRow(0);
-		
-		
-		Cell cellt1 = type_row.createCell(0);
-		cellt1.setCellValue("Type note");
-		
-		Cell cellt2 = type_row.createCell(1);
-		cellt2.setCellValue(type);
-		
-		Row element = sheet.createRow(1);
+		Row element = sheet.createRow(0);
 		
 		
 		Cell celle1 = element.createCell(0);
@@ -63,17 +52,8 @@ public class ExcelExport {
 		Cell celle3 = element.createCell(2);
 		celle3.setCellValue(id_element);
 		
-		Row coefficient = sheet.createRow(2);
 		
-		
-		Cell cellc1 = coefficient.createCell(0);
-		cellc1.setCellValue("Coefficient");
-		
-		Cell cellc2 = coefficient.createCell(1);
-		cellc2.setCellValue("");
-		
-		
-		Row row = sheet.createRow(3);
+		Row row = sheet.createRow(1);
 		
 		
 		Cell cell = row.createCell(0);
@@ -86,7 +66,7 @@ public class ExcelExport {
 		cell2.setCellValue("Prenom");
 		
 		Cell cell3 = row.createCell(3);
-		cell3.setCellValue("Note :" + type);
+		cell3.setCellValue("Note ");
 		
 	}
 	

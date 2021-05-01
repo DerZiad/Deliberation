@@ -5,7 +5,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <layout:extends name="../index-prof.jsp">
 	<layout:put block="responsable" type="REPLACE">
-		<li><a href="/" class=""> <i
+		<li><a href="/professeur/responsablemodule/listermodules" class=""> <i
 				class="metismenu-icon pe-7s-graph3"></i> Mes modules
 		</a></li>
 	</layout:put>

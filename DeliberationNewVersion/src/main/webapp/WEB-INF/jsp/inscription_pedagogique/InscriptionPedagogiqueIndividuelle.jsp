@@ -11,7 +11,7 @@
 			<div class="card-body">
 				<h5 class="card-title">Création d'une Inscirption Pedagogique</h5>
 				<form class=""
-					action="/admin/inscription/PageInscriptionPedagogiqueIndividuelle/${inscription_administrative.filiere.id_filiere}/${inscription_administrative.etudiant.id_etudiant}"
+					action="/admin/inscriptionpedagogique/creer/${inscription_administrative.filiere.id_filiere}/${inscription_administrative.etudiant.id_etudiant}"
 					method="POST">
 					<div class="form-row">
 						<div class="col-md-6">

@@ -64,12 +64,12 @@ public class ProfesseurController {
 
 	@PostMapping("/listerElements/{id_element}")
 	public void makeListtoDownload(@PathVariable("id_element") Long id_element,
-			@RequestParam("annee") Long id_annee, @RequestParam("type") String type,HttpServletResponse response) throws EntityNotFoundException,IOException {
+			@RequestParam("annee") Long id_annee,HttpServletResponse response) throws EntityNotFoundException,IOException {
 		response.setContentType("application/octet-stream");
 		String header_key = "Content-Disposition";
 		String header_value = "attachement; filename=Etudiants.xlsx";
 		response.setHeader(header_key, header_value);
-		professeur_metier.generateExcel(id_element, id_annee, type, response);
+		professeur_metier.generateExcel(id_element, id_annee, response);
 		
 	}
 	

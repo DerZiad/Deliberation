@@ -2,42 +2,28 @@ package com.ziad.models;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.ziad.enums.TypeNote;
-import com.ziad.models.compositeid.ComposeEtudiantElementId;
 
-/*
- * 
- * 
- * 
- * 
- *    Classe associative entre etudiant et module qui contient ses notes
- * 
- * 
- * 
- * 
- * ***/
 @Entity
 @Table(name = "note_element")
 public class NoteElement implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	/******
-	 * 
-	 * 
-	 * Idée composé de l'id d'etudiant et d'element
-	 * 
-	 * 
-	 *****/
-	@EmbeddedId
-	private ComposeEtudiantElementId id_noteelement;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id_note_element;
 
 	@Column(name = "note_element")
 	private Double note_element;
@@ -49,31 +35,34 @@ public class NoteElement implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private TypeNote type;
 
+	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.PERSIST })
+	private InscriptionPedagogique inscription_pedagogique;
+
 	public NoteElement() {
 
 	}
 
-	public NoteElement(Double note_element, Double coeficient, TypeNote type) {
+	public NoteElement(Long id_note_element, Double note_element, Double coeficient, TypeNote type,
+			InscriptionPedagogique inscription_pedagogique) {
+		this(note_element, coeficient, type, inscription_pedagogique);
+		this.id_note_element = id_note_element;
+	}
+
+	public NoteElement(Double note_element, Double coeficient, TypeNote type,
+			InscriptionPedagogique inscription_pedagogique) {
 		super();
 		this.note_element = note_element;
 		this.coeficient = coeficient;
 		this.type = type;
+		this.inscription_pedagogique = inscription_pedagogique;
 	}
 
-	public NoteElement(ComposeEtudiantElementId id_noteelement, Double note_element, Double coeficient, TypeNote type) {
-		super();
-		this.id_noteelement = id_noteelement;
-		this.note_element = note_element;
-		this.coeficient = coeficient;
-		this.type = type;
+	public Long getId_note_element() {
+		return id_note_element;
 	}
 
-	public ComposeEtudiantElementId getId_noteelement() {
-		return id_noteelement;
-	}
-
-	public void setId_noteelement(ComposeEtudiantElementId id_noteelement) {
-		this.id_noteelement = id_noteelement;
+	public void setId_note_element(Long id_note_element) {
+		this.id_note_element = id_note_element;
 	}
 
 	public Double getNote_element() {
@@ -100,4 +89,11 @@ public class NoteElement implements Serializable {
 		this.type = type;
 	}
 
+	public InscriptionPedagogique getInscription_pedagogique() {
+		return inscription_pedagogique;
+	}
+
+	public void setInscription_pedagogique(InscriptionPedagogique inscription_pedagogique) {
+		this.inscription_pedagogique = inscription_pedagogique;
+	}
 }

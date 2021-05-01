@@ -59,11 +59,11 @@ public class ProfesseurService implements ProfesseurInterface {
 	}
 
 	@Override
-	public void generateExcel(Long id_element, Long id_annee, String type,HttpServletResponse response) throws EntityNotFoundException,IOException {
+	public void generateExcel(Long id_element, Long id_annee,HttpServletResponse response) throws EntityNotFoundException,IOException {
 		Element element = elementRepository.getOne(id_element);
 		AnneeAcademique annee = anneeAcademiqueRepository.getOne(id_annee);
 		List<Etudiant> etudiants = inscriptionPedagogiqueRepository.getEtudiantsByElementAndAnneeAcademique(element, annee);
-		generator_excel = new ExcelExport(etudiants, type,element.getLibelle_element(),element.getId_element());
+		generator_excel = new ExcelExport(etudiants,element.getLibelle_element(),element.getId_element());
 		generator_excel.export(response);
 		
 	}

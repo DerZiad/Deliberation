@@ -40,7 +40,7 @@
 								<td><a style="color: black" href="#">${inscription.etudiant.bac_type}</a></td>
 								<td><a style="color: black" href="#">${inscription.etudiant.mention}</a></td>
 								<td><a
-									href="/admin/inscription/PageInscriptionPedagogiqueIndividuelle/${ inscription.filiere.id_filiere}/${inscription.etudiant.id_etudiant}"
+									href="/admin/inscriptionpedagogique/creer/${ inscription.filiere.id_filiere}/${inscription.etudiant.id_etudiant}"
 									style="font-size: 20px;"><i class="far fa-plus-square"
 										aria-hidden="true" title="edit"></i></a></td>
 								<td><a
