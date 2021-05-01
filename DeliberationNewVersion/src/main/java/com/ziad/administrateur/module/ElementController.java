@@ -48,7 +48,7 @@ public class ElementController {
 			@RequestParam(name = "id_professeur",required = false) Long idprofesseur, @RequestParam("coefficient") Double coefficient,
 			@RequestParam("validation") Double validation, @RequestParam("name") String nom) throws EntityNotFoundException {
 		ModelAndView model = new ModelAndView("redirect:/admin/module/profile/"+id+"/element/create");
-		metier.modifyElementsModule(idelement, idprofesseur,id, nom,coefficient, validation, model);
+		metier.modifyElementsModule(idelement, idprofesseur,id, nom,coefficient, validation);
 		return model;
 	}
 

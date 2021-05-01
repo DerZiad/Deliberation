@@ -9,9 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ziad.exceptions.DataNotFoundExceptions;
@@ -19,23 +16,9 @@ import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Element;
 import com.ziad.models.Etudiant;
 import com.ziad.models.InscriptionPedagogique;
-import com.ziad.models.Professeur;
-import com.ziad.models.User;
 import com.ziad.repositories.AnnneAcademiqueRepository;
-import com.ziad.repositories.DocumentDePlusRepository;
 import com.ziad.repositories.ElementRepository;
-import com.ziad.repositories.EtablissementRepository;
-import com.ziad.repositories.EtapeRepository;
-import com.ziad.repositories.EtudiantRepository;
-import com.ziad.repositories.FiliereRepository;
-import com.ziad.repositories.InscriptionAdministrativeRepository;
-import com.ziad.repositories.InscriptionEnLigneRepository;
 import com.ziad.repositories.InscriptionPedagogiqueRepository;
-import com.ziad.repositories.ModuleRepository;
-import com.ziad.repositories.NoteElementRepository;
-import com.ziad.repositories.ProfesseurRepository;
-import com.ziad.repositories.SemestreRepository;
-import com.ziad.repositories.UserRepository;
 import com.ziad.utilities.ExcelExport;
 import com.ziad.utilities.JSONConverter;
 
@@ -43,37 +26,11 @@ import com.ziad.utilities.JSONConverter;
 @Primary
 public class ProfesseurService implements ProfesseurInterface {
 	@Autowired
-	private AnnneAcademiqueRepository annee_academique;
-	@Autowired
-	private DocumentDePlusRepository documentDePlusRepository;
+	private AnnneAcademiqueRepository anneeAcademiqueRepository;
 	@Autowired
 	private ElementRepository elementRepository;
 	@Autowired
-	private EtablissementRepository etablissementRepository;
-	@Autowired
-	private EtapeRepository etapeRepository;
-	@Autowired
-	private EtudiantRepository etudiantRepository;
-	@Autowired
-	private FiliereRepository filiereRepository;
-	@Autowired
-	private InscriptionAdministrativeRepository inscriptionAdministrativeRepository;
-	@Autowired
-	private InscriptionEnLigneRepository inscriptionEnLigneRepository;
-	@Autowired
 	private InscriptionPedagogiqueRepository inscriptionPedagogiqueRepository;
-	@Autowired
-	private ModuleRepository moduleRepository;
-	@Autowired
-	private NoteElementRepository noteElementRepository;
-	@Autowired
-	private ProfesseurRepository professeurRepository;
-	@Autowired
-	private SemestreRepository semestreRepository;
-	@Autowired
-	private UserRepository userRepository;
-	@Autowired
-	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private JSONConverter converter;
 	
@@ -95,8 +52,8 @@ public class ProfesseurService implements ProfesseurInterface {
 		ArrayList<Object> besoins = new ArrayList<Object>();
 		besoins.add(inscriptions_pedagogiques);
 		besoins.add(converter.convertInscriptionsPedagogiques(inscriptions_pedagogiques));
-		besoins.add(annee_academique.findAll());
-		besoins.add(converter.convertAnneesAcademiques(annee_academique.findAll()));
+		besoins.add(anneeAcademiqueRepository.findAll());
+		besoins.add(converter.convertAnneesAcademiques(anneeAcademiqueRepository.findAll()));
 		besoins.add(element);
 		return besoins;
 	}
@@ -104,7 +61,7 @@ public class ProfesseurService implements ProfesseurInterface {
 	@Override
 	public void generateExcel(Long id_element, Long id_annee, String type,HttpServletResponse response) throws EntityNotFoundException,IOException {
 		Element element = elementRepository.getOne(id_element);
-		AnneeAcademique annee = annee_academique.getOne(id_annee);
+		AnneeAcademique annee = anneeAcademiqueRepository.getOne(id_annee);
 		List<Etudiant> etudiants = inscriptionPedagogiqueRepository.getEtudiantsByElementAndAnneeAcademique(element, annee);
 		generator_excel = new ExcelExport(etudiants, type,element.getLibelle_element(),element.getId_element());
 		generator_excel.export(response);

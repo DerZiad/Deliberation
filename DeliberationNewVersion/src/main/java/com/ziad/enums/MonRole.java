@@ -1,4 +1,4 @@
-package com.ziad.security.authentification.enums;
+package com.ziad.enums;
 
 /**
  * 
@@ -7,8 +7,8 @@ package com.ziad.security.authentification.enums;
  */
 public enum MonRole {
 	ROLEADMIN("ADMIN", "/admin"), ROLEPROFESSEUR("PROF", "/professeur"),
-	ROLERESPONSABLEFILIERE("RESPONSABLEFILIERE", "/responsablefiliere"), ROLERESPONSABLEMODULE("RESPONSABLEMODULE", "/responsablemodule"),
-	ROLEETUDIANT("ETUDIANT", "/etudiant");
+	ROLERESPONSABLEFILIERE("RESPONSABLEFILIERE", "/professeur/responsablefiliere"),
+	ROLERESPONSABLEMODULE("RESPONSABLEMODULE", "/professeur/responsablemodule"), ROLEETUDIANT("ETUDIANT", "/etudiant");
 
 	private String role;
 	private String espace;

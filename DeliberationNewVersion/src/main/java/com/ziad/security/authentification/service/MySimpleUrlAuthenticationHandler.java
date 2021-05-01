@@ -16,7 +16,7 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import com.ziad.security.authentification.enums.MonRole;
+import com.ziad.enums.MonRole;
 
 public class MySimpleUrlAuthenticationHandler implements AuthenticationSuccessHandler {
 

@@ -28,12 +28,14 @@ public class ElementMetier implements ElementInterface {
 
 	@Override
 	public void modifyElementsModule(Long idelement, Long idprofesseur, Long idmodule, String libelle_element,
-			Double coeficient, Double validation, ModelAndView model) throws EntityNotFoundException {
+			Double coeficient, Double validation) throws EntityNotFoundException {
 		Element element = elementRepository.findById(idelement).get();
 		Modulee module = moduleRepository.findById(idmodule).get();
 		if(idprofesseur != null) {
 			Professeur professeur = professeurRepository.findById(idprofesseur).get();
-			element.addProfesseur(professeur);
+			if(!element.getProfesseurs().contains(professeur)) {
+				element.addProfesseur(professeur);
+			}
 		}
 		element.setModule(module);
 		element.setCoeficient(coeficient);

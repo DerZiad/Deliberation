@@ -17,7 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.ziad.security.authentification.enums.MonRole;
+import com.ziad.enums.MonRole;
 
 @Entity
 @Table(name = "Professeur")

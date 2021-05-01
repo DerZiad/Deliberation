@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.ziad.enums.MonRole;
 import com.ziad.enums.TypeSemestre;
 import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Element;
@@ -33,7 +34,6 @@ import com.ziad.repositories.NoteElementRepository;
 import com.ziad.repositories.ProfesseurRepository;
 import com.ziad.repositories.SemestreRepository;
 import com.ziad.repositories.UserRepository;
-import com.ziad.security.authentification.enums.MonRole;
 
 @Service
 public class IntialiserBachelor {

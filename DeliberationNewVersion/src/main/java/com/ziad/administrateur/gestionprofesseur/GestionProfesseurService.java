@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.ziad.enums.MonRole;
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Element;
 import com.ziad.models.Filiere;
@@ -20,7 +21,6 @@ import com.ziad.repositories.ElementRepository;
 import com.ziad.repositories.FiliereRepository;
 import com.ziad.repositories.HistoriqueRepository;
 import com.ziad.repositories.ProfesseurRepository;
-import com.ziad.security.authentification.enums.MonRole;
 
 @Service
 @Primary

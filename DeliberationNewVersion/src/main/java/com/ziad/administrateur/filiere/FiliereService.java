@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ziad.enums.MonRole;
 import com.ziad.enums.TypeSemestre;
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Etablissement;
@@ -26,7 +27,6 @@ import com.ziad.repositories.FiliereRepository;
 import com.ziad.repositories.HistoriqueRepository;
 import com.ziad.repositories.ProfesseurRepository;
 import com.ziad.repositories.SemestreRepository;
-import com.ziad.security.authentification.enums.MonRole;
 
 @Primary
 @Service

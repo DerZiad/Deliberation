@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.ziad.security.authentification.enums.MonRole;
+import com.ziad.enums.MonRole;
 import com.ziad.security.authentification.models.UserPrincipalDetailsService;
 
 @Configuration
