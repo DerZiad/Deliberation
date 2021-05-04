@@ -2,6 +2,7 @@ package com.ziad.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -43,8 +44,11 @@ public class InscriptionPedagogique implements Serializable {
 	private AnneeAcademique annee_academique;
 
 	@Column(name = "valide")
-	private boolean isValid;
-
+	private boolean isValid = false;
+	
+	@Column(name = "noteElement")
+	private Double noteElement;
+	
 	@Column(name = "type_inscription")
 	@Enumerated(value = EnumType.STRING)
 	private TypeInscription type_inscription;
@@ -55,7 +59,7 @@ public class InscriptionPedagogique implements Serializable {
 	 * 
 	 * **/
 	@OneToMany(mappedBy = "inscription_pedagogique",cascade = CascadeType.ALL)
-	private ArrayList<NoteElement> notes =  new ArrayList<NoteElement>();
+	private List<NoteElement> notes =  new ArrayList<NoteElement>();
 
 	public InscriptionPedagogique() {
 
@@ -125,13 +129,34 @@ public class InscriptionPedagogique implements Serializable {
 		notes.add(noteElement);
 	}
 
-	public ArrayList<NoteElement> getNotes() {
+	public List<NoteElement> getNotes() {
 		return notes;
 	}
 
-	public void setNotes(ArrayList<NoteElement> notes) {
+	public void setNotes(List<NoteElement> notes) {
 		this.notes = notes;
 	}
 	
+	public Double getNoteElement() {
+		return noteElement;
+	}
+
+	public void setNoteElement(Double noteElement) {
+		this.noteElement = noteElement;
+	}
+
+	public void delibererElement() {
+		noteElement = 0d;
+		double coefficient = 0;
+		for (NoteElement noteElementA : notes) {
+			noteElement = noteElement + noteElementA.getCoeficient() * noteElementA.getNote_element();
+			coefficient = noteElementA.getCoeficient();
+		}
+		noteElement = noteElement / coefficient;
+		
+		if(noteElement >= getElement().getValidation()) {
+			isValid= true;
+		}
+	}
 	
 }

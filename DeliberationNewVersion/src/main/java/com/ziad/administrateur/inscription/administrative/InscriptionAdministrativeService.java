@@ -60,7 +60,7 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 	@Autowired
 	private FiliereRepository filiereRepository;
 	@Autowired
-	private InscriptionEnLigneRepository inscriptionEnLigne;
+	private InscriptionEnLigneRepository inscriptionEnLigneRepository;
 	@Autowired
 	private InscriptionPedagogiqueRepository inscriptionPedagogiqueRepository;
 	@Autowired
@@ -76,7 +76,7 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 
 	@Override
 	public ArrayList<Object> prepareInscriptionDatas() throws DataNotFoundExceptions {
-		List<InscriptionEnLigne> etudiants = inscriptionEnLigne.getAllInscriptionsEnLigneAccepted();
+		List<InscriptionEnLigne> etudiants = inscriptionEnLigneRepository.getAllInscriptionsEnLigneAccepted();
 		List<Filiere> filieres = filiereRepository.findAll();
 		List<AnneeAcademique> annees_academiques = annee_academique_repository.findAll();
 		ArrayList<Object> besoins = new ArrayList<Object>();
@@ -96,49 +96,49 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 
 		ComposedInscriptionAdministrative id_compose = new ComposedInscriptionAdministrative(etudiant, filiere);
 
-		InscriptionEnLigne inscription_en_ligne = inscriptionEnLigne.getOne(id_inscription_en_ligne);
-		etudiant.setAcademy(inscription_en_ligne.getAcademy());
-		etudiant.setBac_place(inscription_en_ligne.getBac_place());
-		etudiant.setBac_type(inscription_en_ligne.getBac_type());
-		etudiant.setBac_year(inscription_en_ligne.getBac_year());
-		etudiant.setBirth_date(inscription_en_ligne.getBirth_date());
-		etudiant.setBirth_place(inscription_en_ligne.getBirth_place());
-		etudiant.setCity(inscription_en_ligne.getCity());
-		etudiant.setCne(inscription_en_ligne.getCne());
-		etudiant.setFirst_name_ar(inscription_en_ligne.getFirst_name_ar());
-		etudiant.setFirst_name_fr(inscription_en_ligne.getFirst_name_fr());
-		etudiant.setGender(inscription_en_ligne.getGender());
-		etudiant.setHigh_school(inscription_en_ligne.getHigh_school());
-		etudiant.setLast_name_ar(inscription_en_ligne.getLast_name_ar());
-		etudiant.setLast_name_fr(inscription_en_ligne.getLast_name_fr());
-		etudiant.setMassar_edu(inscription_en_ligne.getMassar_edu());
-		etudiant.setMention(inscription_en_ligne.getMention());
-		etudiant.setNationality(inscription_en_ligne.getNationality());
-		etudiant.setProvince(inscription_en_ligne.getProvince());
-		etudiant.setRegistration_date(inscription_en_ligne.getRegistration_date());
-		etudiant.setEmail(inscription_en_ligne.getEmail());
+		InscriptionEnLigne inscriptionEnLigne = inscriptionEnLigneRepository.getOne(id_inscription_en_ligne);
+		etudiant.setAcademy(inscriptionEnLigne.getAcademy());
+		etudiant.setBac_place(inscriptionEnLigne.getBac_place());
+		etudiant.setBac_type(inscriptionEnLigne.getBac_type());
+		etudiant.setBac_year(inscriptionEnLigne.getBac_year());
+		etudiant.setBirth_date(inscriptionEnLigne.getBirth_date());
+		etudiant.setBirth_place(inscriptionEnLigne.getBirth_place());
+		etudiant.setCity(inscriptionEnLigne.getCity());
+		etudiant.setCne(inscriptionEnLigne.getCne());
+		etudiant.setFirst_name_ar(inscriptionEnLigne.getFirst_name_ar());
+		etudiant.setFirst_name_fr(inscriptionEnLigne.getFirst_name_fr());
+		etudiant.setGender(inscriptionEnLigne.getGender());
+		etudiant.setHigh_school(inscriptionEnLigne.getHigh_school());
+		etudiant.setLast_name_ar(inscriptionEnLigne.getLast_name_ar());
+		etudiant.setLast_name_fr(inscriptionEnLigne.getLast_name_fr());
+		etudiant.setMassar_edu(inscriptionEnLigne.getMassar_edu());
+		etudiant.setMention(inscriptionEnLigne.getMention());
+		etudiant.setNationality(inscriptionEnLigne.getNationality());
+		etudiant.setProvince(inscriptionEnLigne.getProvince());
+		etudiant.setRegistration_date(inscriptionEnLigne.getRegistration_date());
+		etudiant.setEmail(inscriptionEnLigne.getEmail());
 		/**
 		 * Créeation de l'utilistaeur
 		 */
 		User user = new User();
 		user.setUsername(etudiant.getEmail());
 		// On met le mot de passe son prenom pour le changer apres
-		user.setPassword(passwordEncoder.encode(inscription_en_ligne.getLast_name_fr().toLowerCase()));
+		user.setPassword(passwordEncoder.encode(inscriptionEnLigne.getLast_name_fr().toLowerCase()));
 		user.setActive(1);
 		user.addRole(MonRole.ROLEETUDIANT);
 		etudiant.setUser(user);
-		etudiant.setInscription_en_ligne(inscription_en_ligne);
-		inscription_en_ligne.setEtudiant(etudiant);
-		etudiant.setInscription_en_ligne(inscription_en_ligne);
+		etudiant.setInscription_en_ligne(inscriptionEnLigne);
+		inscriptionEnLigne.setEtudiant(etudiant);
+		etudiant.setInscription_en_ligne(inscriptionEnLigne);
 		etudiantRepository.save(etudiant);
-		inscriptionEnLigne.save(inscription_en_ligne);
+		inscriptionEnLigneRepository.save(inscriptionEnLigne);
 
 		// --------------------partie creation d inscrip
 		// administrative----------------------------//
 
 		AnneeAcademique annee_academique = annee_academique_repository.getOne(id_annee_academique);
 		inscription_administrative.setAnnee_academique(annee_academique);
-		inscription_administrative.setDate_pre_inscription(inscription_en_ligne.getRegistration_date());
+		inscription_administrative.setDate_pre_inscription(inscriptionEnLigne.getRegistration_date());
 		LocalDate ld = LocalDate.now();
 		ZoneId defaultZoneId = ZoneId.systemDefault();
 		java.util.Date date = Date.from(ld.atStartOfDay(defaultZoneId).toInstant());
@@ -308,7 +308,7 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 				.getOne(inscription_administrative_id);
 		ArrayList<Object> besoins = new ArrayList<Object>();
 		besoins.add(inscription_administrative);
-		besoins.add(inscriptionEnLigne.findAll());
+		besoins.add(inscriptionEnLigneRepository.findAll());
 		besoins.add(filiereRepository.findAll());
 		besoins.add(annee_academique_repository.findAll());
 		return besoins;
@@ -343,7 +343,7 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 				/**
 				 * Meme chose pour inscription en ligne et annee academique
 				 */
-				List<InscriptionEnLigne> inscriptions_en_lignes = inscriptionEnLigne.findAll();
+				List<InscriptionEnLigne> inscriptions_en_lignes = inscriptionEnLigneRepository.findAll();
 				List<InscriptionEnLigne> inscriptions_en_lignes_filtered = inscriptions_en_lignes.stream()
 						.filter(inscription -> inscription.getFirst_name_fr().toLowerCase().equals(nom.toLowerCase())
 								&& inscription.getLast_name_fr().toLowerCase().equals(prenom.toLowerCase())
@@ -404,7 +404,7 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 				inscrptionEnLigneObject.setEtudiant(etudiant);
 				etudiant.setInscription_en_ligne(inscrptionEnLigneObject);
 				etudiantRepository.save(etudiant);
-				inscriptionEnLigne.save(inscrptionEnLigneObject);
+				inscriptionEnLigneRepository.save(inscrptionEnLigneObject);
 
 				// --------------------partie creation d inscrip
 				// administrative----------------------------//

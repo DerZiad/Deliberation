@@ -42,7 +42,6 @@ public class ExcelExport {
 		
 		Row element = sheet.createRow(0);
 		
-		
 		Cell celle1 = element.createCell(0);
 		celle1.setCellValue("Nom element");
 		
@@ -72,7 +71,7 @@ public class ExcelExport {
 	
 	private void fillStudent() {
 		for (int i = 0; i < etudiants.size(); i++) {
-			Row row = sheet.createRow(i+4);
+			Row row = sheet.createRow(i+2);
 			
 			Cell cell = row.createCell(0);
 			cell.setCellValue(etudiants.get(i).getMassar_edu());

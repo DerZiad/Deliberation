@@ -92,7 +92,7 @@ public class NoteService implements NoteInterface {
 				String nom = row.getCell(1).getStringCellValue();
 				String prenom = row.getCell(2).getStringCellValue();
 				Double note = row.getCell(5).getNumericCellValue();
-				List<Etudiant> etudiant = etudiantRepository.getStudentByNationality(massar, nom, prenom);
+				List<Etudiant> etudiant = etudiantRepository.listerEtudiantParMassarNomPrenom(massar, nom, prenom);
 				if (etudiant.size() != 1)
 					throw new DataNotFoundExceptions();
 				TypeNote note_type = null;

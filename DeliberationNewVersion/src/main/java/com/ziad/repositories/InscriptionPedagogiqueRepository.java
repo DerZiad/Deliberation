@@ -25,4 +25,7 @@ public interface InscriptionPedagogiqueRepository
 
 	@Query("select e from InscriptionPedagogique s,Etudiant e where s.id_inscription_pedagogique.element=:x and s.annee_academique =:a")
 	List<Etudiant> getEtudiantsByElementAndAnneeAcademique(@Param("x") Element element,@Param("a")AnneeAcademique annee);
+	
+	@Query("select s from InscriptionPedagogique s where s.id_inscription_pedagogique.element=:x and s.annee_academique =:a")
+	List<InscriptionPedagogique> getInscriptionPedagogiquesByElementAndAnneeAcademique(@Param("x") Element element,@Param("a")AnneeAcademique annee);
 }
