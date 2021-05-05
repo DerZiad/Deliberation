@@ -66,8 +66,8 @@
 					}else{
 						var listes_options = "";
 						for (var i = 0; i < modules.length; i++) {
-							let id = modules[i].id_element;
-							let name = modules[i].libelle_element;
+							let id = elements[i].id_element;
+							let name = elements[i].libelle_element;
 							listes_options = listes_options + "<option value=" + id + "> " + name +  "</option> \n";
 						}
 						$('select[name=lists]').html(listes_options);

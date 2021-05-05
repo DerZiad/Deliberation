@@ -74,7 +74,7 @@ public class InscriptionPedagogiqueController {
 		return model;
 	}
 
-	@PostMapping("/ajouter/{id_inscription_filiere}/{id_inscription_etudiant}")
+	@PostMapping("/creer/{id_inscription_filiere}/{id_inscription_etudiant}")
 	public ModelAndView enregistrerInscriptionPedagogique(@PathVariable("id_inscription_filiere") Long id_filiere,
 			@PathVariable("id_inscription_etudiant") Long id_etudiant, HttpServletRequest request)
 			throws EntityNotFoundException, DataNotFoundExceptions {

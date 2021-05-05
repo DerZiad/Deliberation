@@ -8,11 +8,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Element;
+import com.ziad.models.Etape;
+import com.ziad.models.Filiere;
 import com.ziad.models.InscriptionPedagogique;
 import com.ziad.models.Modulee;
 import com.ziad.models.Semestre;
 import com.ziad.utilities.adaptater.AnneeAcademiqueAdaptater;
 import com.ziad.utilities.adaptater.ElementAdaptater;
+import com.ziad.utilities.adaptater.EtapeAdaptater;
+import com.ziad.utilities.adaptater.FiliereAdaptater;
 import com.ziad.utilities.adaptater.InscriptionPedagogiqueAdaptater;
 import com.ziad.utilities.adaptater.ModuleAdaptater;
 import com.ziad.utilities.adaptater.SemestreAdaptater;
@@ -48,5 +52,25 @@ public class JSONConverter{
 	public String convertInscriptionsPedagogiques(List<InscriptionPedagogique> inscription_pedagogiques) {
 		Gson gson = gsonBuilder.registerTypeAdapter(InscriptionPedagogique.class,new InscriptionPedagogiqueAdaptater()).create();
 		return gson.toJson(inscription_pedagogiques);
+	}
+	
+	public String convertFiliere(Filiere filiere) {
+		Gson gson = gsonBuilder.registerTypeAdapter(Filiere.class, new FiliereAdaptater()).create();
+		return gson.toJson(filiere);
+	}
+	
+	public String convertFilieres(List<Filiere> filieres) {
+		Gson gson = gsonBuilder.registerTypeAdapter(Filiere.class, new FiliereAdaptater()).create();
+		return gson.toJson(filieres);
+	}
+	
+	public String convertEtape(Etape etape) {
+		Gson gson = gsonBuilder.registerTypeAdapter(Etape.class, new EtapeAdaptater()).create();
+		return gson.toJson(etape);
+	}
+	
+	public String convertEtape(List<Etape> etapes) {
+		 Gson gson = gsonBuilder.registerTypeAdapter(Etape.class, new EtapeAdaptater()).create();
+		    return gson.toJson(etapes);
 	}
 }

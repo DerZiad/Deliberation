@@ -11,6 +11,7 @@ public class ModuleAdaptater implements JsonSerializer<Modulee>{
     @Override
     public JsonElement serialize(Modulee module, Type type, JsonSerializationContext jsc) {
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id_filiere", module.getSemestre().getEtape().getFiliere().getId_filiere());
         jsonObject.addProperty("id_module", module.getId_module());
         jsonObject.addProperty("libelle_module", module.getLibelle_module());
         jsonObject.addProperty("validation", module.getValidation());

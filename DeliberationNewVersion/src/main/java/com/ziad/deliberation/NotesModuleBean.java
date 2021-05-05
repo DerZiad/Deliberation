@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-
 import com.ziad.models.Etudiant;
 import com.ziad.models.InscriptionPedagogique;
 import com.ziad.models.Modulee;

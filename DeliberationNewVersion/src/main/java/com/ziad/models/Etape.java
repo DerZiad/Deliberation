@@ -25,7 +25,7 @@ public class Etape implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_etape")
-	private int id_etape;
+	private Long id_etape;
 	
 	@Column(name = "libelle_etape")
 	private String libelle_etape;
@@ -58,7 +58,7 @@ public class Etape implements Serializable{
 		this.filiere = filiere;
 	}
 
-	public Etape(int id_etape, String libelle_etape, boolean diplomante, Double validation, Filiere filiere) {
+	public Etape(Long id_etape, String libelle_etape, boolean diplomante, Double validation, Filiere filiere) {
 		super();
 		this.id_etape = id_etape;
 		this.libelle_etape = libelle_etape;
@@ -67,11 +67,11 @@ public class Etape implements Serializable{
 		this.filiere = filiere;
 	}
 
-	public int getId_etape() {
+	public Long getId_etape() {
 		return id_etape;
 	}
 
-	public void setId_etape(int id_etape) {
+	public void setId_etape(Long id_etape) {
 		this.id_etape = id_etape;
 	}
 

@@ -2,9 +2,6 @@ package com.ziad.deliberation;
 
 import java.util.HashMap;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-
 import com.ziad.models.Etudiant;
 import com.ziad.models.Modulee;
 import com.ziad.models.Semestre;
