@@ -47,6 +47,8 @@ import com.ziad.repositories.HistoriqueRepository;
 import com.ziad.repositories.InscriptionAdministrativeRepository;
 import com.ziad.repositories.InscriptionEnLigneRepository;
 import com.ziad.repositories.InscriptionPedagogiqueRepository;
+import com.ziad.repositories.ModuleRepository;
+import com.ziad.repositories.SemestreRepository;
 import com.ziad.utilities.ExcelReader;
 
 @Service
@@ -73,6 +75,12 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 	private InscriptionAdministrativeRepository inscription_admistrative_repository;
 	@Autowired
 	private ExcelReader excel_service;
+
+	@Autowired
+	private ModuleRepository moduleRepository;
+
+	@Autowired
+	private SemestreRepository semestreRespository;
 
 	@Override
 	public ArrayList<Object> prepareInscriptionDatas() throws DataNotFoundExceptions {
@@ -250,11 +258,13 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 				lia.get(i).setEncodedCin(base64Encoded);
 			}
 		}
-		List<InscriptionAdministrative> inscription_administrative = inscription_admistrative_repository.findAll();
 		ArrayList<Object> list = new ArrayList<Object>();
-		list.add((Integer) ele[0]);// ele[0]
-		list.add(inscription_administrative);
+		list.add(annee_academique_repository.findAll());
 		list.add(filieres);
+		list.add(semestreRespository.findAll());
+		list.add(moduleRepository.findAll());
+		list.add(inscription_admistrative_repository.findAll());
+
 		return list;
 	}
 
@@ -459,6 +469,38 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 			throw new FormatReaderException("La date doit être un entier");
 		}
 		return first_part;
+	}
+
+	@Override
+	public List<InscriptionAdministrative> listInscriptionAdministrativeByFilter(Long idFiliere, Long idAnneeAcademique,
+			Long idSemestre, Long idModule) throws DataNotFoundExceptions, EntityNotFoundException {
+		List<InscriptionAdministrative> listesInscription = new ArrayList<InscriptionAdministrative>();
+		if (idModule != null) {
+			System.out.println("Filtre module");
+			Modulee module = moduleRepository.getOne(idModule);
+			listesInscription = inscription_admistrative_repository.listerInscriptionsAdministrativesByModule(module);
+		} else if (idSemestre != null) {
+			System.out.println("Filtre semestre");
+			Semestre semestre = semestreRespository.getOne(idSemestre);
+			listesInscription = inscription_admistrative_repository
+					.listerInscriptionsAdministrativesBySemestre(semestre);
+		} else if (idFiliere != null) {
+			System.out.println("Filtre filiere");
+			Filiere filiere = filiereRepository.getOne(idFiliere);
+			listesInscription = inscription_admistrative_repository.listerInscriptionsAdministrativesByFiliere(filiere);
+		}
+
+		if (idAnneeAcademique != null) {
+			System.out.println("Filtre annee academique");
+			listesInscription = listesInscription.stream()
+					.filter(inscri -> inscri.getAnnee_academique().getId_annee_academique() == idAnneeAcademique)
+					.collect(Collectors.toList());
+		}
+		
+		if(listesInscription.size() == 0) {
+			listesInscription = inscription_admistrative_repository.findAll();
+		}
+		return listesInscription;
 	}
 
 }

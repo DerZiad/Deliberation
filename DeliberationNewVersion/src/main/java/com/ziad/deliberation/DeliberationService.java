@@ -97,8 +97,7 @@ public class DeliberationService implements DeliberationInterface {
 				algorithme.delibererSemestre(semestre, annee);
 			}
 		}
-		
-		
+				
 	}
 	
 	

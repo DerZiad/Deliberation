@@ -27,7 +27,6 @@ public class Algorithme {
 	@Autowired
 	private InscriptionPedagogiqueRepository inscriptionPedagogiqueRepository;
 
-	@Autowired
 	private DeliberationRepository deliberationRepository;
 	@Autowired
 	private ModuleRepository moduleRepository;

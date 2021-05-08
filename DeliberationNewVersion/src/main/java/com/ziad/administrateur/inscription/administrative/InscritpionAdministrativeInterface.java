@@ -8,11 +8,13 @@ import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ziad.exceptions.CSVReaderOException;
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.exceptions.FormatReaderException;
+import com.ziad.models.InscriptionAdministrative;
 
 public interface InscritpionAdministrativeInterface {
 
@@ -22,18 +24,21 @@ public interface InscritpionAdministrativeInterface {
 
 	public ArrayList<Object> prepareInscriptionDatas() throws DataNotFoundExceptions;
 
-	public void deleteInscriptionAdministrative(Long id_etudiant,Long id_filiere) throws EntityNotFoundException;
+	public void deleteInscriptionAdministrative(Long id_etudiant, Long id_filiere) throws EntityNotFoundException;
 
 	public ArrayList<Object> listerInscriptionsAdministratives()
 			throws DataNotFoundExceptions, UnsupportedEncodingException;
 
 	public void modifierInscriptionAdministrative(Date date_pre_inscription, Date date_valid_inscription,
-			Long id_etudiant, Long id_filiere, MultipartFile photo, MultipartFile bac,
-			MultipartFile relevee_note, MultipartFile acte_de_naissance, MultipartFile cin, Long id_annee_academique)
-			throws IOException;
+			Long id_etudiant, Long id_filiere, MultipartFile photo, MultipartFile bac, MultipartFile relevee_note,
+			MultipartFile acte_de_naissance, MultipartFile cin, Long id_annee_academique) throws IOException;
 
-	public ArrayList<Object> getInscriptionAdministrative(Long id_filiere,Long id_etudiant) throws EntityNotFoundException;
+	public ArrayList<Object> getInscriptionAdministrative(Long id_filiere, Long id_etudiant)
+			throws EntityNotFoundException;
 
+	public List<InscriptionAdministrative> listInscriptionAdministrativeByFilter(Long idFiliere, Long idAnneeAcademique,
+			Long idSemestre, Long idModule) throws DataNotFoundExceptions, EntityNotFoundException;
 
-	public List<String> uploadInscriptionAdministrative(MultipartFile file) throws CSVReaderOException,IOException,FormatReaderException;
+	public List<String> uploadInscriptionAdministrative(MultipartFile file)
+			throws CSVReaderOException, IOException, FormatReaderException;
 }

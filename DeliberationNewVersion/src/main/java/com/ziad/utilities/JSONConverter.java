@@ -10,6 +10,7 @@ import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Element;
 import com.ziad.models.Etape;
 import com.ziad.models.Filiere;
+import com.ziad.models.InscriptionEnLigne;
 import com.ziad.models.InscriptionPedagogique;
 import com.ziad.models.Modulee;
 import com.ziad.models.Semestre;
@@ -17,6 +18,7 @@ import com.ziad.utilities.adaptater.AnneeAcademiqueAdaptater;
 import com.ziad.utilities.adaptater.ElementAdaptater;
 import com.ziad.utilities.adaptater.EtapeAdaptater;
 import com.ziad.utilities.adaptater.FiliereAdaptater;
+import com.ziad.utilities.adaptater.InscriptionEnLigneAdaptater;
 import com.ziad.utilities.adaptater.InscriptionPedagogiqueAdaptater;
 import com.ziad.utilities.adaptater.ModuleAdaptater;
 import com.ziad.utilities.adaptater.SemestreAdaptater;
@@ -71,6 +73,16 @@ public class JSONConverter{
 	
 	public String convertEtape(List<Etape> etapes) {
 		 Gson gson = gsonBuilder.registerTypeAdapter(Etape.class, new EtapeAdaptater()).create();
-		    return gson.toJson(etapes);
+		 return gson.toJson(etapes);
+	}
+	
+	public String convertInscriptionsEnLignes(List<InscriptionEnLigne> inscriptions) {
+		Gson gson = gsonBuilder.registerTypeAdapter(InscriptionEnLigne.class,new InscriptionEnLigneAdaptater()).create();
+	    return gson.toJson(inscriptions);
+	}
+	
+	public String convertInscriptionsEnLignes(InscriptionEnLigne inscription) {
+		Gson gson = gsonBuilder.registerTypeAdapter(InscriptionEnLigne.class,new InscriptionEnLigneAdaptater()).create();
+	    return gson.toJson(inscription);
 	}
 }

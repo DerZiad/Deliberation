@@ -135,9 +135,11 @@ public class InscriptionEnLigne implements Serializable {
 	/**
 	 * L'inscription en ligne est accepté
 	 */
-	@Column(name = "accepted")
+	@Column(name = "acceptedEmail")
 	private int accepted;
 
+	@Column(name = "acceptedAdmin")
+	private int acceptedParAdmin = 0;
 	/**
 	 * Relations
 	 */
@@ -148,22 +150,11 @@ public class InscriptionEnLigne implements Serializable {
 
 	}
 
-	public InscriptionEnLigne(Long id_inscription_en_ligne, String email, Etudiant etudiant, String massar_edu,
-			String first_name_fr, String first_name_ar, String last_name_fr, String last_name_ar, String cne,
-			String nationality, Gender gender, Date birth_date, String birth_place, String city, String province,
-			Integer bac_year, String bac_type, String mention, String high_school, String bac_place, String academy,
-			Date registration_date, int accepted, Etablissement etablissement) {
-		this(email, etudiant, massar_edu, first_name_fr, first_name_ar, last_name_fr, last_name_ar, cne, nationality,
-				gender, birth_date, birth_place, city, province, bac_year, bac_type, mention, high_school, bac_place,
-				academy, registration_date, accepted, etablissement);
-		this.id_inscription_en_ligne = id_inscription_en_ligne;
-	}
-
 	public InscriptionEnLigne(String email, Etudiant etudiant, String massar_edu, String first_name_fr,
 			String first_name_ar, String last_name_fr, String last_name_ar, String cne, String nationality,
 			Gender gender, Date birth_date, String birth_place, String city, String province, Integer bac_year,
 			String bac_type, String mention, String high_school, String bac_place, String academy,
-			Date registration_date, int accepted, Etablissement etablissement) {
+			Date registration_date, int accepted, int acceptedParAdmin, Etablissement etablissement) {
 		super();
 		this.email = email;
 		this.etudiant = etudiant;
@@ -187,7 +178,20 @@ public class InscriptionEnLigne implements Serializable {
 		this.academy = academy;
 		this.registration_date = registration_date;
 		this.accepted = accepted;
+		this.acceptedParAdmin = acceptedParAdmin;
 		this.etablissement = etablissement;
+	}
+
+	public InscriptionEnLigne(Long id_inscription_en_ligne, String email, Etudiant etudiant, String massar_edu,
+			String first_name_fr, String first_name_ar, String last_name_fr, String last_name_ar, String cne,
+			String nationality, Gender gender, Date birth_date, String birth_place, String city, String province,
+			Integer bac_year, String bac_type, String mention, String high_school, String bac_place, String academy,
+			Date registration_date, int accepted, int acceptedParAdmin, Etablissement etablissement) {
+		this(email, etudiant, massar_edu, first_name_fr, first_name_ar, last_name_fr, last_name_ar, cne, nationality,
+				gender, birth_date, birth_place, city, province, bac_year, bac_type, mention, high_school, bac_place,
+				academy, registration_date, accepted, acceptedParAdmin, etablissement);
+		this.id_inscription_en_ligne = id_inscription_en_ligne;
+
 	}
 
 	public Long getId_inscription_en_ligne() {
@@ -196,6 +200,14 @@ public class InscriptionEnLigne implements Serializable {
 
 	public void setId_inscription_en_ligne(Long id_inscription_en_ligne) {
 		this.id_inscription_en_ligne = id_inscription_en_ligne;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public Etudiant getEtudiant() {
@@ -366,20 +378,20 @@ public class InscriptionEnLigne implements Serializable {
 		this.accepted = accepted;
 	}
 
+	public int getAcceptedParAdmin() {
+		return acceptedParAdmin;
+	}
+
+	public void setAcceptedParAdmin(int acceptedParAdmin) {
+		this.acceptedParAdmin = acceptedParAdmin;
+	}
+
 	public Etablissement getEtablissement() {
 		return etablissement;
 	}
 
 	public void setEtablissement(Etablissement etablissement) {
 		this.etablissement = etablissement;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 }

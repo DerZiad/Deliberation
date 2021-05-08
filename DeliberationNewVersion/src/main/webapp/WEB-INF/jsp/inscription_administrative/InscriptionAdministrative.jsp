@@ -12,26 +12,11 @@
 			<div class="card-body">
 				<h5 class="card-title">Inscription Administrative de l'Etudiant</h5>
 				<form class=""
-					action="/admin/inscription/InscriptionAdministrative"
+					action="/admin/inscription/InscriptionAdministrative/${inscriptionenligne}"
 					method="Post" enctype="multipart/form-data">
 
 
 					<div class="form-row">
-						<div class="col-md-6">
-							<div class="position-relative form-group">
-								<label for="Nom Etudiant" class="">Nom Etudiant</label> <select
-									name="id_inscription_en_ligne" id="exampleSelect" class="form-control"
-									required>
-									<c:forEach var="etudiant" items="${etudiants}">
-										<option value="${etudiant.id_inscription_en_ligne}">${etudiant.first_name_fr }
-											${etudiant.last_name_fr }</option>
-									</c:forEach>
-								</select>
-							</div>
-						</div>
-
-
-
 						<div class="col-md-6">
 							<div class="position-relative form-group">
 								<label for="Filiere" class="">Filiere</label> <select

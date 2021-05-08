@@ -104,7 +104,7 @@
 				</a>
 					<ul class="mm-collapse" style="height: 7.04px;">
 
-						<li><a href="/admin/inscription/InscriptionAdministrative"
+						<li><a href="/admin/inscriptionenligne/list"
 							class="${InscriptionAdministrative}"> <i
 								class="metismenu-icon pe-7s-add-user"></i>Ajouter I.
 								Administrative

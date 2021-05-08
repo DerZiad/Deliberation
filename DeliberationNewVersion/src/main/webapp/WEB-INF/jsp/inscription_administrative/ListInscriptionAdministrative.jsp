@@ -7,167 +7,134 @@
 
 <layout:extends name="../layout.jsp">
 	<layout:put block="content" type="REPLACE">
+		<script>
+jQuery(document).ready(function(){
+		$("input[name=checkfiliere]").click(function(){
+				enable_cb("checkfiliere","select[name=id_filiere]");
+		});
+});
 
+
+function enable_cb(checkboxobject,select) {
+	if ($('input[name=checkboxobject]').attr('checked')) {
+		$(select).removeAttr("disabled");
+	} else {
+		$(select).attr("disabled", true);
+	}
+}
+		</script>
 		<div class="main-card mb-3 card">
 			<div class="card-body">
-				<h5 class="card-title">Liste des inscriptions d'étudiants</h5>
-				<div class="tab">
-					<c:forEach var="filiere" items="${filieres}">
-						<button class="mb-2 mr-2 btn btn-primary"
-							onclick="openCity(event, '${filiere.nom_filiere}')">${filiere.nom_filiere}</button>
-					</c:forEach>
-				</div>
-				<div class="col-md-6">
-					<div class="position-relative form-group">
-						<label for="Filiere" class="">Année universitaire</label> <select
-							name="annee" id="myInput" class="form-control"
-							onchange="filtre()">
-							<option selected="selected" disabled>Choisir l'année
-								universitaire</option>
-							<option value="${annee-1}/${annee}">${annee-1}/${annee}</option>
-							<option value="${annee-2}/${annee-1}">${annee-2}/${annee-1}</option>
-							<option value="${annee-3}/${annee-2}">${annee-3}/${annee-2}</option>
-							<option value="${annee-4}/${annee-3}">${annee-4}/${annee-3}</option>
-							<option value="${annee-5}/${annee-4}">${annee-5}/${annee-4}</option>
-							<option value="${annee-6}/${annee-5}">${annee-6}/${annee-5}</option>
-						</select>
-					</div>
-
-				</div>
-				<c:forEach var="filiere" items="${filieres}">
-
-					<div id="${filiere.nom_filiere}" class="tabcontent">
-						<table class="mb-0 table table-hover" id="myTable">
-							<thead>
-								<tr>
-									<th class="th-sm">Nom Etudiant</th>
-									<th class="th-sm">Année universitaire</th>
-									<th class="th-sm">Date de preinscription</th>
-									<th class="th-sm">Date Validation d'inscription</th>
-									<th class="th-sm">Operateur</th>
-									<th class="th-sm"></th>
-									<th class="th-sm"></th>
-								</tr>
-							</thead>
-							<tbody>
-								<c:forEach var="inscriptionAssociative"
-									items="${InscriptionAssociative}">
-									<tr>
-										<c:if
-											test="${filiere.id_filiere==inscriptionAssociative.composite_association_id.filiere.id_filiere }">
-											<td
-												onclick="window.location.href ='/admin/ProfilEtudiant/${inscriptionAssociative.composite_association_id.filiere.id_filiere}/${inscriptionAssociative.composite_association_id.etudiant.id_etudiant }">
-												<a style="color: black">
-													${inscriptionAssociative.composite_association_id.etudiant.first_name_fr}
-													${inscriptionAssociative.composite_association_id.etudiant.last_name_fr}</a>
-											</td>
-											<td
-												onclick="window.location.href ='/admin/ProfilEtudiant/${inscriptionAssociative.composite_association_id.filiere.id_filiere}/${inscriptionAssociative.composite_association_id.etudiant.id_etudiant }">
-												<a style="color: black">
-													${inscriptionAssociative.annee_academique.annee_academique}</a>
-											</td>
-											<td
-												onclick="window.location.href ='/admin/ProfilEtudiant/${inscriptionAssociative.composite_association_id.filiere.id_filiere}/${inscriptionAssociative.composite_association_id.etudiant.id_etudiant }">
-												<a style="color: black">
-													${inscriptionAssociative.date_pre_inscription.toString().substring(0,10)}</a>
-											</td>
-											<td
-												onclick="window.location.href ='/admin/ProfilEtudiant/${inscriptionAssociative.composite_association_id.filiere.id_filiere}/${inscriptionAssociative.composite_association_id.etudiant.id_etudiant }">
-												<a style="color: black">
-													${inscriptionAssociative.date_valid_inscription.toString().substring(0,10)}</a>
-											</td>
-
-
-
-											<td><i class="fa fa-fw" aria-hidden="true"
-												title="Copy to use pencil-square-o"><a
-													href="PageModifierInscriptionAdministrative/${inscriptionAssociative.composite_association_id.filiere.id_filiere}/${inscriptionAssociative.composite_association_id.etudiant.id_etudiant }"
-													style="font-size: 20px;"></a></i></td>
-											<td><i class="fa fa-fw" aria-hidden="true"
-												title="Copy to use trash"> <a
-													href="SupprimerInscriptionAdministrative/${inscriptionAssociative.composite_association_id.filiere.id_filiere}/${inscriptionAssociative.composite_association_id.etudiant.id_etudiant }"
-													style="color: red; font-size: 20px;"></a>
-											</i></td>
-										</c:if>
-									</tr>
+				<h5 class="card-title">Liste des inscriptions administratives
+					des etudiants</h5>
+				<form action="/admin/inscription/ListInscriptionAdministrative"
+					method="POST">
+					<div class="col-md-6">
+						<div class="position-relative form-group">
+							<input type="checkbox" class="form-class" name="checkfiliere"/>
+							<label for="Filiere" class="">Filiere</label> <select
+								name="id_filiere" class="form-control">
+								<c:forEach var="filiere" items="${filieres}">
+									<option value="${filiere.id_filiere }">${filiere.nom_filiere }</option>
 								</c:forEach>
-							</tbody>
-						</table>
+
+							</select>
+						</div>
 					</div>
-				</c:forEach>
+					<div class="col-md-6">
+						<div class="position-relative form-group">
+							<input type="checkbox" class="form-class" name="checkannee"/>
+							<label for="Filiere" class="">Année universitaire</label> <select
+								name="id_annee_academique" id="myInput" class="form-control">
+								<c:forEach var="annee" items="${annees_academiques}">
+									<option value="${annee.id_annee_academique }">${annee.annee_academique }</option>
+								</c:forEach>
+
+							</select>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="position-relative form-group">
+							<input type="checkbox" class="form-class" name="checksemestre"/>
+							<label for="semestre" class="">Semestre</label> <select
+								name="id_semestre" id="myInput" class="form-control">
+								<c:forEach var="semestre" items="${semestres}">
+									<option value="${semestre.id_semestre }">${semestre.libelle_semestre }</option>
+								</c:forEach>
+
+							</select>
+						</div>
+
+					</div>
+					<div class="col-md-6">
+						<div class="position-relative form-group">
+							<input type="checkbox" class="form-class" name="checkmodule"/>
+							<label for="module" class="">Module</label> <select name="id_module"
+								id="myInput" class="form-control">
+								<c:forEach var="module" items="${modules}">
+									<option value="${module.id_module }">${module.libelle_module }</option>
+								</c:forEach>
+
+							</select>
+						</div>
+
+					</div>
+					<div class="col-md-9">
+						<div class="position-relative form-group">
+							<button class="btn btn-success">Valider</button>
+						</div>
+
+					</div>
+				</form>
+
+				<table class="mb-0 table table-hover" id="myTable">
+					<thead>
+						<tr>	
+							<th class="th-sm">Massar</th>
+							<th class="th-sm">Nom Etudiant</th>
+							<th class="th-sm">Date de preinscription</th>
+							<th class="th-sm">Date Validation d'inscription</th>
+							<th class="th-sm">Operateur</th>
+							<th class="th-sm"></th>
+							<th class="th-sm"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach var="inscription"
+							items="${InscriptionAssociative}">
+							<tr>	
+									<td>
+										<a style="color: black">
+											${inscription.composite_association_id.etudiant.massar_edu}</a>
+									</td>
+									<td>
+										<a style="color: black">
+											${inscription.composite_association_id.etudiant.first_name_fr}
+											${inscription.composite_association_id.etudiant.last_name_fr}</a>
+									</td>
+									<td>
+										<a style="color: black">
+											${inscription.date_pre_inscription.toString().substring(0,10)}</a>
+									</td>
+									<td>
+										<a style="color: black">
+											${inscription.date_valid_inscription.toString().substring(0,10)}</a>
+									</td>
+
+									<td><i class="fa fa-fw" aria-hidden="true"
+										title="Copy to use pencil-square-o"><a
+											href="PageModifierInscriptionAdministrative/${inscription.composite_association_id.filiere.id_filiere}/${inscription.composite_association_id.etudiant.id_etudiant }"
+											style="font-size: 20px;"></a></i></td>
+									<td><i class="fa fa-fw" aria-hidden="true"
+										title="Copy to use trash"> <a
+											href="SupprimerInscriptionAdministrative/${inscription.composite_association_id.filiere.id_filiere}/${inscription.composite_association_id.etudiant.id_etudiant }"
+											style="color: red; font-size: 20px;"></a>
+									</i></td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
 			</div>
 		</div>
-		<script type="text/javascript" src="./assets/scripts/main.js"></script>
-		<script>
-		
-		
-		
-		function openCity(evt, cityName) {
-			  // Declare all variables
-			  var i, tabcontent, tablinks;
-
-			  // Get all elements with class="tabcontent" and hide them
-			  tabcontent = document.getElementsByClassName("tabcontent");
-			  for (i = 0; i < tabcontent.length; i++) {
-			    tabcontent[i].style.display = "none";
-			  }
-
-			  // Get all elements with class="tablinks" and remove the class "active"
-			  tablinks = document.getElementsByClassName("mb-2 mr-2 btn btn-success");
-			  for (i = 0; i < tablinks.length; i++) {
-			    tablinks[i].className = tablinks[i].className.replace(" active", "");
-			  }
-
-			  // Show the current tab, and add an "active" class to the link that opened the tab
-			  document.getElementById(cityName).style.display = "block";
-			  evt.currentTarget.className += " active";
-			}
-		
-		function filtre() {
-			  // Declare variables
-			  var input, filter, table, tr, td, i, txtValue;
-			  input = document.getElementById("myInput");
-			  filter = input.value.toUpperCase();
-			  table = document.getElementById("myTable");
-			  tr = table.getElementsByTagName("tr");
-			  // Loop through all table rows, and hide those who don't match the search query
-			  for (i = 0; i < tr.length; i++) {
-			    td = tr[i].getElementsByTagName("td")[1];
-			    if (td) {
-			      txtValue = td.textContent || td.innerText;
-			      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-			        tr[i].style.display = "";
-			      } else {
-			        tr[i].style.display = "none";
-			      }
-			    }
-			  }
-			}
-		</script>
 	</layout:put>
-	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<p class="mb-0">Lorem Ipsum has been the industry's standard
-						dummy text ever since the 1500s, when an unknown printer took a
-						galley of type and scrambled.</p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
 </layout:extends>
