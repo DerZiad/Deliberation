@@ -78,12 +78,10 @@ public class DeliberationService implements DeliberationInterface {
 
 		
 		if (typeDeliberation.equals(TYPE_DELIBERATION_ORDINAIRE)) {
-			algorithme.enableOrdinaire();
-			delibpermis = !algorithme.isDeliberedOrdinaire(annee, id_element);
+			algorithme.enableDeliberationOrdinaire();
 		} else if (typeDeliberation.equals(TYPE_DELIBERATION_RATTRAPAGE)) {
-			algorithme.enableConsiderationDesNotes(consideration == 1);
-			algorithme.enableRattrapage();
-			delibpermis = !algorithme.isDeliberedRattrapage(annee, id_element);
+			algorithme.enableConsideration(true);
+			algorithme.enableDeliberationRattrapage();
 		}
 		if(delibpermis) {
 			if (type.equals(TYPE_DELIBERATION_ETAPE)) {

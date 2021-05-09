@@ -1,9 +1,14 @@
 package com.ziad.repositories;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.ziad.models.Element;
+import com.ziad.models.Professeur;
 @Repository
 public interface ElementRepository extends JpaRepository<Element, Long>{
 	/*@Query("select s from Element s")
@@ -13,7 +18,7 @@ public interface ElementRepository extends JpaRepository<Element, Long>{
 	
 	@Query("select e from Element e where e.professeur = :professeur")
 	List<Element> getElementsByProfesseur(@Param("professeur") Professeur professeur);
-	
+	/*
 	@Query(value = "select e.* from element e, module m, semestre s, filiere f "
 			+ "where s.filiere = :filiere and s.filiere = f.id_filiere "
 			+ "and s.id_semestre = m.semestre and m.id_module = e.module"

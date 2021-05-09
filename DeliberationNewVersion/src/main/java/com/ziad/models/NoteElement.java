@@ -1,19 +1,22 @@
 package com.ziad.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.ziad.enums.TypeNote;
+import com.ziad.models.compositeid.ComposedInscriptionPedagogique;
 
 @Entity
 @Table(name = "note_element")
@@ -21,9 +24,8 @@ public class NoteElement implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id_note_element;
+	@EmbeddedId
+	private ComposedInscriptionPedagogique idCompose;
 
 	@Column(name = "note_element")
 	private Double note_element;
@@ -31,38 +33,47 @@ public class NoteElement implements Serializable {
 	@Column(name = "coeficient")
 	private Double coeficient;
 
+	private boolean isValid = false;
+
 	@Column(name = "Type_note")
 	@Enumerated(EnumType.STRING)
 	private TypeNote type;
 
-	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.PERSIST })
-	private InscriptionPedagogique inscription_pedagogique;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "noteelement")
+	private List<Note> notes = new ArrayList<Note>();
 
-	public NoteElement() {
+	@OneToOne(cascade = CascadeType.DETACH)
+	private AnneeAcademique annee_academique;
 
-	}
-
-	public NoteElement(Long id_note_element, Double note_element, Double coeficient, TypeNote type,
-			InscriptionPedagogique inscription_pedagogique) {
-		this(note_element, coeficient, type, inscription_pedagogique);
-		this.id_note_element = id_note_element;
-	}
-
-	public NoteElement(Double note_element, Double coeficient, TypeNote type,
-			InscriptionPedagogique inscription_pedagogique) {
+	public NoteElement(Double note_element, Double coeficient, boolean isValid, TypeNote type, List<Note> notes,
+			AnneeAcademique annee_academique) {
 		super();
 		this.note_element = note_element;
 		this.coeficient = coeficient;
+		this.isValid = isValid;
 		this.type = type;
-		this.inscription_pedagogique = inscription_pedagogique;
+		this.notes = notes;
+		this.annee_academique = annee_academique;
 	}
 
-	public Long getId_note_element() {
-		return id_note_element;
+	public NoteElement(ComposedInscriptionPedagogique idCompose, Double note_element, Double coeficient,
+			boolean isValid, TypeNote type, List<Note> notes, AnneeAcademique annee_academique) {
+		super();
+		this.idCompose = idCompose;
+		this.note_element = note_element;
+		this.coeficient = coeficient;
+		this.isValid = isValid;
+		this.type = type;
+		this.notes = notes;
+		this.annee_academique = annee_academique;
 	}
 
-	public void setId_note_element(Long id_note_element) {
-		this.id_note_element = id_note_element;
+	public ComposedInscriptionPedagogique getIdCompose() {
+		return idCompose;
+	}
+
+	public void setIdCompose(ComposedInscriptionPedagogique idCompose) {
+		this.idCompose = idCompose;
 	}
 
 	public Double getNote_element() {
@@ -81,6 +92,14 @@ public class NoteElement implements Serializable {
 		this.coeficient = coeficient;
 	}
 
+	public boolean isValid() {
+		return isValid;
+	}
+
+	public void setValid(boolean isValid) {
+		this.isValid = isValid;
+	}
+
 	public TypeNote getType() {
 		return type;
 	}
@@ -89,11 +108,68 @@ public class NoteElement implements Serializable {
 		this.type = type;
 	}
 
-	public InscriptionPedagogique getInscription_pedagogique() {
-		return inscription_pedagogique;
+	public List<Note> getNotes() {
+		return notes;
 	}
 
-	public void setInscription_pedagogique(InscriptionPedagogique inscription_pedagogique) {
-		this.inscription_pedagogique = inscription_pedagogique;
+	public void setNotes(List<Note> notes) {
+		this.notes = notes;
+	}
+
+	public AnneeAcademique getAnnee_academique() {
+		return annee_academique;
+	}
+	
+	public Element getElement() {
+		return idCompose.getElement();
+	}
+	
+	public Etudiant getEtudiant() {
+		return idCompose.getEtudiant();
+	}
+	
+	public void addNote(Note note) {
+		notes.add(note);
+	}
+	public void setAnnee_academique(AnneeAcademique annee_academique) {
+		this.annee_academique = annee_academique;
+	}
+
+	public void delibererElementOrdinaire() {
+		note_element = 0d;
+		double coefficient = 0;
+		for (Note noteElementA : notes) {
+			note_element = note_element + noteElementA.getCoeficient() * noteElementA.getNote();
+			coefficient = noteElementA.getCoeficient();
+		}
+		note_element = note_element / coefficient;
+
+		if (note_element >= getElement().getValidation()) {
+			isValid = true;
+		}
+
+	}
+
+	public void delibererElementRattrapage(Integer consideration) {
+		double coefficient = 0;
+		note_element = 0d;
+		if (consideration == 1) {
+			for (Note noteElementA : notes) {
+				if (noteElementA.getType().equals(TypeNote.EXAM_ORDINAIRE))
+					continue;
+				note_element = note_element + noteElementA.getCoeficient() * noteElementA.getNote();
+				coefficient = coefficient + noteElementA.getCoeficient();
+			}
+			note_element = note_element / coefficient;
+		} else {
+			for (Note noteElementA : notes) {
+				if (noteElementA.getType().equals(TypeNote.EXAM_RATTRAPAGE)) {
+					note_element = noteElementA.getNote();
+					break;
+				}
+			}
+			note_element = note_element / coefficient;
+		}
+
 	}
 }

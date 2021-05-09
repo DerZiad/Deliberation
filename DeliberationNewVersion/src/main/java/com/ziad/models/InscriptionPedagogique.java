@@ -54,14 +54,6 @@ public class InscriptionPedagogique implements Serializable {
 	@Enumerated(value = EnumType.STRING)
 	private TypeInscription type_inscription;
 
-	/**
-	 * 
-	 * Relations demandé
-	 * 
-	 **/
-	@OneToMany(mappedBy = "inscription_pedagogique", cascade = CascadeType.ALL)
-	private List<NoteElement> notes = new ArrayList<NoteElement>();
-
 	public InscriptionPedagogique() {
 
 	}
@@ -130,18 +122,6 @@ public class InscriptionPedagogique implements Serializable {
 		id_inscription_pedagogique.setEtudiant(etudiant);
 	}
 
-	public void addNote(NoteElement noteElement) {
-		notes.add(noteElement);
-	}
-
-	public List<NoteElement> getNotes() {
-		return notes;
-	}
-
-	public void setNotes(List<NoteElement> notes) {
-		this.notes = notes;
-	}
-
 	public Double getNoteElement() {
 		return noteElement;
 	}
@@ -149,7 +129,7 @@ public class InscriptionPedagogique implements Serializable {
 	public void setNoteElement(Double noteElement) {
 		this.noteElement = noteElement;
 	}
-
+	/*
 	public void delibererElement(String type, Integer consideration) {
 		noteElement = 0d;
 		double coefficient = 0;
@@ -182,6 +162,6 @@ public class InscriptionPedagogique implements Serializable {
 			isValid = true;
 		}
 
-	}
+	}*/
 
 }

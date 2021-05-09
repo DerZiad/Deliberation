@@ -1,10 +1,9 @@
 package com.ziad.deliberation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-
-import javax.persistence.EntityNotFoundException;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,13 +12,27 @@ import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Element;
 import com.ziad.models.Etape;
 import com.ziad.models.Etudiant;
-import com.ziad.models.InscriptionPedagogique;
 import com.ziad.models.Modulee;
+import com.ziad.models.NoteElement;
 import com.ziad.models.Semestre;
-import com.ziad.repositories.AnnneAcademiqueRepository;
+import com.ziad.models.compositeid.ComposedInscriptionPedagogique;
+import com.ziad.newmodels.ComposedNoteEtape;
+import com.ziad.newmodels.ComposedNoteModule;
+import com.ziad.newmodels.ComposedNoteSemestre;
+import com.ziad.newmodels.Deliberation;
+import com.ziad.newmodels.DeliberationRepository;
+import com.ziad.newmodels.DeliberationType;
+import com.ziad.newmodels.NoteEtape;
+import com.ziad.newmodels.NoteModule;
+import com.ziad.newmodels.NoteSemestre;
+import com.ziad.newmodels.NotesEtapeRepository;
+import com.ziad.newmodels.NotesModuleRepository;
+import com.ziad.newmodels.NotesSemestreRepository;
+import com.ziad.repositories.ElementRepository;
 import com.ziad.repositories.EtapeRepository;
 import com.ziad.repositories.InscriptionPedagogiqueRepository;
 import com.ziad.repositories.ModuleRepository;
+import com.ziad.repositories.NoteElementRepository;
 import com.ziad.repositories.SemestreRepository;
 
 @Service
@@ -27,136 +40,135 @@ public class Algorithme {
 	@Autowired
 	private InscriptionPedagogiqueRepository inscriptionPedagogiqueRepository;
 
-	private DeliberationRepository deliberationRepository;
 	@Autowired
 	private ModuleRepository moduleRepository;
 	@Autowired
 	private EtapeRepository etapeRepository;
 	@Autowired
 	private SemestreRepository semestreRepository;
+	@Autowired
+	private ElementRepository elementRepository;
+	@Autowired
+	private NotesEtapeRepository notesEtapeRepository;
+	@Autowired
+	private NotesModuleRepository notesModuleRepository;
+	@Autowired
+	private NotesSemestreRepository notesSemestreRepository;
 
-	private String typeDelib = DeliberationType.ORDINAIRE.name();
-	private Integer consideration = 1;
+	@Autowired
+	private NoteElementRepository noteElementRepository;
 
-	public NotesModuleBean creerStructureDeModule(Modulee module, AnneeAcademique annee) {
-		// Creation de strcutres de données
-		NotesModuleBean notes = new NotesModuleBean(module);
-		// Generation des inscriptions pédagogiques de ce module
-		for (Element element : module.getElements()) {
-			List<InscriptionPedagogique> listeInscriptionsPedagogiques = inscriptionPedagogiqueRepository
-					.getInscriptionPedagogiquesByElementAndAnneeAcademique(element, annee);
-			HashMap<Etudiant, ArrayList<InscriptionPedagogique>> structures = extractInscriptionPedagogiquesParEtudiant(
-					listeInscriptionsPedagogiques);
-			notes.addStructure(structures);
-		}
+	@Autowired
+	private DeliberationRepository deliberationRepository;
 
-		return notes;
+	private InscriptionPedagogiqueRepository inscritionPedagogiqueRepository;
+	private DeliberationType typeDelib = DeliberationType.ORDINAIRE;
+	private Integer consideration = 1;// Consideration encas du rattrapage
+
+	public void enableDeliberationRattrapage() {
+		typeDelib = DeliberationType.RATTRAPAGE;
 	}
-
-	private HashMap<Etudiant, ArrayList<InscriptionPedagogique>> extractInscriptionPedagogiquesParEtudiant(
-			List<InscriptionPedagogique> listeInscriptions) {
-		HashMap<Etudiant, ArrayList<InscriptionPedagogique>> structures = new HashMap<Etudiant, ArrayList<InscriptionPedagogique>>();
-		for (InscriptionPedagogique inscription : listeInscriptions) {
-			Etudiant etudiant = inscription.getEtudiant();
-			structures.put(etudiant, new ArrayList<InscriptionPedagogique>());
-			for (InscriptionPedagogique inscriptionPedagogique : listeInscriptions) {
-				if (etudiant.equals(inscriptionPedagogique.getEtudiant())) {
-					structures.get(etudiant).add(inscriptionPedagogique);
+	
+	public void enableDeliberationOrdinaire() {
+		typeDelib= DeliberationType.ORDINAIRE;
+	}
+	
+	public void enableConsideration(Boolean choix) {
+		consideration = choix ? 1:0;
+	}
+	
+	public void delibererElement(Element element, AnneeAcademique annee) {
+		List<NoteElement> notes = noteElementRepository.getNoteElementAnnee(element, annee);
+		for (NoteElement noteElement : notes) {
+			if (typeDelib.equals(DeliberationType.ORDINAIRE)) {
+				noteElement.delibererElementOrdinaire();
+			} else if (typeDelib.equals(DeliberationType.RATTRAPAGE)) {
+				if (!noteElement.isValid()) {
+					noteElement.delibererElementRattrapage(consideration);
 				}
 			}
 		}
-		return structures;
 	}
 
-	public NotesSemestreBean creerStructureDeSemestre(Semestre semestre, AnneeAcademique annee) {
-		NotesSemestreBean noteSemestre = new NotesSemestreBean(semestre);
-		for (Modulee module : semestre.getModules()) {
-			NotesModuleBean notesParModule = creerStructureDeModule(module, annee);
-			noteSemestre.extractNotesModule(notesParModule);
-		}
-		return noteSemestre;
-	}
-
-	public void delibererModule(Modulee module, AnneeAcademique anneeAcademique) {
-		List<InscriptionPedagogique> listesInscriptionsPedagogiques = null;
-		DeliberationModel deliberation = new DeliberationModel(new ComposedKey(anneeAcademique, module.getId_module()));
-		deliberation.setTypeDelibered(typeDelib);
-		deliberation.setTypeDelibered(DeliberationType.MODULE.name());
-		deliberationRepository.save(deliberation);
-		/**
-		 * Deliberations des elements
-		 */
+	public void delibererModule(Modulee module, AnneeAcademique annee) {
 		for (Element element : module.getElements()) {
-			listesInscriptionsPedagogiques = inscriptionPedagogiqueRepository
-					.getInscriptionPedagogiquesByElementAndAnneeAcademique(element, anneeAcademique);
-			listesInscriptionsPedagogiques
-					.forEach(inscription -> inscription.delibererElement(typeDelib, consideration));
-			inscriptionPedagogiqueRepository.saveAll(listesInscriptionsPedagogiques);
+			delibererElement(element, annee);
+		}
+		Deliberation deliberation = new Deliberation(typeDelib, DeliberationType.MODULE, annee);
+		List<Etudiant> etudiants = inscriptionPedagogiqueRepository.getEtudiantParModule(module, annee);
+		for (Etudiant etudiant : etudiants) {
+			double coefficient = 0d;
+			double noteDouble = 0d;
+			for (Element element : module.getElements()) {
+				NoteElement note = noteElementRepository.getOne(new ComposedInscriptionPedagogique(etudiant, element));
+				noteDouble = noteDouble + note.getNote_element() * note.getCoeficient();
+				coefficient = coefficient + note.getCoeficient();
+			}
+			noteDouble = noteDouble / coefficient;
+			NoteModule noteParModule = new NoteModule(new ComposedNoteModule(module, etudiant), noteDouble,
+					deliberation);
+			noteParModule.delibererModule(typeDelib);
+			deliberation.addNoteModule(noteParModule);
+			deliberationRepository.save(deliberation);
+			// TODO - Ziad 2 Don't forget to save
 		}
 	}
 
-	public void delibererSemestre(Semestre semestre, AnneeAcademique anneeAcademique) {
-		DeliberationModel deliberation = new DeliberationModel(
-				new ComposedKey(anneeAcademique, semestre.getId_semestre()));
-		deliberation.setTypeDelibered(typeDelib);
-		deliberation.setTypeDelibered(DeliberationType.SEMESTRE.name());
-		deliberationRepository.save(deliberation);
+	public void delibererSemestre(Semestre semestre, AnneeAcademique annee) {
 		for (Modulee module : semestre.getModules()) {
-			delibererModule(module, anneeAcademique);
+			delibererModule(module, annee);
 		}
+
+		Deliberation deliberation = new Deliberation(typeDelib, DeliberationType.SEMESTRE, annee);
+		List<Etudiant> etudiants = inscriptionPedagogiqueRepository.getEtudiantParSemestre(semestre, annee);
+
+		for (Etudiant etudiant : etudiants) {
+			double coefficient = 0d;
+			double noteSemestre = 0d;
+			for (Modulee module : semestre.getModules()) {
+				List<Deliberation> deliberations = deliberationRepository.findAll();
+				List<Deliberation> delibs = deliberations.stream()
+						.filter(delib -> delib.getTypeDeliberation().equals(typeDelib)
+								&& delib.getTypeExamen().equals(DeliberationType.MODULE)
+								&& delib.getAnneeAcademique().equals(annee))
+						.collect(Collectors.toList());
+				if (delibs.size() == 0) {
+					NoteModule noteParModule = notesModuleRepository.getOne(new ComposedNoteModule(module, etudiant));
+					noteSemestre = noteSemestre + noteParModule.getNote() * module.getCoeficient();
+					coefficient = coefficient + module.getCoeficient();
+				}
+			}
+			noteSemestre = noteSemestre / coefficient;
+			NoteSemestre noteSemestreO = new NoteSemestre(new ComposedNoteSemestre(semestre, etudiant), noteSemestre,
+					deliberation);
+			deliberation.addNoteSemestre(noteSemestreO);
+			deliberationRepository.save(deliberation);
+		}
+
 	}
 
-	public void delibererEtape(Etape etape, AnneeAcademique anneeAcademique) {
-		DeliberationModel deliberation = new DeliberationModel(new ComposedKey(anneeAcademique, etape.getId_etape()));
-		deliberation.setTypeDelibered(typeDelib);
-		deliberation.setTypeDelibered(DeliberationType.ETAPE.name());
-		deliberationRepository.save(deliberation);
+	public void delibererEtape(Etape etape, AnneeAcademique annee) {
+		List<Etudiant> etudiants = new ArrayList<Etudiant>();
 		for (Semestre semestre : etape.getSemestres()) {
-			delibererSemestre(semestre, anneeAcademique);
+			delibererSemestre(semestre, annee);
+			etudiants.addAll(inscriptionPedagogiqueRepository.getEtudiantParSemestre(semestre, annee));
 		}
-	}
 
-	public boolean isDelibered(AnneeAcademique annee, Long idElement) {
-		try {
-			deliberationRepository.getOne(new ComposedKey(annee, idElement));
-			return true;
-		} catch (EntityNotFoundException e) {
-			return false;
-		}
-	}
+		Deliberation deliberation = new Deliberation(typeDelib, DeliberationType.ETAPE, annee);
 
-	public boolean isDeliberedOrdinaire(AnneeAcademique annee, Long idElement) {
-		try {
-			DeliberationModel delib = deliberationRepository.getOne(new ComposedKey(annee, idElement));
-			if (delib.getTypeDeliberation().equals(DeliberationType.ORDINAIRE.name())) {
-				return true;
+		for (Etudiant etudiant : etudiants) {
+			double noteParEtapeD = 0d;
+			for (Semestre semestre : etape.getSemestres()) {
+				NoteSemestre noteSemestre = notesSemestreRepository
+						.getOne(new ComposedNoteSemestre(semestre, etudiant));
+				noteParEtapeD = noteParEtapeD + noteSemestre.getNote();
 			}
-		} catch (EntityNotFoundException e) {
+			noteParEtapeD = noteParEtapeD / 2;
+			NoteEtape noteEtape = new NoteEtape(new ComposedNoteEtape(etape, etudiant), noteParEtapeD, deliberation);
+			deliberation.addNoteEtape(noteEtape);
+			deliberationRepository.save(deliberation);
 		}
-		return false;
-	}
 
-	public boolean isDeliberedRattrapage(AnneeAcademique annee, Long idElement) {
-		try {
-			DeliberationModel delib = deliberationRepository.getOne(new ComposedKey(annee, idElement));
-			if (delib.getTypeDeliberation().equals(DeliberationType.RATTRAPAGE.name())) {
-				return true;
-			}
-		} catch (EntityNotFoundException e) {
-		}
-		return false;
-	}
-
-	public void enableRattrapage() {
-		typeDelib = "rattrapage";
-	}
-
-	public void enableOrdinaire() {
-		typeDelib = DeliberationType.ORDINAIRE.name();
-	}
-
-	public void enableConsiderationDesNotes(boolean b) {
-		consideration = b ? 1 : 0;
 	}
 
 }

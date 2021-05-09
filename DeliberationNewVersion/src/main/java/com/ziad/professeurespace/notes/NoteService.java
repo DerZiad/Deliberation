@@ -19,6 +19,7 @@ import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Element;
 import com.ziad.models.Etudiant;
 import com.ziad.models.InscriptionPedagogique;
+import com.ziad.models.Note;
 import com.ziad.models.NoteElement;
 import com.ziad.models.compositeid.ComposedInscriptionPedagogique;
 import com.ziad.repositories.AnnneAcademiqueRepository;
@@ -100,11 +101,9 @@ public class NoteService implements NoteInterface {
 					if (type_object.name() == type)
 						note_type = type_object;
 				}
-				InscriptionPedagogique inscription_pedagogique = inscriptionPedagogiqueRepository
-						.getOne(new ComposedInscriptionPedagogique(etudiant.get(0), element));
-				NoteElement note_element = new NoteElement(note, coefficient, note_type, inscription_pedagogique);
-				inscription_pedagogique.addNote(note_element);
-				inscriptionPedagogiqueRepository.save(inscription_pedagogique);
+				NoteElement noteElement = noteElementRepository.getOne(new ComposedInscriptionPedagogique(etudiant.get(0),element));
+				noteElement.addNote(new Note(note, coefficient, note_type, noteElement));
+				noteElementRepository.save(noteElement);
 			} catch (Exception e) {
 
 			}
