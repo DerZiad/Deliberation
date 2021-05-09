@@ -1,7 +1,6 @@
 package com.ziad.deliberation;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,31 +24,15 @@ import com.ziad.newmodels.DeliberationType;
 import com.ziad.newmodels.NoteEtape;
 import com.ziad.newmodels.NoteModule;
 import com.ziad.newmodels.NoteSemestre;
-import com.ziad.newmodels.NotesEtapeRepository;
 import com.ziad.newmodels.NotesModuleRepository;
 import com.ziad.newmodels.NotesSemestreRepository;
-import com.ziad.repositories.ElementRepository;
-import com.ziad.repositories.EtapeRepository;
 import com.ziad.repositories.InscriptionPedagogiqueRepository;
-import com.ziad.repositories.ModuleRepository;
 import com.ziad.repositories.NoteElementRepository;
-import com.ziad.repositories.SemestreRepository;
 
 @Service
 public class Algorithme {
 	@Autowired
 	private InscriptionPedagogiqueRepository inscriptionPedagogiqueRepository;
-
-	@Autowired
-	private ModuleRepository moduleRepository;
-	@Autowired
-	private EtapeRepository etapeRepository;
-	@Autowired
-	private SemestreRepository semestreRepository;
-	@Autowired
-	private ElementRepository elementRepository;
-	@Autowired
-	private NotesEtapeRepository notesEtapeRepository;
 	@Autowired
 	private NotesModuleRepository notesModuleRepository;
 	@Autowired
@@ -61,9 +44,9 @@ public class Algorithme {
 	@Autowired
 	private DeliberationRepository deliberationRepository;
 
-	private InscriptionPedagogiqueRepository inscritionPedagogiqueRepository;
 	private DeliberationType typeDelib = DeliberationType.ORDINAIRE;
 	private Integer consideration = 1;// Consideration encas du rattrapage
+
 
 	public void enableDeliberationRattrapage() {
 		typeDelib = DeliberationType.RATTRAPAGE;
@@ -101,8 +84,8 @@ public class Algorithme {
 			double noteDouble = 0d;
 			for (Element element : module.getElements()) {
 				NoteElement note = noteElementRepository.getOne(new ComposedInscriptionPedagogique(etudiant, element));
-				noteDouble = noteDouble + note.getNote_element() * note.getCoeficient();
-				coefficient = coefficient + note.getCoeficient();
+				noteDouble = noteDouble + note.getNote_element() * element.getCoeficient();
+				coefficient = coefficient + element.getCoeficient();
 			}
 			noteDouble = noteDouble / coefficient;
 			NoteModule noteParModule = new NoteModule(new ComposedNoteModule(module, etudiant), noteDouble,

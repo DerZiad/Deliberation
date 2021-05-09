@@ -8,9 +8,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -30,14 +27,7 @@ public class NoteElement implements Serializable {
 	@Column(name = "note_element")
 	private Double note_element;
 
-	@Column(name = "coeficient")
-	private Double coeficient;
-
 	private boolean isValid = false;
-
-	@Column(name = "Type_note")
-	@Enumerated(EnumType.STRING)
-	private TypeNote type;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "noteelement")
 	private List<Note> notes = new ArrayList<Note>();
@@ -45,26 +35,17 @@ public class NoteElement implements Serializable {
 	@OneToOne(cascade = CascadeType.DETACH)
 	private AnneeAcademique annee_academique;
 
-	public NoteElement(Double note_element, Double coeficient, boolean isValid, TypeNote type, List<Note> notes,
-			AnneeAcademique annee_academique) {
+	public NoteElement(Double note_element, AnneeAcademique annee_academique) {
 		super();
 		this.note_element = note_element;
-		this.coeficient = coeficient;
-		this.isValid = isValid;
-		this.type = type;
-		this.notes = notes;
 		this.annee_academique = annee_academique;
 	}
 
-	public NoteElement(ComposedInscriptionPedagogique idCompose, Double note_element, Double coeficient,
-			boolean isValid, TypeNote type, List<Note> notes, AnneeAcademique annee_academique) {
+	public NoteElement(ComposedInscriptionPedagogique idCompose, Double note_element,
+			AnneeAcademique annee_academique) {
 		super();
 		this.idCompose = idCompose;
 		this.note_element = note_element;
-		this.coeficient = coeficient;
-		this.isValid = isValid;
-		this.type = type;
-		this.notes = notes;
 		this.annee_academique = annee_academique;
 	}
 
@@ -84,28 +65,12 @@ public class NoteElement implements Serializable {
 		this.note_element = note_element;
 	}
 
-	public Double getCoeficient() {
-		return coeficient;
-	}
-
-	public void setCoeficient(Double coeficient) {
-		this.coeficient = coeficient;
-	}
-
 	public boolean isValid() {
 		return isValid;
 	}
 
 	public void setValid(boolean isValid) {
 		this.isValid = isValid;
-	}
-
-	public TypeNote getType() {
-		return type;
-	}
-
-	public void setType(TypeNote type) {
-		this.type = type;
 	}
 
 	public List<Note> getNotes() {
@@ -119,18 +84,19 @@ public class NoteElement implements Serializable {
 	public AnneeAcademique getAnnee_academique() {
 		return annee_academique;
 	}
-	
+
 	public Element getElement() {
 		return idCompose.getElement();
 	}
-	
+
 	public Etudiant getEtudiant() {
 		return idCompose.getEtudiant();
 	}
-	
+
 	public void addNote(Note note) {
 		notes.add(note);
 	}
+
 	public void setAnnee_academique(AnneeAcademique annee_academique) {
 		this.annee_academique = annee_academique;
 	}

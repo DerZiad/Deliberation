@@ -32,8 +32,7 @@ public class HomeController {
 
 	@Autowired
 	private UserRepository userRespository;
-	@Autowired
-	private ProfesseurRepository professeurRepository;
+
 
 	@GetMapping("/admin")
 	public ModelAndView getAdministrateurHomePage() throws AnonymousException {

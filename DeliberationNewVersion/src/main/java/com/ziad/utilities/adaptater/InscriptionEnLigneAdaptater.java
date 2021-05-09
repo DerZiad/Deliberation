@@ -1,23 +1,11 @@
 package com.ziad.utilities.adaptater;
 
 import java.lang.reflect.Type;
-import java.util.Date;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import com.ziad.enums.Gender;
-import com.ziad.models.Etudiant;
 import com.ziad.models.InscriptionEnLigne;
 
 public class InscriptionEnLigneAdaptater implements JsonSerializer<InscriptionEnLigne>{

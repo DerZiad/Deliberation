@@ -1,15 +1,10 @@
 package com.ziad.newmodels;
 
-import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.ziad.models.InscriptionPedagogique;
 
 @Entity
 @Table(name = "notesmodule")

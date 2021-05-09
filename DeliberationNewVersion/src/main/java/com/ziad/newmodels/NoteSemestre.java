@@ -13,9 +13,9 @@ public class NoteSemestre {
 
 	private Double note;
 	private boolean isValid = false;
-	
-	private String etat = "";//Compensation ou elimine
-	
+
+	private String etat = "";// Compensation ou elimine
+
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
 	private Deliberation deliberation;
 
@@ -24,12 +24,12 @@ public class NoteSemestre {
 	}
 
 	public NoteSemestre(ComposedNoteSemestre idCompose, Double note, Deliberation deliberation) {
-		this(note,deliberation);
+		this(note, deliberation);
 		this.idCompose = idCompose;
 
 	}
 
-	public NoteSemestre(Double note,Deliberation deliberation) {
+	public NoteSemestre(Double note, Deliberation deliberation) {
 		super();
 		this.note = note;
 		this.deliberation = deliberation;
@@ -67,7 +67,15 @@ public class NoteSemestre {
 		this.deliberation = deliberation;
 	}
 
+	public String getEtat() {
+		return etat;
+	}
+
+	public void setEtat(String etat) {
+		this.etat = etat;
+	}
+
 	public void delibererSemestre() {
-		
+
 	}
 }

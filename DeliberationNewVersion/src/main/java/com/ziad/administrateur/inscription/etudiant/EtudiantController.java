@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ziad.models.InscriptionEnLigne;
-import com.ziad.repositories.EtudiantRepository;
 import com.ziad.repositories.InscriptionAdministrativeRepository;
 import com.ziad.repositories.InscriptionEnLigneRepository;
 
