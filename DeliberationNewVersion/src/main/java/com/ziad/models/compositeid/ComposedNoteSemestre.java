@@ -1,4 +1,6 @@
-package com.ziad.newmodels;
+package com.ziad.models.compositeid;
+
+import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
@@ -8,7 +10,7 @@ import com.ziad.models.Etudiant;
 import com.ziad.models.Semestre;
 
 @Embeddable
-public class ComposedNoteSemestre {
+public class ComposedNoteSemestre implements Serializable{
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private Semestre semestre;

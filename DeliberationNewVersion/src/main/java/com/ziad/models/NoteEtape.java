@@ -1,4 +1,6 @@
-package com.ziad.newmodels;
+package com.ziad.models;
+
+import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.EmbeddedId;
@@ -6,9 +8,16 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.ziad.models.compositeid.ComposedNoteEtape;
+
 @Entity
 @Table(name = "notesetape")
-public class NoteEtape {
+public class NoteEtape implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@EmbeddedId
 	private ComposedNoteEtape idCompose;
 

@@ -18,7 +18,7 @@ import com.ziad.repositories.UserRepository;
 @Controller
 public class HomeController {
 
-	private final static String PAGE_RESPONSABLE_FILIERE = "espace_professeur/";
+	private final static String PAGE_RESPONSABLE_FILIERE = "espace_professeur/responsablefiliere/index-respf";
 	private final static String PAGE_RESPONSABLE_MODULE = "espace_professeur/responsablemodule/index-resp";
 	private final static String PAGE_PROFESSEUR = "espace_professeur/index-prof";
 	private final static String PAGE_ADMINISTRATEUR = "index-admin";

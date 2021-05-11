@@ -1,43 +1,45 @@
-package com.ziad.newmodels;
+package com.ziad.models.compositeid;
+
+import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToOne;
 
+import com.ziad.models.Etape;
 import com.ziad.models.Etudiant;
-import com.ziad.models.Modulee;
 
 @Embeddable
-public class ComposedNoteModule {
-	
+public class ComposedNoteEtape implements Serializable{
 	@OneToOne(cascade = CascadeType.ALL)
-	private Modulee module;
+	private Etape etape;
 	@OneToOne(cascade = CascadeType.ALL)
 	private Etudiant etudiant;
 	
-	public ComposedNoteModule() {
+	public ComposedNoteEtape() {
 		
 	}
 	
-	public ComposedNoteModule(Modulee module, Etudiant etudiant) {
+	public ComposedNoteEtape(Etape etape, Etudiant etudiant) {
 		super();
-		this.module = module;
+		this.etape = etape;
 		this.etudiant = etudiant;
 	}
-	public Modulee getModule() {
-		return module;
+
+	public Etape getEtape() {
+		return etape;
 	}
-	public void setModule(Modulee module) {
-		this.module = module;
+
+	public void setEtape(Etape etape) {
+		this.etape = etape;
 	}
+
 	public Etudiant getEtudiant() {
 		return etudiant;
 	}
+
 	public void setEtudiant(Etudiant etudiant) {
 		this.etudiant = etudiant;
 	}
-	
-	
-	
-	
+
 }

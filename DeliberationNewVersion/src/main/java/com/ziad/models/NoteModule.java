@@ -1,10 +1,14 @@
-package com.ziad.newmodels;
+package com.ziad.models;
 
 import javax.persistence.CascadeType;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.ziad.enums.DeliberationType;
+import com.ziad.enums.Etat;
+import com.ziad.models.compositeid.ComposedNoteModule;
 
 @Entity
 @Table(name = "notesmodule")
@@ -21,7 +25,7 @@ public class NoteModule {
 
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
 	private Deliberation deliberation;
-
+	
 	public NoteModule() {
 
 	}

@@ -1,11 +1,11 @@
-package com.ziad.newmodels;
+package com.ziad.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,48 +13,55 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.ziad.models.AnneeAcademique;
-
 @Entity
 @Table(name = "deliberation")
 public class Deliberation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long idDeliberation;
-	@Enumerated(EnumType.STRING)
-	private DeliberationType typeDeliberation;
-	@Enumerated(EnumType.STRING)
-	private DeliberationType typeExamen;
+	
+	private String typeDeliberation;
 
 	@OneToOne(cascade = CascadeType.PERSIST)
 	private AnneeAcademique anneeAcademique;
+	@OneToOne(cascade = CascadeType.PERSIST)
+	private Modulee module;
+	@OneToOne(cascade = CascadeType.PERSIST)
+	private Semestre semestre;
+	@OneToOne(cascade = CascadeType.PERSIST)
+	private Etape etape;
+		
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "deliberation")
+	private List<NoteSemestre> notesSemestre = new ArrayList<NoteSemestre>();
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "deliberation")
+	private List<NoteModule> notesModule = new ArrayList<NoteModule>();
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "deliberation")
+	private List<NoteEtape> notesEtape = new ArrayList<NoteEtape>();
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "deliberation")
-	private ArrayList<NoteSemestre> notesSemestre = new ArrayList<NoteSemestre>();
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "deliberation")
-	private ArrayList<NoteModule> notesModule = new ArrayList<NoteModule>();
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "deliberation")
-	private ArrayList<NoteEtape> notesEtape = new ArrayList<NoteEtape>();
+	public Deliberation() {
+		
+	}
 
-	public Deliberation(Long idDeliberation, DeliberationType typeDeliberation, DeliberationType typeExamen,
-			AnneeAcademique anneeAcademique) {
+	public Deliberation(String typeDeliberation, AnneeAcademique anneeAcademique,
+			Modulee module, Semestre semestre, Etape etape) {
+		super();
+		this.typeDeliberation = typeDeliberation;
+		this.anneeAcademique = anneeAcademique;
+		this.module = module;
+		this.semestre = semestre;
+		this.etape = etape;
+	}
+
+	public Deliberation(Long idDeliberation, String typeDeliberation,
+			AnneeAcademique anneeAcademique, Modulee module, Semestre semestre, Etape etape) {
 		super();
 		this.idDeliberation = idDeliberation;
 		this.typeDeliberation = typeDeliberation;
-		this.typeExamen = typeExamen;
 		this.anneeAcademique = anneeAcademique;
-	}
-
-	public Deliberation() {
-
-	}
-
-	public Deliberation(DeliberationType typeDeliberation, DeliberationType typeExamen,
-			AnneeAcademique anneeAcademique) {
-		super();
-		this.typeDeliberation = typeDeliberation;
-		this.typeExamen = typeExamen;
-		this.anneeAcademique = anneeAcademique;
+		this.module = module;
+		this.semestre = semestre;
+		this.etape = etape;
 	}
 
 	public Long getIdDeliberation() {
@@ -65,20 +72,12 @@ public class Deliberation {
 		this.idDeliberation = idDeliberation;
 	}
 
-	public DeliberationType getTypeDeliberation() {
+	public String getTypeDeliberation() {
 		return typeDeliberation;
 	}
 
-	public void setTypeDeliberation(DeliberationType typeDeliberation) {
+	public void setTypeDeliberation(String typeDeliberation) {
 		this.typeDeliberation = typeDeliberation;
-	}
-
-	public DeliberationType getTypeExamen() {
-		return typeExamen;
-	}
-
-	public void setTypeExamen(DeliberationType typeExamen) {
-		this.typeExamen = typeExamen;
 	}
 
 	public AnneeAcademique getAnneeAcademique() {
@@ -89,7 +88,7 @@ public class Deliberation {
 		this.anneeAcademique = anneeAcademique;
 	}
 
-	public ArrayList<NoteSemestre> getNotesSemestre() {
+	public List<NoteSemestre> getNotesSemestre() {
 		return notesSemestre;
 	}
 
@@ -97,7 +96,7 @@ public class Deliberation {
 		this.notesSemestre = notesSemestre;
 	}
 
-	public ArrayList<NoteModule> getNotesModule() {
+	public List<NoteModule> getNotesModule() {
 		return notesModule;
 	}
 
@@ -105,7 +104,7 @@ public class Deliberation {
 		this.notesModule = notesModule;
 	}
 
-	public ArrayList<NoteEtape> getNotesEtape() {
+	public List<NoteEtape> getNotesEtape() {
 		return notesEtape;
 	}
 
@@ -125,4 +124,5 @@ public class Deliberation {
 	public void addNoteEtape(NoteEtape note) {
 		notesEtape.add(note);
 	}
+	
 }
