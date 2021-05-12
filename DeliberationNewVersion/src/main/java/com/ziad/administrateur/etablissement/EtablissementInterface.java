@@ -26,5 +26,4 @@ public interface EtablissementInterface {
 	
 	public List<Professeur> getProfesseursListByEtablissement(Long id) throws EntityNotFoundException, DataNotFoundExceptions;
 	
-	public List<Etudiant> getEtudiantListByEtablissement(Long id)  throws EntityNotFoundException,DataNotFoundExceptions;
 }

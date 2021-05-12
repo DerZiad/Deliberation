@@ -34,7 +34,7 @@ public class DeliberationController {
 	private DeliberationInterface deliberationMetier;
 
 	@SuppressWarnings("unchecked")
-	@GetMapping("/")
+	@GetMapping("")
 	public ModelAndView generatePageDelib() throws EntityNotFoundException, DataNotFoundExceptions {
 		ModelAndView model = new ModelAndView(PAGE_DELIBERATION);
 
@@ -48,7 +48,7 @@ public class DeliberationController {
 		return model;
 	}
 
-	@PostMapping("/")
+	@PostMapping("")
 	public ModelAndView deliberer(@RequestParam("filiere") Long idFiliere,
 			@RequestParam("annee") Long idAnneeAcademique, @RequestParam("type") String type,
 			@RequestParam("element") Long id_element, @RequestParam("typedeliberation") String typeDeliberation,

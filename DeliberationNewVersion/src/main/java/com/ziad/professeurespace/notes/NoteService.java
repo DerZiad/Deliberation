@@ -23,6 +23,7 @@ import com.ziad.models.compositeid.ComposedInscriptionPedagogique;
 import com.ziad.repositories.ElementRepository;
 import com.ziad.repositories.EtudiantRepository;
 import com.ziad.repositories.NoteElementRepository;
+import com.ziad.repositories.NoteRepository;
 import com.ziad.utilities.ExcelReader;
 
 @Service
@@ -36,7 +37,8 @@ public class NoteService implements NoteInterface {
 	private NoteElementRepository noteElementRepository;
 	@Autowired
 	private ExcelReader reader;
-
+	@Autowired
+	private NoteRepository noteRepository;
 	@Override
 	public void readExcel(MultipartFile file, String type,Double coefficient)
 			throws DataNotFoundExceptions, EntityNotFoundException, IOException, CSVReaderOException {
@@ -45,15 +47,16 @@ public class NoteService implements NoteInterface {
 		Row second = rows.next();
 		Long id_element = (long) second.getCell(2).getNumericCellValue();
 		Element element = elementRepository.getOne(id_element);
-
+		rows.next();
 		while (rows.hasNext()) {
 			try {
 				Row row = rows.next();
 				String massar = row.getCell(0).getStringCellValue();
 				String nom = row.getCell(1).getStringCellValue();
 				String prenom = row.getCell(2).getStringCellValue();
-				Double note = row.getCell(5).getNumericCellValue();
+				Double note = row.getCell(3).getNumericCellValue();
 				List<Etudiant> etudiant = etudiantRepository.listerEtudiantParMassarNomPrenom(massar, nom, prenom);
+				System.out.println(etudiant.size());
 				if (etudiant.size() != 1)
 					throw new DataNotFoundExceptions();
 				TypeNote note_type = null;
@@ -62,10 +65,12 @@ public class NoteService implements NoteInterface {
 						note_type = type_object;
 				}
 				NoteElement noteElement = noteElementRepository.getOne(new ComposedInscriptionPedagogique(etudiant.get(0),element));
-				noteElement.addNote(new Note(note, coefficient, note_type, noteElement));
+				Note noteS = new Note(note, coefficient, note_type, noteElement);
+				noteElement.addNote(noteS);				
 				noteElementRepository.save(noteElement);
+				noteRepository.save(noteS);
 			} catch (Exception e) {
-
+				e.printStackTrace();
 			}
 
 		}

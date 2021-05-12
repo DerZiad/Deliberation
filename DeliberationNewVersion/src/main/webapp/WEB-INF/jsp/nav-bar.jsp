@@ -62,11 +62,11 @@
 						class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
 				</a>
 					<ul class="mm-collapse" style="height: 7.04px;">
-						<li><a href="/admin/filiere/creer" class="${FiliereCreate}"> <i
-								class="metismenu-icon pe-7s-add-user"></i>Ajouter une filière
+						<li><a href="/admin/filiere/creer" class="${FiliereCreate}">
+								<i class="metismenu-icon pe-7s-add-user"></i>Ajouter une filière
 						</a></li>
-						<li><a href="/admin/filiere/liste" class="${listFiliere}"> <i
-								class="metismenu-icon pe-7s-menu"></i>Liste des filières
+						<li><a href="/admin/filiere/liste" class="${listFiliere}">
+								<i class="metismenu-icon pe-7s-menu"></i>Liste des filières
 						</a></li>
 					</ul></li>
 				<li><a href="#" aria-expanded="false"> <i
@@ -74,12 +74,13 @@
 						class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
 				</a>
 					<ul class="mm-collapse" style="height: 7.04px;">
-						<li><a href="/admin/professeur/creer" class="${ProfesseurCreate}">
-								<i class="metismenu-icon pe-7s-add-user"></i>Ajouter un
-								Professeur
+						<li><a href="/admin/professeur/creer"
+							class="${ProfesseurCreate}"> <i
+								class="metismenu-icon pe-7s-add-user"></i>Ajouter un Professeur
 						</a></li>
-						<li><a href="/admin/professeur/liste" class="${listProfesseur}">
-								<i class="metismenu-icon pe-7s-menu"></i>Liste des Professeurs
+						<li><a href="/admin/professeur/liste"
+							class="${listProfesseur}"> <i
+								class="metismenu-icon pe-7s-menu"></i>Liste des Professeurs
 						</a></li>
 					</ul></li>
 				<li><a href="#" aria-expanded="false"> <i
@@ -87,11 +88,11 @@
 						class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
 				</a>
 					<ul class="mm-collapse" style="height: 7.04px;">
-						<li><a href="/admin/module/creer" class="${ModuleCreate}"> <i
-								class="metismenu-icon pe-7s-add-user"></i>Créer un Module
+						<li><a href="/admin/module/creer" class="${ModuleCreate}">
+								<i class="metismenu-icon pe-7s-add-user"></i>Créer un Module
 						</a></li>
-						<li><a href="/admin/module/liste" class="${listModule}"> <i
-								class="metismenu-icon pe-7s-menu"></i>Liste des Modules
+						<li><a href="/admin/module/liste" class="${listModule}">
+								<i class="metismenu-icon pe-7s-menu"></i>Liste des Modules
 						</a></li>
 					</ul></li>
 				<li><a href="/admin/student/list" class="${listStudent}"> <i
@@ -109,42 +110,33 @@
 								class="metismenu-icon pe-7s-add-user"></i>Ajouter I.
 								Administrative
 						</a></li>
-						<li><a href="/admin/inscription/ListInscriptionAdministrative"
+						<li><a
+							href="/admin/inscription/ListInscriptionAdministrative"
 							class="${listAdministartive}"> <i
 								class="metismenu-icon pe-7s-menu"></i> Listes I. Administratives
 						</a></li>
-					</ul></li>								
-					
-				
+					</ul></li>
+
+
 				<li><a href="#" aria-expanded="false"> <i
 						class="metismenu-icon pe-7s-id"></i>Deliberation<i
 						class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
 				</a>
 					<ul class="mm-collapse" style="height: 7.04px;">
-					<li><a href="/admin/delib/menuDeliberation"
-					class="${importdelib}"> <i
-						class="metismenu-icon pe-7s-graph3"></i> Deliberation module
-				</a></li>
-				<li><a href="/admin/delib/choixList"
-					class="${importdelib}"> <i
-						class="metismenu-icon pe-7s-graph3"></i> Resultat Deliberation module
-				</a></li>	
-				<li><a href="/admin/delib/choixListSemestre"
-					class="${importdelib}"> <i
-						class="metismenu-icon pe-7s-graph3"></i> Resultat Deliberation semestre
-				</a></li>
-				<li><a href="/admin/delib/choixListEtape"
-					class="${importdelib}"> <i
-						class="metismenu-icon pe-7s-graph3"></i> Resultat Deliberation anuelle
-				</a></li>
-						
+						<li><a href="/delib"
+							class="${importdelib}"> <i
+								class="metismenu-icon pe-7s-graph3"></i> Deliberation
+						</a></li>
+						<li><a href="/admin/delib/choixList" class="${importdelib}">
+								<i class="metismenu-icon pe-7s-graph3"></i> Resultat
+								Deliberation
+						</a></li>
+
 					</ul></li>
-				<li><a href="/admin/historique/liste"
-					class=""> <i
+				<li><a href="/admin/historique/liste" class=""> <i
 						class="metismenu-icon pe-7s-graph3"></i> Historique
 				</a></li>
-				<li><a href="/logout"
-					class=""> <i
+				<li><a href="/logout" class=""> <i
 						class="metismenu-icon pe-7s-graph3"></i> Se déconnecter
 				</a></li>
 			</ul>

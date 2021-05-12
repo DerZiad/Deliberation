@@ -15,7 +15,7 @@
 						<h5 class="card-title">établissement: ${etablissement.nom_etablissement }</h5>
 						<a href="/admin/etablissement/profile/${etablissement.id_etablissement }/filiere/liste"><button class="mb-2 mr-2 btn btn-primary btn-block">Les filières de l'établissement</button></a>
 						<a href="/admin/etablissement/profile/${etablissement.id_etablissement }/professeur/liste"><button class="mb-2 mr-2 btn btn-success btn-block">Les professeurs de l'établissement</button></a>
-						<a href="/admin/etablissement/profile/${etablissement.id_etablissement }/etudiant/liste"><button class="mb-2 mr-2 btn btn-warning btn-block">Les étudiants de l'établissement</button></a>
+						<a href="/admin/student/list"><button class="mb-2 mr-2 btn btn-warning btn-block">Les étudiants de l'établissement</button></a>
 
 					</div>
 				</div>

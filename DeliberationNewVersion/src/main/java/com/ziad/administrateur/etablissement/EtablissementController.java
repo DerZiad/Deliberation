@@ -89,16 +89,5 @@ public class EtablissementController {
 
 		return model;
 	}
-	
-	@GetMapping("/etablissement/profile/{id}/etudiant/liste")
-	public ModelAndView etablissementEtudiantListe(@PathVariable("id") Long id)
-			throws EntityNotFoundException, DataNotFoundExceptions {
-		ModelAndView model = new ModelAndView("/Etablissement/EtablissementProfilesProfesseurListe");
-		List<Professeur> listes_de_professeurs = etablissement_metier.getProfesseursListByEtablissement(id);
-		model.addObject("professeurs", listes_de_professeurs);
-		model.addObject("etablissement", etablissement_metier.getEtablissementById(id));
-
-		return model;
-	}
 
 }

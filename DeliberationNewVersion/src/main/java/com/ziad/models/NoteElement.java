@@ -34,7 +34,11 @@ public class NoteElement implements Serializable {
 
 	@OneToOne(cascade = CascadeType.DETACH)
 	private AnneeAcademique annee_academique;
-
+	
+	public NoteElement() {
+		
+	}
+	
 	public NoteElement(Double note_element, AnneeAcademique annee_academique) {
 		super();
 		this.note_element = note_element;
@@ -100,6 +104,8 @@ public class NoteElement implements Serializable {
 	public void setAnnee_academique(AnneeAcademique annee_academique) {
 		this.annee_academique = annee_academique;
 	}
+	
+	
 
 	public void delibererElementOrdinaire() {
 		note_element = 0d;

@@ -1,4 +1,4 @@
- package com.ziad.administrateur.inscription.pedagogique;
+package com.ziad.administrateur.inscription.pedagogique;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -126,7 +126,8 @@ public class InscriptionPedagogiqueService implements InscriptionPedagogiqueInte
 								id_inscription_pedagogique, inscription_administrative.getAnnee_academique(), false,
 								TypeInscription.SEMESTRE);
 						inscriptionPedagogiqueRepository.save(inscription_pedagogique);
-						NoteElement note = new NoteElement(id_inscription_pedagogique,0d, inscription_administrative.getAnnee_academique());
+						NoteElement note = new NoteElement(id_inscription_pedagogique, 0d,
+								inscription_administrative.getAnnee_academique());
 						noteElementRepository.save(note);
 					}
 				}
@@ -139,8 +140,9 @@ public class InscriptionPedagogiqueService implements InscriptionPedagogiqueInte
 							id_inscription_pedagogique, inscription_administrative.getAnnee_academique(), false,
 							TypeInscription.MODULE);
 					inscriptionPedagogiqueRepository.save(inscription_pedagogique);
-				
-					NoteElement note = new NoteElement(id_inscription_pedagogique,0d, inscription_administrative.getAnnee_academique());
+
+					NoteElement note = new NoteElement(id_inscription_pedagogique, 0d,
+							inscription_administrative.getAnnee_academique());
 					noteElementRepository.save(note);
 				}
 			} else if (type.equals("element")) {
@@ -150,7 +152,8 @@ public class InscriptionPedagogiqueService implements InscriptionPedagogiqueInte
 				InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(id_inscription_pedagogique,
 						inscription_administrative.getAnnee_academique(), false, TypeInscription.ELEMENT);
 				inscriptionPedagogiqueRepository.save(inscription_pedagogique);
-				NoteElement note = new NoteElement(id_inscription_pedagogique,0d, inscription_administrative.getAnnee_academique());
+				NoteElement note = new NoteElement(id_inscription_pedagogique, 0d,
+						inscription_administrative.getAnnee_academique());
 				noteElementRepository.save(note);
 			} else {
 				throw new Exception();
@@ -162,18 +165,20 @@ public class InscriptionPedagogiqueService implements InscriptionPedagogiqueInte
 	}
 
 	@Override
-	public List<InscriptionPedagogique> prepareInscriptionListpage(Long id_etudiant) throws DataNotFoundExceptions,EntityNotFoundException {
+	public List<InscriptionPedagogique> prepareInscriptionListpage(Long id_etudiant)
+			throws DataNotFoundExceptions, EntityNotFoundException {
 		List<InscriptionPedagogique> listes_inscriptions = inscriptionPedagogiqueRepository.findAll();
 		List<InscriptionPedagogique> listes_inscriptions_filtred = listes_inscriptions.stream()
-				.filter(inscription -> inscription.getEtudiant().getId_etudiant() == id_etudiant)
+				.filter(inscription -> inscription.getEtudiant().getId_etudiant().equals(id_etudiant))
 				.collect(Collectors.toList());
-		if(listes_inscriptions_filtred.size() <= 0 )throw new DataNotFoundExceptions("La liste des inscription est vide");
+		if (listes_inscriptions_filtred.size() <= 0)
+			throw new DataNotFoundExceptions("La liste des inscription est vide");
 		return listes_inscriptions_filtred;
 
 	}
 
 	@Override
-	public void suprimerInscriptionPedagogique(Long id_etudiant,Long id_element) throws EntityNotFoundException {
+	public void suprimerInscriptionPedagogique(Long id_etudiant, Long id_element) throws EntityNotFoundException {
 		Etudiant etudiant = etudiantRepository.getOne(id_etudiant);
 		Element element = elementRepository.getOne(id_element);
 		ComposedInscriptionPedagogique composed = new ComposedInscriptionPedagogique(etudiant, element);

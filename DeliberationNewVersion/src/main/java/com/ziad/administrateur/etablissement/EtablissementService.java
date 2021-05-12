@@ -73,7 +73,8 @@ public class EtablissementService implements EtablissementInterface {
 		etablissementRepository.deleteById(id);
 	}
 
-	public List<Filiere> getFilieresListByEtablissement(Long id) throws EntityNotFoundException, DataNotFoundExceptions {
+	public List<Filiere> getFilieresListByEtablissement(Long id)
+			throws EntityNotFoundException, DataNotFoundExceptions {
 		Etablissement etablissement = etablissementRepository.getOne(id);
 
 		List<Filiere> listes_de_filieres = etablissement.getFilieres();
@@ -87,7 +88,8 @@ public class EtablissementService implements EtablissementInterface {
 		return listes_de_filieres;
 	}
 
-	public List<Professeur> getProfesseursListByEtablissement(Long id) throws EntityNotFoundException, DataNotFoundExceptions {
+	public List<Professeur> getProfesseursListByEtablissement(Long id)
+			throws EntityNotFoundException, DataNotFoundExceptions {
 		Etablissement etablissement = etablissementRepository.getOne(id);
 		/**
 		 * On récupere la liste des filieres , si il n'ya pas de filiere , pas la peine
@@ -136,32 +138,4 @@ public class EtablissementService implements EtablissementInterface {
 		etablissementRepository.save(etablissement);// La modification n'est pas necessaire dans ce champs
 	}
 
-	@Override
-	public List<Etudiant> getEtudiantListByEtablissement(Long id) throws EntityNotFoundException, DataNotFoundExceptions {
-		Etablissement etablissement = etablissementRepository.getOne(id);
-		/**
-		 * On récupere la liste des filieres , si il n'ya pas de filiere , pas la peine
-		 * de continuer throw new DataNotFoundException
-		 */
-		List<Filiere> listes_de_filieres = etablissement.getFilieres();
-		if (listes_de_filieres.size() == 0)
-			throw new DataNotFoundExceptions();
-
-		/**
-		 * Pour récuperer tous les profs on doit récuperer les elements de chaque
-		 * filieres, ce n'est pas bien de la parcourir comme ca mais c'est la seule
-		 * solution pour éviter les relations cyclique
-		 */
-		List<Professeur> listes_de_professeurs = new ArrayList<Professeur>();
-		for (Filiere filiere : listes_de_filieres) {
-			List<Etape> etapes = filiere.getEtapes();
-			for (Etape etape : etapes) {
-				List<Semestre> semestres = etape.getSemestres();
-				listerSemestre(listes_de_professeurs, semestres);
-			}
-		}
-		if (listes_de_professeurs.size() == 0)
-			throw new DataNotFoundExceptions();
-		return null;
-	}
 }

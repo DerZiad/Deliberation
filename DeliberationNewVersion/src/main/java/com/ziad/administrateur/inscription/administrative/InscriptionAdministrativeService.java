@@ -36,6 +36,7 @@ import com.ziad.models.InscriptionAdministrative;
 import com.ziad.models.InscriptionEnLigne;
 import com.ziad.models.InscriptionPedagogique;
 import com.ziad.models.Modulee;
+import com.ziad.models.NoteElement;
 import com.ziad.models.Semestre;
 import com.ziad.models.User;
 import com.ziad.models.compositeid.ComposedInscriptionAdministrative;
@@ -48,6 +49,7 @@ import com.ziad.repositories.InscriptionAdministrativeRepository;
 import com.ziad.repositories.InscriptionEnLigneRepository;
 import com.ziad.repositories.InscriptionPedagogiqueRepository;
 import com.ziad.repositories.ModuleRepository;
+import com.ziad.repositories.NoteElementRepository;
 import com.ziad.repositories.SemestreRepository;
 import com.ziad.utilities.ExcelReader;
 
@@ -75,7 +77,10 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 	private InscriptionAdministrativeRepository inscription_admistrative_repository;
 	@Autowired
 	private ExcelReader excel_service;
-
+	@Autowired
+	private NoteElementRepository noteElementRepository;
+	
+	
 	@Autowired
 	private ModuleRepository moduleRepository;
 
@@ -182,6 +187,9 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 					InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(compsedId,
 							annee_academique, false, TypeInscription.ELEMENT);
 					this.inscriptionPedagogiqueRepository.save(inscription_pedagogique);
+					NoteElement note = new NoteElement(compsedId, 0d,
+							inscription_administrative.getAnnee_academique());
+					noteElementRepository.save(note);
 				}
 			}
 		}
@@ -199,6 +207,7 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 		InscriptionAdministrative inscription_adminisrative = inscriptionAdministrative
 				.getOne(inscription_administrative);
 		inscription_admistrative_repository.delete(inscription_adminisrative);
+		etudiantRepository.delete(etudiant);
 
 	}
 
@@ -442,6 +451,9 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 							InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(compsedId,
 									annee_academique, false, TypeInscription.ELEMENT);
 							this.inscriptionPedagogiqueRepository.save(inscription_pedagogique);
+							NoteElement note = new NoteElement(compsedId, 0d,
+									inscription_administrative.getAnnee_academique());
+							noteElementRepository.save(note);
 						}
 					}
 				}

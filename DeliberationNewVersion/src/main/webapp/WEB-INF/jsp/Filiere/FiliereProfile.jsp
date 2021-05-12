@@ -15,7 +15,7 @@
 					<div class="main-card mb-3 card">
 						<div class="card-body">
 							<h5 class="card-title">filière: ${filiere.nom_filiere }</h5>
-							<a href="/filiere/profile/${filiere.id_filiere }/etudiant/liste"><button
+							<a href="/admin/student/list"><button
 									class="mb-2 mr-2 btn btn-warning btn-block">Les
 									étudiants de la filière</button></a>
 						</div>
