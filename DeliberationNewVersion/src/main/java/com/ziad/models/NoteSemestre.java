@@ -16,7 +16,7 @@ public class NoteSemestre {
 	@EmbeddedId
 	private ComposedNoteSemestre idCompose;
 
-	private Double note;
+	private Double note=0d;
 	private boolean isValid = false;
 
 	private String etat = "";// Compensation ou elimine

@@ -1,5 +1,8 @@
 package com.ziad;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,17 +11,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.ziad.enums.Gender;
 import com.ziad.enums.MonRole;
+import com.ziad.enums.TypeInscription;
 import com.ziad.enums.TypeSemestre;
 import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Element;
 import com.ziad.models.Etablissement;
 import com.ziad.models.Etape;
+import com.ziad.models.Etudiant;
 import com.ziad.models.Filiere;
+import com.ziad.models.InscriptionAdministrative;
+import com.ziad.models.InscriptionEnLigne;
+import com.ziad.models.InscriptionPedagogique;
 import com.ziad.models.Modulee;
+import com.ziad.models.NoteElement;
 import com.ziad.models.Professeur;
 import com.ziad.models.Semestre;
 import com.ziad.models.User;
+import com.ziad.models.compositeid.ComposedInscriptionAdministrative;
+import com.ziad.models.compositeid.ComposedInscriptionPedagogique;
 import com.ziad.repositories.AnnneAcademiqueRepository;
 import com.ziad.repositories.DocumentDePlusRepository;
 import com.ziad.repositories.ElementRepository;
@@ -84,6 +96,7 @@ public class IntialiserBachelor {
 			System.out.println("============> Professeurs ");
 			users.stream().forEach(user -> System.out.println(user));
 			createAnneeAcademique();
+			//createStudents();
 		} catch (Exception e) {
 			System.err.println("[ - ] - Error \n" + e.getMessage());
 			e.printStackTrace();
@@ -207,5 +220,77 @@ public class IntialiserBachelor {
 		if (test)
 			System.out.println("[ ! ] - Data base not empty");
 		return !test;
+	}
+	
+	public void createStudents() {
+		Filiere filiere = filiereRepository.findAll().get(0);
+		
+		for (int i = 0; i < 100; i++) {
+			Etudiant etudiant = new Etudiant();
+			InscriptionEnLigne inscriptionEnLigne = new InscriptionEnLigne();
+			etudiant.setAcademy("Bachelor");
+			etudiant.setBac_place("Meknes");
+			etudiant.setBac_type("PC"+i);
+			etudiant.setBac_year(2018);
+			etudiant.setBirth_date(new java.util.Date());
+			etudiant.setBirth_place("Meknes");
+			etudiant.setCity("Meknes");
+			etudiant.setCne("D896565"+i);
+			etudiant.setFirst_name_ar("Ziad"+i);
+			etudiant.setFirst_name_fr("Bougrine"+i);
+			etudiant.setGender(Gender.HOMME);
+			etudiant.setHigh_school("Tremplin");
+			etudiant.setLast_name_ar("Bougrine");
+			etudiant.setLast_name_fr("Ziad");
+			etudiant.setMassar_edu("M13124589"+i);
+			etudiant.setMention("Tres bien");
+			etudiant.setNationality("Morrocain");
+			etudiant.setProvince("Kamilia");
+			etudiant.setRegistration_date(new java.util.Date());
+			etudiant.setEmail("ziadbougrine@gmail.com");
+
+			User user = new User();
+			user.setUsername(etudiant.getEmail());
+			// On met le mot de passe son prenom pour le changer apres
+			user.setPassword(passwordEncoder.encode(etudiant.getLast_name_fr().toLowerCase()));
+			user.setActive(1);
+			user.addRole(MonRole.ROLEETUDIANT);
+			etudiant.setUser(user);
+			etudiant.setInscription_en_ligne(new InscriptionEnLigne());
+			inscriptionEnLigne.setEtudiant(etudiant);
+			etudiant.setInscription_en_ligne(inscriptionEnLigne);
+			etudiantRepository.save(etudiant);
+			inscriptionEnLigneRepository.save(inscriptionEnLigne);
+
+			InscriptionAdministrative inscription_administrative = new InscriptionAdministrative();
+
+			AnneeAcademique annee_academique = this.annee_academique.findAll().get(0);
+			inscription_administrative.setAnnee_academique(annee_academique);
+			inscription_administrative.setDate_pre_inscription(new java.util.Date());
+			inscription_administrative.setComposite_association_id(new ComposedInscriptionAdministrative(etudiant, filiere));
+			LocalDate ld = LocalDate.now();
+			ZoneId defaultZoneId = ZoneId.systemDefault();
+			java.util.Date date = Date.from(ld.atStartOfDay(defaultZoneId).toInstant());
+
+			List<Etape> etapes = etapeRepository.getEtapeByFiliere(filiere);
+			Etape firststep = etapes.get(0);	
+			
+			for (Semestre semestre : firststep.getSemestres()) {
+				for (Modulee module : semestre.getModules()) {
+					for (Element element : module.getElements()) {
+						ComposedInscriptionPedagogique compsedId = new ComposedInscriptionPedagogique(etudiant, element);
+						InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(compsedId,
+								annee_academique, false, TypeInscription.ELEMENT);
+						this.inscriptionPedagogiqueRepository.save(inscription_pedagogique);
+						NoteElement note = new NoteElement(compsedId, 0d,
+								inscription_administrative.getAnnee_academique());
+						noteElementRepository.save(note);
+					}
+				}
+			}
+			inscriptionAdministrativeRepository.save(inscription_administrative);
+
+		}
+		
 	}
 }

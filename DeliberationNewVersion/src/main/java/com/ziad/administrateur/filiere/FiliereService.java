@@ -124,7 +124,7 @@ public class FiliereService implements FiliereInterface {
 		if (etablissement != null)
 			filiere.setEtablissements(etablissement);
 		filiere = filiereRepository.save(filiere);
-		List<Etape> etapes = etapeRepository.getEtapeByFiliere(filiere);
+		List<Etape> etapes = filiere.getEtapes();
 		List<Semestre> semestres = semestreRepository.getSemestresByFiliere(filiere);
 		if (old_semester_num != semester_number)
 			if (etapes != null) {

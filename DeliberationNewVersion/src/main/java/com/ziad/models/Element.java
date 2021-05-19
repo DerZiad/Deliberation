@@ -118,4 +118,12 @@ public class Element implements Serializable{
 		professeurs.add(professeur);
 	}
 
+	@Override
+	public String toString() {
+		return "Element [id_element=" + id_element + ", libelle_element=" + libelle_element + ", coeficient="
+				+ coeficient + ", validation=" + validation + ", module=" + module + ", professeurs=" + professeurs
+				+ "]";
+	}
+	
+	
 }

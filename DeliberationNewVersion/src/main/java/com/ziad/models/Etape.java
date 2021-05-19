@@ -39,8 +39,7 @@ public class Etape implements Serializable{
 	/**
 	 * Relations
 	 * */
-	@ManyToOne(cascade = CascadeType.DETACH)
-	@JoinColumn(name = "filiere", foreignKey = @ForeignKey(name = "fk_filiere"))
+	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.PERSIST})
 	private Filiere filiere;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "etape")

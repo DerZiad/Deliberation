@@ -25,7 +25,7 @@ public class NoteElement implements Serializable {
 	private ComposedInscriptionPedagogique idCompose;
 
 	@Column(name = "note_element")
-	private Double note_element;
+	private Double note_element=0d;
 
 	private boolean isValid = false;
 
@@ -144,4 +144,12 @@ public class NoteElement implements Serializable {
 		}
 
 	}
+
+	@Override
+	public String toString() {
+		return "NoteElement [idCompose=" + idCompose + ", note_element=" + note_element + ", isValid=" + isValid
+				+ ", notes=" + notes + ", annee_academique=" + annee_academique + "]";
+	}
+	
+	
 }

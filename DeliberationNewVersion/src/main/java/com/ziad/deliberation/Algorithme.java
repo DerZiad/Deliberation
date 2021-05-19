@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ziad.enums.DeliberationType;
+import com.ziad.enums.TypeInscription;
 import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Deliberation;
 import com.ziad.models.Element;
@@ -70,7 +71,11 @@ public class Algorithme {
 		}
 	}
 
-	public void delibererModule(Modulee module, AnneeAcademique annee) {
+	public void delibererModule(Modulee module, AnneeAcademique annee,TypeInscription type) {
+		if(type == null) {
+			type = TypeInscription.MODULE;
+		}
+		
 		List<Deliberation> delibs = null;
 		/**
 		 * Etape1 -> Verifier si on a deja deliberer
@@ -87,25 +92,26 @@ public class Algorithme {
 			for (Element element : module.getElements()) {
 				delibererElement(element, annee);
 			}
-
-			List<Etudiant> etudiants = inscriptionPedagogiqueRepository.getEtudiantParModule(module, annee);
+			List<Etudiant> etudiants = inscriptionPedagogiqueRepository.getEtudiantParModule(module, annee,type);
 			for (Etudiant etudiant : etudiants) {
-				double coefficient = 0d;
-				double noteDouble = 0d;
+				Double coefficient = 0d;
+				Double noteDouble = 0d;
 				for (Element element : module.getElements()) {
 					NoteElement note = noteElementRepository
 							.getOne(new ComposedInscriptionPedagogique(etudiant, element));
+					System.out.println("Element object " + note);
+					System.out.println("Note element " + note.getNote_element());
+					System.out.println("Coefficient  " + element.getCoeficient());
 					noteDouble = noteDouble + note.getNote_element() * element.getCoeficient();
 					coefficient = coefficient + element.getCoeficient();
 				}
 				noteDouble = noteDouble / coefficient;
-				NoteModule noteParModule = new NoteModule(new ComposedNoteModule(module, etudiant), noteDouble,
+				NoteModule noteParModule = new NoteModule(new ComposedNoteModule(module, etudiant), 2d,
 						deliberation);
 				noteParModule.delibererModule(typeDelib);
 				deliberation.addNoteModule(noteParModule);
-				deliberationRepository.save(deliberation);
-				// TODO - Ziad 2 Don't forget to save
 			}
+			deliberationRepository.save(deliberation);
 		}
 	}
 
@@ -124,14 +130,14 @@ public class Algorithme {
 		if (delibs.size() == 0) {
 			Deliberation deliberation = new Deliberation(typeDelib.name(), annee, null, semestre, null);
 			for (Modulee module : semestre.getModules()) {
-				delibererModule(module, annee);
+				delibererModule(module, annee,TypeInscription.SEMESTRE);
 			}
 
 			List<Etudiant> etudiants = inscriptionPedagogiqueRepository.getEtudiantParSemestre(semestre, annee);
 
 			for (Etudiant etudiant : etudiants) {
-				double coefficient = 0d;
-				double noteSemestre = 0d;
+				Double coefficient = 0d;
+				Double noteSemestre = 0d;
 				List<NoteModule> notess = new ArrayList<NoteModule>();
 				for (Modulee module : semestre.getModules()) {
 					NoteModule noteParModule = notesModuleRepository.getOne(new ComposedNoteModule(module, etudiant));
@@ -144,7 +150,7 @@ public class Algorithme {
 						noteSemestre, deliberation);
 				noteSemestreO.delibererSemestre(notess);
 				deliberation.addNoteSemestre(noteSemestreO);
-				deliberationRepository.save(deliberation);
+				//deliberationRepository.save(deliberation);
 			}
 
 		}
@@ -188,7 +194,7 @@ public class Algorithme {
 			}
 
 			for (Etudiant etudiant : etudiants) {
-				double noteParEtapeD = 0d;
+				Double noteParEtapeD = 0d;
 				for (Semestre semestre : etape.getSemestres()) {
 					NoteSemestre noteSemestre = notesSemestreRepository
 							.getOne(new ComposedNoteSemestre(semestre, etudiant));

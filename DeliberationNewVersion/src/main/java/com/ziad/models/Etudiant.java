@@ -385,4 +385,18 @@ public class Etudiant implements Serializable{
 		this.user = user;
 	}
 
+	@Override
+	public String toString() {
+		return "Etudiant [id_etudiant=" + id_etudiant + ", massar_edu=" + massar_edu + ", first_name_fr="
+				+ first_name_fr + ", first_name_ar=" + first_name_ar + ", last_name_fr=" + last_name_fr
+				+ ", last_name_ar=" + last_name_ar + ", cne=" + cne + ", nationality=" + nationality + ", gender="
+				+ gender + ", birth_date=" + birth_date + ", birth_place=" + birth_place + ", city=" + city
+				+ ", province=" + province + ", bac_year=" + bac_year + ", bac_type=" + bac_type + ", mention="
+				+ mention + ", high_school=" + high_school + ", bac_place=" + bac_place + ", academy=" + academy
+				+ ", registration_date=" + registration_date + ", email=" + email + ", inscription_en_ligne="
+				+ inscription_en_ligne + ", user=" + user + "]";
+	}
+	
+	
+
 }

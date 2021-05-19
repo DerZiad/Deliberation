@@ -1,7 +1,6 @@
 package com.ziad.models;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -9,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -24,12 +24,15 @@ public class Deliberation {
 
 	@OneToOne(cascade = CascadeType.PERSIST)
 	private AnneeAcademique anneeAcademique;
-	@OneToOne(cascade = CascadeType.PERSIST)
-	private Modulee module;
-	@OneToOne(cascade = CascadeType.PERSIST)
-	private Semestre semestre;
-	@OneToOne(cascade = CascadeType.PERSIST)
-	private Etape etape;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(nullable=true)
+	private Modulee module = null;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(nullable=true)
+	private Semestre semestre = null;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(nullable=true)
+	private Etape etape = null;
 		
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "deliberation")
@@ -124,5 +127,20 @@ public class Deliberation {
 	public void addNoteEtape(NoteEtape note) {
 		notesEtape.add(note);
 	}
+
+	@Override
+	public String toString() {
+		String ch = "";
+		for (NoteModule notemodule : notesModule) {
+			ch = ch + notemodule.getEtat() + " : " + notemodule.getNote();
+		}
+		
+		return "Deliberation [idDeliberation=" + idDeliberation + ", typeDeliberation=" + typeDeliberation
+				+ ", anneeAcademique=" + anneeAcademique + ", module=" + module + ", semestre=" + semestre + ", etape="
+				+ etape + ch +  "]" ;
+		
+	}
+	
+	
 	
 }

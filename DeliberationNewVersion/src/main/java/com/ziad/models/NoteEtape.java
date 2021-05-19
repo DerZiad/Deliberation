@@ -21,7 +21,7 @@ public class NoteEtape implements Serializable{
 	@EmbeddedId
 	private ComposedNoteEtape idCompose;
 
-	private Double note;
+	private Double note=0d;
 
 	private boolean isValid = false;
 

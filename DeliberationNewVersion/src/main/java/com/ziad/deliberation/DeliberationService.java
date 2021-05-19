@@ -73,31 +73,27 @@ public class DeliberationService implements DeliberationInterface {
 	@Override
 	public void deliberer(Long idFiliere, Long idAnneeAcademique, String type, Long id_element, String typeDeliberation,
 			Integer consideration) throws DataNotFoundExceptions, EntityNotFoundException {
-		boolean delibpermis = false;
 		AnneeAcademique annee = anneeAcademiqueRepository.getOne(idAnneeAcademique);
 
-		
 		if (typeDeliberation.equals(TYPE_DELIBERATION_ORDINAIRE)) {
 			algorithme.enableDeliberationOrdinaire();
 		} else if (typeDeliberation.equals(TYPE_DELIBERATION_RATTRAPAGE)) {
 			algorithme.enableConsideration(true);
 			algorithme.enableDeliberationRattrapage();
 		}
-		if(delibpermis) {
-			if (type.equals(TYPE_DELIBERATION_ETAPE)) {
-				Etape etape = etapeRepository.getOne(id_element);
-				algorithme.delibererEtape(etape, annee);
-			} else if (type.equals(TYPE_DELIBERATION_MODULE)) {
-				Modulee module = moduleRepository.getOne(id_element);
-				algorithme.delibererModule(module, annee);
-			} else if (type.equals(TYPE_DELIBERATION_SEMESTRE)) {
-				Semestre semestre = semestreRepository.getOne(id_element);
-				algorithme.delibererSemestre(semestre, annee);
-			}
+		if (type.equals(TYPE_DELIBERATION_ETAPE)) {
+			Etape etape = etapeRepository.getOne(id_element);
+			algorithme.delibererEtape(etape, annee);
+		} else if (type.equals(TYPE_DELIBERATION_MODULE)) {
+			Modulee module = moduleRepository.getOne(id_element);
+			algorithme.delibererModule(module, annee,null);
+		} else if (type.equals(TYPE_DELIBERATION_SEMESTRE)) {
+			Semestre semestre = semestreRepository.getOne(id_element);
+			algorithme.delibererSemestre(semestre, annee);
 		}
-				
+
+		System.out.println("Deliberation effectue");
+
 	}
-	
-	
 
 }

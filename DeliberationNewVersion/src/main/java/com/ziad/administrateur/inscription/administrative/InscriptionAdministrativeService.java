@@ -185,9 +185,9 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 				for (Element element : module.getElements()) {
 					ComposedInscriptionPedagogique compsedId = new ComposedInscriptionPedagogique(etudiant, element);
 					InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(compsedId,
-							annee_academique, false, TypeInscription.ELEMENT);
+							annee_academique, false, TypeInscription.SEMESTRE);
 					this.inscriptionPedagogiqueRepository.save(inscription_pedagogique);
-					NoteElement note = new NoteElement(compsedId, 0d,
+					NoteElement note = new NoteElement(compsedId,-1d,
 							inscription_administrative.getAnnee_academique());
 					noteElementRepository.save(note);
 				}
@@ -207,8 +207,6 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 		InscriptionAdministrative inscription_adminisrative = inscriptionAdministrative
 				.getOne(inscription_administrative);
 		inscription_admistrative_repository.delete(inscription_adminisrative);
-		etudiantRepository.delete(etudiant);
-
 	}
 
 	@Override
@@ -449,7 +447,7 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 							ComposedInscriptionPedagogique compsedId = new ComposedInscriptionPedagogique(etudiant,
 									element);
 							InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(compsedId,
-									annee_academique, false, TypeInscription.ELEMENT);
+									annee_academique, false, TypeInscription.SEMESTRE);
 							this.inscriptionPedagogiqueRepository.save(inscription_pedagogique);
 							NoteElement note = new NoteElement(compsedId, 0d,
 									inscription_administrative.getAnnee_academique());

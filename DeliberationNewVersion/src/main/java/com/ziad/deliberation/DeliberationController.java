@@ -52,7 +52,7 @@ public class DeliberationController {
 	public ModelAndView deliberer(@RequestParam("filiere") Long idFiliere,
 			@RequestParam("annee") Long idAnneeAcademique, @RequestParam("type") String type,
 			@RequestParam("element") Long id_element, @RequestParam("typedeliberation") String typeDeliberation,
-			@RequestParam("consideration") Integer consideration) throws EntityNotFoundException,DataNotFoundExceptions{
+			@RequestParam(name = "consideration",required = false) Integer consideration) throws EntityNotFoundException,DataNotFoundExceptions{
 		ModelAndView model = new ModelAndView();
 		deliberationMetier.deliberer(idFiliere, idAnneeAcademique, type, id_element, typeDeliberation, consideration);
 		return model;

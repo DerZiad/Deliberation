@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import com.ziad.models.Etudiant;
@@ -13,8 +14,10 @@ import com.ziad.models.Modulee;
 public class ComposedNoteModule implements Serializable{
 	
 	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(nullable = true)
 	private Modulee module;
 	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(nullable = true)
 	private Etudiant etudiant;
 	
 	public ComposedNoteModule() {
@@ -38,8 +41,10 @@ public class ComposedNoteModule implements Serializable{
 	public void setEtudiant(Etudiant etudiant) {
 		this.etudiant = etudiant;
 	}
-	
-	
-	
+
+	@Override
+	public String toString() {
+		return "ComposedNoteModule [module=" + module + ", etudiant=" + etudiant + "]";
+	}
 	
 }

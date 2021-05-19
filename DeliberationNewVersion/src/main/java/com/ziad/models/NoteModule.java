@@ -17,7 +17,7 @@ public class NoteModule {
 	@EmbeddedId
 	private ComposedNoteModule idComposed;
 
-	private Double note;
+	private Double note=0d;
 
 	private boolean isValid = false;
 
@@ -98,5 +98,13 @@ public class NoteModule {
 			}
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "NoteModule [idComposed=" + idComposed + ", note=" + note + ", isValid=" + isValid + ", etat=" + etat
+				+ ", deliberation=" + deliberation + "]";
+	}
+	
+	
 
 }
