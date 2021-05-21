@@ -15,12 +15,8 @@
 					method="POST">
 					<div class="col-md-6">
 						<div class="position-relative form-group">
-							<label for="name" class="">Années academiques</label> <select
-								name="annee" id="exampleSelect" class="form-control">
-								<c:forEach var="annee" items="${annees}">
-									<option value="${annee.id_annee_academique }">${annee.annee_academique }</option>
-								</c:forEach>
-							</select>
+							<label for="name" class="">Rattrapage</label> <input name="ratt"
+								id="exampleSelect" class="form-control" type="checkbox" value="" />
 						</div>
 						<div class="position-relative form-group">
 							<button class="btn btn-success">Download excel</button>
@@ -41,12 +37,12 @@
 							<th class="th-sm">Statut</th>
 						</tr>
 					</thead>
-					<tbody id="etudiants">
+					<tbody id="notes">
 						<c:forEach var="note" items="${deliberation.notesModule}">
 							<tr>
-								<td style="color: black">${note.etudiant.massar_edu}</td>
-								<td style="color: black">${note.etudiant.last_name_fr}</td>
-								<td style="color: black">${note.etudiant.first_name_fr}</td>
+								<td style="color: black">${note.idComposed.etudiant.massar_edu}</td>
+								<td style="color: black">${note.idComposed.etudiant.last_name_fr}</td>
+								<td style="color: black">${note.idComposed.etudiant.first_name_fr}</td>
 								<td style="color: black">${note.note}</td>
 								<td style="color: black">${note.etat}</td>
 							</tr>
@@ -55,5 +51,43 @@
 				</table>
 			</div>
 		</div>
+		<script>
+			var notes = JSON.parse('${notejson}');
+
+			jQuery(document).ready(function(){
+					$("input[name=ratt]").click(function(){
+							enable_cb($('input[name=ratt]'),"table[id=notes]");
+					});
+			});
+			
+			
+			function enable_cb(checkboxobject,select) {
+				var ch = "";
+				if (checkboxobject.is(':checked')) {
+					for(let i = 0;i<notes.length;i++){
+						if(notes[i].etat == "RATTRAPAGE"){
+										ch = ch + "<tr>\n";
+										ch = ch + '<td style="color: black">' + notes[i].massar_edu + '</td>\n';
+										ch = ch + '<td style="color: black">' + notes[i].last_name_fr + '</td>\n';
+										ch = ch + '<td style="color: black">' + notes[i].first_name_fr + '</td>\n';
+										ch = ch + '<td style="color: black">' + notes[i].note + '</td>\n';
+										ch = ch + '<td style="color: black">' + notes[i].etat + '</td>\n';
+										ch = ch + '</tr>\n'		
+						}
+					}
+				} else {
+					for(let i = 0;i<notes.length;i++){
+										ch = ch + "<tr>\n";
+										ch = ch + '<td style="color: black">' + notes[i].massar_edu + '</td>\n';
+										ch = ch + '<td style="color: black">' + notes[i].last_name_fr + '</td>\n';
+										ch = ch + '<td style="color: black">' + notes[i].first_name_fr + '</td>\n';
+										ch = ch + '<td style="color: black">' + notes[i].note + '</td>\n';
+										ch = ch + '<td style="color: black">' + notes[i].etat + '</td>\n';
+										ch = ch + '</tr>\n'		
+					}
+				}
+				$(select).html(ch);
+			}
+		</script>
 	</layout:put>
 </layout:extends>

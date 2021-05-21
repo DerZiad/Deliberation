@@ -11,11 +11,13 @@ import org.springframework.stereotype.Service;
 
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.AnneeAcademique;
+import com.ziad.models.Deliberation;
 import com.ziad.models.Etape;
 import com.ziad.models.Filiere;
 import com.ziad.models.Modulee;
 import com.ziad.models.Semestre;
 import com.ziad.repositories.AnnneAcademiqueRepository;
+import com.ziad.repositories.DeliberationRepository;
 import com.ziad.repositories.EtapeRepository;
 import com.ziad.repositories.FiliereRepository;
 import com.ziad.repositories.ModuleRepository;
@@ -40,7 +42,10 @@ public class DeliberationService implements DeliberationInterface {
 
 	@Autowired
 	private AnnneAcademiqueRepository anneeAcademiqueRepository;
-
+	
+	@Autowired
+	private DeliberationRepository deliberationRepository;
+	
 	@Autowired
 	private Algorithme algorithme;
 
@@ -92,9 +97,11 @@ public class DeliberationService implements DeliberationInterface {
 			Semestre semestre = semestreRepository.getOne(id_element);
 			algorithme.delibererSemestre(semestre, annee);
 		}
+	}
 
-		System.out.println("Deliberation effectue");
-
+	@Override
+	public Deliberation piocherDeliberation(Long idDelib) throws EntityNotFoundException {
+		return deliberationRepository.getOne(idDelib);
 	}
 
 }

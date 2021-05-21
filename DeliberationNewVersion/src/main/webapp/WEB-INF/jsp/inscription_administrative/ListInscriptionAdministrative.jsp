@@ -29,7 +29,6 @@ jQuery(document).ready(function(){
 
 function enable_cb(checkboxobject,select,oldname) {
 	if (checkboxobject.is(':checked')) {
-		console.log("je suis checked");
 		$(select).attr("name",oldname);
 		$(select).removeAttr("disabled");
 	} else {

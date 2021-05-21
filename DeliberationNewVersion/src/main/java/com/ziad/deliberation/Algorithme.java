@@ -126,6 +126,7 @@ public class Algorithme {
 					noteParModule = new NoteModule(new ComposedNoteModule(module, inscription.getEtudiant()),
 							noteDouble, deliberation);
 				}
+				noteParModule.delibererModule(typeDelib);
 				deliberation.addNoteModule(noteParModule);
 			}
 			deliberationRepository.save(deliberation);

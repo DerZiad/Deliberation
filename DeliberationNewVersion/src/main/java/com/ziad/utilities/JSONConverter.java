@@ -13,6 +13,7 @@ import com.ziad.models.Filiere;
 import com.ziad.models.InscriptionEnLigne;
 import com.ziad.models.InscriptionPedagogique;
 import com.ziad.models.Modulee;
+import com.ziad.models.NoteModule;
 import com.ziad.models.Semestre;
 import com.ziad.utilities.adaptater.AnneeAcademiqueAdaptater;
 import com.ziad.utilities.adaptater.ElementAdaptater;
@@ -21,6 +22,7 @@ import com.ziad.utilities.adaptater.FiliereAdaptater;
 import com.ziad.utilities.adaptater.InscriptionEnLigneAdaptater;
 import com.ziad.utilities.adaptater.InscriptionPedagogiqueAdaptater;
 import com.ziad.utilities.adaptater.ModuleAdaptater;
+import com.ziad.utilities.adaptater.NotesModuleAdaptater;
 import com.ziad.utilities.adaptater.SemestreAdaptater;
 
 @Service
@@ -84,5 +86,15 @@ public class JSONConverter{
 	public String convertInscriptionsEnLignes(InscriptionEnLigne inscription) {
 		Gson gson = gsonBuilder.registerTypeAdapter(InscriptionEnLigne.class,new InscriptionEnLigneAdaptater()).create();
 	    return gson.toJson(inscription);
+	}
+	
+	public String convertNotesModule(NoteModule note) {
+		Gson gson = gsonBuilder.registerTypeAdapter(NoteModule.class,new NotesModuleAdaptater()).create();
+		return gson.toJson(note);
+	}
+	
+	public String convertNotesModule(List<NoteModule> notes) {
+		Gson gson = gsonBuilder.registerTypeAdapter(NoteModule.class,new NotesModuleAdaptater()).create();
+		return gson.toJson(notes);
 	}
 }

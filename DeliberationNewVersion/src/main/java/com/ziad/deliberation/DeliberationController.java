@@ -14,8 +14,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.AnneeAcademique;
+import com.ziad.models.Deliberation;
 import com.ziad.models.Filiere;
 import com.ziad.models.Semestre;
+import com.ziad.utilities.JSONConverter;
 
 @Controller
 @RequestMapping("/delib")
@@ -29,9 +31,17 @@ public class DeliberationController {
 	private final static String ATTRIBUT_MODULES_JSON = "modulesjson";
 	private final static String ATTRIBUT_ETAPES_JSON = "etapesjson";
 	private final static String ATTRIBUT_SEMESTRES_JSON = "semestresjson";
+	
+	private final static String ATTRIBUT_DELIBERATION = "deliberation";
+	private final static String ATTRIBUT_NOTES_MODULE = "notejson";
+	
+	private final static String PATH_DELIBERATION_LIST = "admin/ResultatModule";
 
 	@Autowired
 	private DeliberationInterface deliberationMetier;
+	
+	@Autowired
+	private JSONConverter converter;
 
 	@SuppressWarnings("unchecked")
 	@GetMapping("")
@@ -52,19 +62,27 @@ public class DeliberationController {
 	public ModelAndView deliberer(@RequestParam("filiere") Long idFiliere,
 			@RequestParam("annee") Long idAnneeAcademique, @RequestParam("type") String type,
 			@RequestParam("element") Long id_element, @RequestParam("typedeliberation") String typeDeliberation,
-			@RequestParam(name = "consideration",required = false) Integer consideration) throws EntityNotFoundException,DataNotFoundExceptions{
+			@RequestParam(name = "consideration", required = false) Integer consideration)
+			throws EntityNotFoundException, DataNotFoundExceptions {
 		ModelAndView model = new ModelAndView();
 		deliberationMetier.deliberer(idFiliere, idAnneeAcademique, type, id_element, typeDeliberation, consideration);
 		return model;
 	}
-	
+
 	/**
 	 * Resultat deliberation par module
-	 * **/
-
-	public ModelAndView listerDeliberationParModule() {
-		ModelAndView model = new ModelAndView();
-		
+	 **/
+	@GetMapping("/listerDelib")
+	public ModelAndView listerDeliberationParModule(@RequestParam(name = "id", required = false) Long idDelib) {
+		ModelAndView model = null;
+		if (idDelib == null) {
+			model = new ModelAndView();
+		} else {
+			model = new ModelAndView(PATH_DELIBERATION_LIST);
+			Deliberation delib = deliberationMetier.piocherDeliberation(idDelib);
+			model.addObject(ATTRIBUT_DELIBERATION,delib);
+			model.addObject(ATTRIBUT_NOTES_MODULE,converter.convertNotesModule(delib.getNotesModule()));
+		}
 		return model;
 	}
 }

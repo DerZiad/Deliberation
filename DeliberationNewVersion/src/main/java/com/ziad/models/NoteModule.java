@@ -17,7 +17,7 @@ public class NoteModule {
 	@EmbeddedId
 	private ComposedNoteModule idComposed;
 
-	private Double note=0d;
+	private Double note = 0d;
 
 	private boolean isValid = false;
 
@@ -25,7 +25,7 @@ public class NoteModule {
 
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
 	private Deliberation deliberation;
-	
+
 	public NoteModule() {
 
 	}
@@ -74,7 +74,7 @@ public class NoteModule {
 	public void setDeliberation(Deliberation deliberation) {
 		this.deliberation = deliberation;
 	}
-	
+
 	public String getEtat() {
 		return etat;
 	}
@@ -84,16 +84,22 @@ public class NoteModule {
 	}
 
 	public void delibererModule(DeliberationType session) {
+		System.out.println("Je demare deliberation");
+		System.out.println(note + " validation " + idComposed.getModule().getValidation());
 		if (note >= idComposed.getModule().getValidation()) {
+			System.out.println("Im valide");
 			isValid = true;
 			etat = Etat.VALIDE.name();
 		} else {
-			if (note >= idComposed.getModule().getEliminatoire())
+			if (note >= idComposed.getModule().getEliminatoire()) {
 				etat = Etat.COMPONSE.name();
-			else {
+				System.out.println("Im componse");
+			} else {
 				etat = Etat.ELIMINIE.name();
+				System.out.println("Im elimine");
 			}
 			if (session.equals(DeliberationType.ORDINAIRE)) {
+				System.out.println("Im rattrapage");
 				etat = DeliberationType.RATTRAPAGE.name();
 			}
 		}
@@ -104,7 +110,5 @@ public class NoteModule {
 		return "NoteModule [idComposed=" + idComposed + ", note=" + note + ", isValid=" + isValid + ", etat=" + etat
 				+ ", deliberation=" + deliberation + "]";
 	}
-	
-	
 
 }
