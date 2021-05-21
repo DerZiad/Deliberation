@@ -1,10 +1,13 @@
 package com.ziad.deliberation;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.lowagie.text.DocumentException;
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Deliberation;
@@ -31,15 +35,17 @@ public class DeliberationController {
 	private final static String ATTRIBUT_MODULES_JSON = "modulesjson";
 	private final static String ATTRIBUT_ETAPES_JSON = "etapesjson";
 	private final static String ATTRIBUT_SEMESTRES_JSON = "semestresjson";
-	
+
 	private final static String ATTRIBUT_DELIBERATION = "deliberation";
 	private final static String ATTRIBUT_NOTES_MODULE = "notejson";
-	
+
 	private final static String PATH_DELIBERATION_LIST = "admin/ResultatModule";
+
+	private final static String REDIRECT_DELIBERATION_LIST_MODULE = "/delib/listerDelib?id=%d";
 
 	@Autowired
 	private DeliberationInterface deliberationMetier;
-	
+
 	@Autowired
 	private JSONConverter converter;
 
@@ -80,9 +86,18 @@ public class DeliberationController {
 		} else {
 			model = new ModelAndView(PATH_DELIBERATION_LIST);
 			Deliberation delib = deliberationMetier.piocherDeliberation(idDelib);
-			model.addObject(ATTRIBUT_DELIBERATION,delib);
-			model.addObject(ATTRIBUT_NOTES_MODULE,converter.convertNotesModule(delib.getNotesModule()));
+			model.addObject(ATTRIBUT_DELIBERATION, delib);
+			model.addObject(ATTRIBUT_NOTES_MODULE, converter.convertNotesModule(delib.getNotesModule()));
 		}
+		return model;
+	}
+
+	@GetMapping("/generatePvModule")
+	public ModelAndView generatePvModule(@RequestParam("idDeliberation") Long idDeliberation,
+			@RequestParam(name = "ratt", required = false) Integer rattrapage, @RequestParam("type") String type,
+			HttpServletResponse response) throws EntityNotFoundException, DocumentException, IOException {
+		deliberationMetier.generateExcel(response, type, idDeliberation, rattrapage);
+		ModelAndView model = new ModelAndView(String.format(REDIRECT_DELIBERATION_LIST_MODULE, idDeliberation));
 		return model;
 	}
 }

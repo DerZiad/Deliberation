@@ -84,22 +84,16 @@ public class NoteModule {
 	}
 
 	public void delibererModule(DeliberationType session) {
-		System.out.println("Je demare deliberation");
-		System.out.println(note + " validation " + idComposed.getModule().getValidation());
 		if (note >= idComposed.getModule().getValidation()) {
-			System.out.println("Im valide");
 			isValid = true;
 			etat = Etat.VALIDE.name();
 		} else {
 			if (note >= idComposed.getModule().getEliminatoire()) {
 				etat = Etat.COMPONSE.name();
-				System.out.println("Im componse");
 			} else {
 				etat = Etat.ELIMINIE.name();
-				System.out.println("Im elimine");
 			}
 			if (session.equals(DeliberationType.ORDINAIRE)) {
-				System.out.println("Im rattrapage");
 				etat = DeliberationType.RATTRAPAGE.name();
 			}
 		}

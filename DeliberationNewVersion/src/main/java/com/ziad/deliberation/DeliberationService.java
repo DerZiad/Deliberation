@@ -1,20 +1,26 @@
 package com.ziad.deliberation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import com.lowagie.text.DocumentException;
+import com.ziad.enums.DeliberationType;
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Deliberation;
 import com.ziad.models.Etape;
 import com.ziad.models.Filiere;
 import com.ziad.models.Modulee;
+import com.ziad.models.NoteModule;
 import com.ziad.models.Semestre;
 import com.ziad.repositories.AnnneAcademiqueRepository;
 import com.ziad.repositories.DeliberationRepository;
@@ -23,6 +29,7 @@ import com.ziad.repositories.FiliereRepository;
 import com.ziad.repositories.ModuleRepository;
 import com.ziad.repositories.SemestreRepository;
 import com.ziad.utilities.JSONConverter;
+import com.ziad.utilities.PDFExport;
 
 @Service
 @Primary
@@ -102,6 +109,22 @@ public class DeliberationService implements DeliberationInterface {
 	@Override
 	public Deliberation piocherDeliberation(Long idDelib) throws EntityNotFoundException {
 		return deliberationRepository.getOne(idDelib);
+	}
+
+	@Override
+	public void generateExcel(HttpServletResponse response, String type, Long idDeliberation, Integer rattrapage)
+			throws EntityNotFoundException, DocumentException, IOException {
+		Deliberation deliberation = deliberationRepository.getOne(idDeliberation);
+		if(type.equals(DeliberationType.MODULE.name())) {
+			List<NoteModule> notes = deliberation.getNotesModule();
+			if(rattrapage != null) {
+				notes = notes.stream().filter(n -> n.getEtat().equals(DeliberationType.RATTRAPAGE.name())).collect(Collectors.toList());
+			}
+			PDFExport pdf = new PDFExport(response, "notesModule");
+			pdf.generatePvModule(notes, deliberation.getModule());
+			pdf.closeDocument();
+		}
+		
 	}
 
 }

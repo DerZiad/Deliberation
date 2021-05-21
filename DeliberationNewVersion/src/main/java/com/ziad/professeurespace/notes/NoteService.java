@@ -37,8 +37,7 @@ public class NoteService implements NoteInterface {
 	private NoteElementRepository noteElementRepository;
 	@Autowired
 	private ExcelReader reader;
-	@Autowired
-	private NoteRepository noteRepository;
+	
 	@Override
 	public void readExcel(MultipartFile file, String type,Double coefficient)
 			throws DataNotFoundExceptions, EntityNotFoundException, IOException, CSVReaderOException {

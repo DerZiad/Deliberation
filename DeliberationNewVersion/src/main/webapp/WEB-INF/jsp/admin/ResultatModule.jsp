@@ -11,12 +11,14 @@
 			<div class="card-body">
 				<h5 class="card-title">Filter</h5>
 				<form class="form-group"
-					action="/professeur/listerElements/${element.id_element}"
-					method="POST">
+					action="/delib/generatePvModule"
+					method="GET">
+					<input type="hidden" name="type" value="MODULE"/>
+					<input type="hidden" name="idDeliberation" value="${deliberation.idDeliberation}"/>
 					<div class="col-md-6">
 						<div class="position-relative form-group">
 							<label for="name" class="">Rattrapage</label> <input name="ratt"
-								id="exampleSelect" class="form-control" type="checkbox" value="" />
+								id="exampleSelect" class="form-control" type="checkbox" value="1" />
 						</div>
 						<div class="position-relative form-group">
 							<button class="btn btn-success">Download excel</button>
@@ -56,7 +58,7 @@
 
 			jQuery(document).ready(function(){
 					$("input[name=ratt]").click(function(){
-							enable_cb($('input[name=ratt]'),"table[id=notes]");
+							enable_cb($('input[name=ratt]'),"tbody[id=notes]");
 					});
 			});
 			
@@ -66,6 +68,7 @@
 				if (checkboxobject.is(':checked')) {
 					for(let i = 0;i<notes.length;i++){
 						if(notes[i].etat == "RATTRAPAGE"){
+										console.log("Ok");
 										ch = ch + "<tr>\n";
 										ch = ch + '<td style="color: black">' + notes[i].massar_edu + '</td>\n';
 										ch = ch + '<td style="color: black">' + notes[i].last_name_fr + '</td>\n';
