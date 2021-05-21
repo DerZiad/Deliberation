@@ -78,7 +78,8 @@ public class DeliberationService implements DeliberationInterface {
 		if (typeDeliberation.equals(TYPE_DELIBERATION_ORDINAIRE)) {
 			algorithme.enableDeliberationOrdinaire();
 		} else if (typeDeliberation.equals(TYPE_DELIBERATION_RATTRAPAGE)) {
-			algorithme.enableConsideration(true);
+			if(consideration != null)
+				algorithme.enableConsideration(true);
 			algorithme.enableDeliberationRattrapage();
 		}
 		if (type.equals(TYPE_DELIBERATION_ETAPE)) {
@@ -86,7 +87,7 @@ public class DeliberationService implements DeliberationInterface {
 			algorithme.delibererEtape(etape, annee);
 		} else if (type.equals(TYPE_DELIBERATION_MODULE)) {
 			Modulee module = moduleRepository.getOne(id_element);
-			algorithme.delibererModule(module, annee,null);
+			algorithme.delibererModule(module, annee);
 		} else if (type.equals(TYPE_DELIBERATION_SEMESTRE)) {
 			Semestre semestre = semestreRepository.getOne(id_element);
 			algorithme.delibererSemestre(semestre, annee);

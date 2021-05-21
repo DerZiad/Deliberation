@@ -1,5 +1,7 @@
 package com.ziad.models;
 
+import static java.lang.Math.max;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.ziad.enums.DeliberationType;
 import com.ziad.enums.TypeNote;
 import com.ziad.models.compositeid.ComposedInscriptionPedagogique;
 
@@ -25,7 +28,15 @@ public class NoteElement implements Serializable {
 	private ComposedInscriptionPedagogique idCompose;
 
 	@Column(name = "note_element")
-	private Double note_element=0d;
+	private Double note_element = 0d;
+	
+	private Double ordinaireNote = 0d;
+	
+	private Double rattrapageNote = 0d;
+		
+	@Column(name = "etat")
+	private String etat = "";
+	
 
 	private boolean isValid = false;
 
@@ -50,7 +61,7 @@ public class NoteElement implements Serializable {
 		super();
 		this.idCompose = idCompose;
 		this.note_element = note_element;
-		this.annee_academique = annee_academique;
+		this.annee_academique = annee_academique;		
 	}
 
 	public ComposedInscriptionPedagogique getIdCompose() {
@@ -108,41 +119,72 @@ public class NoteElement implements Serializable {
 	
 
 	public void delibererElementOrdinaire() {
-		note_element = 0d;
+		ordinaireNote  = 0d;
 		double coefficient = 0;
+		etat = DeliberationType.ORDINAIRE.name();
 		for (Note noteElementA : notes) {
-			note_element = note_element + noteElementA.getCoeficient() * noteElementA.getNote();
-			coefficient = noteElementA.getCoeficient();
+			if (noteElementA.getType().equals(TypeNote.EXAM_RATTRAPAGE))
+				continue;
+			ordinaireNote = ordinaireNote + noteElementA.getCoeficient() * noteElementA.getNote();
+			coefficient = coefficient +  noteElementA.getCoeficient();
 		}
-		note_element = note_element / coefficient;
-
+		ordinaireNote = ordinaireNote / coefficient;
+		note_element = ordinaireNote;
+		
 		if (note_element >= getElement().getValidation()) {
 			isValid = true;
+		}else {
+			isValid = false;
 		}
+	}
+	
+	
 
+	public Double getOrdinaireNote() {
+		return ordinaireNote;
+	}
+
+	public void setOrdinaireNote(Double ordinaireNote) {
+		this.ordinaireNote = ordinaireNote;
+	}
+
+	public Double getRattrapageNote() {
+		return rattrapageNote;
+	}
+
+	public void setRattrapageNote(Double rattrapageNote) {
+		this.rattrapageNote = rattrapageNote;
+	}
+
+	public String getEtat() {
+		return etat;
+	}
+
+	public void setEtat(String etat) {
+		this.etat = etat;
 	}
 
 	public void delibererElementRattrapage(Integer consideration) {
 		double coefficient = 0;
-		note_element = 0d;
+		rattrapageNote = 0d;
+		etat = DeliberationType.RATTRAPAGE.name();
 		if (consideration == 1) {
 			for (Note noteElementA : notes) {
 				if (noteElementA.getType().equals(TypeNote.EXAM_ORDINAIRE))
 					continue;
-				note_element = note_element + noteElementA.getCoeficient() * noteElementA.getNote();
+				rattrapageNote = rattrapageNote + noteElementA.getCoeficient() * noteElementA.getNote();
 				coefficient = coefficient + noteElementA.getCoeficient();
 			}
-			note_element = note_element / coefficient;
+			rattrapageNote = rattrapageNote / coefficient;
 		} else {
 			for (Note noteElementA : notes) {
 				if (noteElementA.getType().equals(TypeNote.EXAM_RATTRAPAGE)) {
-					note_element = noteElementA.getNote();
+					rattrapageNote = noteElementA.getNote();
 					break;
 				}
 			}
-			note_element = note_element / coefficient;
 		}
-
+		note_element = max(ordinaireNote, rattrapageNote);
 	}
 
 	@Override

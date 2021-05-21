@@ -2,6 +2,7 @@ package com.ziad.deliberation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import com.ziad.models.Deliberation;
 import com.ziad.models.Element;
 import com.ziad.models.Etape;
 import com.ziad.models.Etudiant;
+import com.ziad.models.InscriptionPedagogique;
 import com.ziad.models.Modulee;
 import com.ziad.models.NoteElement;
 import com.ziad.models.NoteEtape;
@@ -25,7 +27,9 @@ import com.ziad.models.compositeid.ComposedNoteEtape;
 import com.ziad.models.compositeid.ComposedNoteModule;
 import com.ziad.models.compositeid.ComposedNoteSemestre;
 import com.ziad.repositories.DeliberationRepository;
+import com.ziad.repositories.ElementRepository;
 import com.ziad.repositories.InscriptionPedagogiqueRepository;
+import com.ziad.repositories.ModuleRepository;
 import com.ziad.repositories.NoteElementRepository;
 import com.ziad.repositories.NotesModuleRepository;
 import com.ziad.repositories.NotesSemestreRepository;
@@ -42,9 +46,11 @@ public class Algorithme {
 	private NoteElementRepository noteElementRepository;
 	@Autowired
 	private DeliberationRepository deliberationRepository;
+	@Autowired
+	private ElementRepository elementRepository;;
 
 	private DeliberationType typeDelib = DeliberationType.ORDINAIRE;
-	private Integer consideration = 1;// Consideration encas du rattrapage
+	private Integer consideration = 0;// Consideration encas du rattrapage
 
 	public void enableDeliberationRattrapage() {
 		typeDelib = DeliberationType.RATTRAPAGE;
@@ -64,61 +70,74 @@ public class Algorithme {
 			if (typeDelib.equals(DeliberationType.ORDINAIRE)) {
 				noteElement.delibererElementOrdinaire();
 			} else if (typeDelib.equals(DeliberationType.RATTRAPAGE)) {
-				if (!noteElement.isValid()) {
+				if (!noteElement.isValid())
 					noteElement.delibererElementRattrapage(consideration);
-				}
 			}
 		}
 	}
 
-	public void delibererModule(Modulee module, AnneeAcademique annee,TypeInscription type) {
-		if(type == null) {
-			type = TypeInscription.MODULE;
-		}
-		
-		List<Deliberation> delibs = null;
+	public void delibererModule(Modulee module, AnneeAcademique annee) {
 		/**
-		 * Etape1 -> Verifier si on a deja deliberer
-		 * 
+		 * Etape1 -> Verifier si on a deja deliberer Avant de deliberer on doit
+		 * récuperer quel etat de deliberation on est RATT OR ORDINARY
 		 **/
-		if (DeliberationType.ORDINAIRE.equals(typeDelib)) {
-			delibs = deliberationRepository.getDeliberationByModuleOrdinaire(module, annee);
+		List<Deliberation> delibs = null;
+		delibs = deliberationRepository.getDeliberationByModuleOrdinaire(module, annee);
+		Deliberation deliberation = null;
+
+		boolean deliberationpermis = false;
+		if (delibs.size() == 0) {
+			deliberationpermis = true;
+			deliberation = new Deliberation(typeDelib.name(), annee, module, null, null);
 		} else {
-			delibs = deliberationRepository.getDeliberationByModuleRattrapage(module, annee);
+			deliberation = delibs.get(0);
+			deliberationpermis = !deliberation.isDelibered() && typeDelib.equals(DeliberationType.RATTRAPAGE);// On a
+																												// pas
+																												// encore
+																												// deliberer
+																												// le
+																												// rattrapage
+			deliberation.setDelibered(deliberationpermis);
 		}
 
-		if (delibs.size() == 0) {
-			Deliberation deliberation = new Deliberation(typeDelib.name(), annee, module, null, null);
-			for (Element element : module.getElements()) {
+		if (deliberationpermis) {
+			for (Element element : elementRepository.getElementsByModule(module)) {
 				delibererElement(element, annee);
 			}
-			List<Etudiant> etudiants = inscriptionPedagogiqueRepository.getEtudiantParModule(module, annee,type);
-			for (Etudiant etudiant : etudiants) {
+			List<InscriptionPedagogique> listeInscriptionsPedagogique = inscriptionPedagogiqueRepository
+					.getInscriptionPedagogiqueParModule(module, annee);
+			for (InscriptionPedagogique inscription : listeInscriptionsPedagogique) {
 				Double coefficient = 0d;
 				Double noteDouble = 0d;
-				for (Element element : module.getElements()) {
-					NoteElement note = noteElementRepository
-							.getOne(new ComposedInscriptionPedagogique(etudiant, element));
-					System.out.println("Element object " + note);
-					System.out.println("Note element " + note.getNote_element());
-					System.out.println("Coefficient  " + element.getCoeficient());
+				for (Element element : elementRepository.getElementsByModule(module)) {
+					NoteElement note = noteElementRepository.getOne(inscription.getId_inscription_pedagogique());
+					System.out
+							.println("Note element " + element.getLibelle_element() + " est " + note.getNote_element());
 					noteDouble = noteDouble + note.getNote_element() * element.getCoeficient();
 					coefficient = coefficient + element.getCoeficient();
 				}
 				noteDouble = noteDouble / coefficient;
-				NoteModule noteParModule = new NoteModule(new ComposedNoteModule(module, etudiant), 2d,
-						deliberation);
-				noteParModule.delibererModule(typeDelib);
+				NoteModule noteParModule = null;
+				if (typeDelib.equals(DeliberationType.RATTRAPAGE)) {
+					noteParModule = notesModuleRepository
+							.getOne(new ComposedNoteModule(module, inscription.getEtudiant()));
+					noteParModule.setNote(noteDouble);
+				} else {
+					noteParModule = new NoteModule(new ComposedNoteModule(module, inscription.getEtudiant()),
+							noteDouble, deliberation);
+				}
 				deliberation.addNoteModule(noteParModule);
 			}
 			deliberationRepository.save(deliberation);
 		}
 	}
 
-	public HashMap<Modulee,HashMap<Etudiant,Double>> delibererSemestre(Semestre semestre, AnneeAcademique annee) {
+	public void delibererSemestre(Semestre semestre, AnneeAcademique annee) {
 		List<Deliberation> delibs = null;
 		/**
-		 * Etape1 -> Verifier si on a deja deliberer
+		 * Etape 1 => Verifier si tous les deliberations inclus de rattrapage sont
+		 * faites
+		 *
 		 * 
 		 **/
 		if (DeliberationType.ORDINAIRE.equals(typeDelib)) {
@@ -128,48 +147,51 @@ public class Algorithme {
 		}
 
 		if (delibs.size() == 0) {
-			Deliberation deliberation = new Deliberation(typeDelib.name(), annee, null, semestre, null);
-			for (Modulee module : semestre.getModules()) {
-				delibererModule(module, annee,TypeInscription.SEMESTRE);
-			}
+			try {
+				isDeliberationSemestreAllowed(semestre, annee);
+				Deliberation deliberation = new Deliberation(typeDelib.name(), annee, null, semestre, null);
+				List<InscriptionPedagogique> inscriptionsPedagogiques = inscriptionPedagogiqueRepository.getInscriptionPedagogiqueParSemestre(semestre, annee);
 
-			List<Etudiant> etudiants = inscriptionPedagogiqueRepository.getEtudiantParSemestre(semestre, annee);
-
-			for (Etudiant etudiant : etudiants) {
-				Double coefficient = 0d;
-				Double noteSemestre = 0d;
-				List<NoteModule> notess = new ArrayList<NoteModule>();
-				for (Modulee module : semestre.getModules()) {
-					NoteModule noteParModule = notesModuleRepository.getOne(new ComposedNoteModule(module, etudiant));
-					noteSemestre = noteSemestre + noteParModule.getNote() * module.getCoeficient();
-					coefficient = coefficient + module.getCoeficient();
-					notess.add(noteParModule);
+				for (InscriptionPedagogique inscription : inscriptionsPedagogiques) {
+					Double coefficient = 0d;
+					Double noteSemestre = 0d;
+					List<NoteModule> notess = new ArrayList<NoteModule>();
+					for (Modulee module : semestre.getModules()) {
+						NoteModule noteParModule = notesModuleRepository.getOne(new ComposedNoteModule(module, inscription.getEtudiant()));
+						noteSemestre = noteSemestre + noteParModule.getNote() * module.getCoeficient();
+						coefficient = coefficient + module.getCoeficient();
+						notess.add(noteParModule);
+					}
+					noteSemestre = noteSemestre / coefficient;
+					NoteSemestre noteSemestreO = new NoteSemestre(new ComposedNoteSemestre(semestre, inscription.getEtudiant()),
+							noteSemestre, deliberation);
+					noteSemestreO.delibererSemestre(notess);
+					deliberation.addNoteSemestre(noteSemestreO);
+					deliberationRepository.save(deliberation);
 				}
-				noteSemestre = noteSemestre / coefficient;
-				NoteSemestre noteSemestreO = new NoteSemestre(new ComposedNoteSemestre(semestre, etudiant),
-						noteSemestre, deliberation);
-				noteSemestreO.delibererSemestre(notess);
-				deliberation.addNoteSemestre(noteSemestreO);
-				//deliberationRepository.save(deliberation);
+				
+			} catch (DeliberationSemestreNotAllowed e) {
+				System.out.println("Can not deliberer");
 			}
-
 		}
-		HashMap<Modulee, HashMap<Etudiant, Double>> structures = new HashMap<Modulee, HashMap<Etudiant, Double>>();
+	}
+
+	private List<Deliberation> isDeliberationSemestreAllowed(Semestre semestre, AnneeAcademique annee)
+			throws DeliberationSemestreNotAllowed {
+		List<Deliberation> listesDeliberation = new ArrayList<Deliberation>();
 		for (Modulee module : semestre.getModules()) {
-			List<NoteModule> notes = null;
-			if (typeDelib.equals(DeliberationType.ORDINAIRE)) {
-				notes = notesModuleRepository.listerNotesModuleByAnneeOrdinaire(module, annee);
+			List<Deliberation> delibs = deliberationRepository.getDeliberationByModuleOrdinaire(module, annee);
+			if (delibs.size() == 0) {
+				throw new DeliberationSemestreNotAllowed(module, "Le module suivant n'est pas déliberer");
 			} else {
-				notes = notesModuleRepository.listerNotesModuleByAnneeRattrapage(module, annee);
+				Deliberation del = delibs.get(0);
+				if (del.isDelibered())
+					listesDeliberation.add(del);
+				else
+					throw new DeliberationSemestreNotAllowed(module, "Le module suivant n'est pas déliberer en rattrapage");
 			}
-			HashMap<Etudiant, Double> EtudiantNotes = new HashMap<Etudiant, Double>();
-			for (NoteModule note : notes) {
-				EtudiantNotes.put(note.getIdComposed().getEtudiant(), note.getNote());
-			}
-			structures.put(module, EtudiantNotes);
 		}
-		return structures;
-
+		return listesDeliberation;
 	}
 
 	public void delibererEtape(Etape etape, AnneeAcademique annee) {
@@ -190,7 +212,7 @@ public class Algorithme {
 			List<Etudiant> etudiants = new ArrayList<Etudiant>();
 			for (Semestre semestre : etape.getSemestres()) {
 				delibererSemestre(semestre, annee);
-				etudiants.addAll(inscriptionPedagogiqueRepository.getEtudiantParSemestre(semestre, annee));
+				etudiants.addAll(null);
 			}
 
 			for (Etudiant etudiant : etudiants) {

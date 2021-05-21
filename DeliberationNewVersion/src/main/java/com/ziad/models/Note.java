@@ -32,7 +32,11 @@ public class Note {
 
 	@ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.DETACH })
 	private NoteElement noteelement;
-
+	
+	public Note() {
+		
+	}
+	
 	public Note(Double note, Double coeficient, TypeNote type, NoteElement noteelement) {
 		super();
 		this.note = note;

@@ -25,6 +25,8 @@ public class NoteController {
 	private NoteInterface note_metier;
 
 	private final static String ATTRIBUT_TYPES = "types";
+	
+	private final static String REDIRECT_TO_NOTE = "redirect:/professeur/note/ajouter";
 
 	@GetMapping("/ajouter")
 	public ModelAndView createPageNote() {
@@ -37,7 +39,7 @@ public class NoteController {
 	public ModelAndView uploadNote(@RequestParam("file") MultipartFile file, @RequestParam("type") String type_exam,
 			@RequestParam("coeficient") Double coefficient)
 			throws DataNotFoundExceptions, EntityNotFoundException, IOException, CSVReaderOException {
-		ModelAndView model = new ModelAndView("espace_professeur/ajouterNote");
+		ModelAndView model = new ModelAndView(REDIRECT_TO_NOTE);
 		note_metier.readExcel(file, type_exam,coefficient);
 		return model;
 	}

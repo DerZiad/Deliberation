@@ -56,19 +56,17 @@ public class NoteService implements NoteInterface {
 				String prenom = row.getCell(2).getStringCellValue();
 				Double note = row.getCell(3).getNumericCellValue();
 				List<Etudiant> etudiant = etudiantRepository.listerEtudiantParMassarNomPrenom(massar, nom, prenom);
-				System.out.println(etudiant.size());
 				if (etudiant.size() != 1)
 					throw new DataNotFoundExceptions();
 				TypeNote note_type = null;
 				for (TypeNote type_object : TypeNote.values()) {
-					if (type_object.name() == type)
+					if (type_object.name().equals(type))
 						note_type = type_object;
 				}
 				NoteElement noteElement = noteElementRepository.getOne(new ComposedInscriptionPedagogique(etudiant.get(0),element));
 				Note noteS = new Note(note, coefficient, note_type, noteElement);
 				noteElement.addNote(noteS);				
 				noteElementRepository.save(noteElement);
-				noteRepository.save(noteS);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

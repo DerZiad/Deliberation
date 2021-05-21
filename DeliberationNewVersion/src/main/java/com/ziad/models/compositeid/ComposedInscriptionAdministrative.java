@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
+import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 
 import com.ziad.models.Etudiant;
@@ -18,10 +19,10 @@ public class ComposedInscriptionAdministrative implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	private Etudiant etudiant;
 
-	@OneToOne(cascade = CascadeType.DETACH)
+	@OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.DETACH)
 	private Filiere filiere;
 
 	public ComposedInscriptionAdministrative() {

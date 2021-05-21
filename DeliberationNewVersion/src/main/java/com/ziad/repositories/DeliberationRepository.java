@@ -14,11 +14,8 @@ import com.ziad.models.Modulee;
 import com.ziad.models.Semestre;
 @Repository
 public interface DeliberationRepository extends JpaRepository<Deliberation, Long> {
-	@Query("select d from Deliberation d where d.module =:module and typeDeliberation='ORDINAIRE' and anneeAcademique =:annee")
+	@Query("select d from Deliberation d where d.module =:module and anneeAcademique =:annee")
 	List<Deliberation> getDeliberationByModuleOrdinaire(@Param("module") Modulee module,@Param("annee") AnneeAcademique annee);
-	
-	@Query("select d from Deliberation d where d.module =:module and typeDeliberation='RATTRAPAGE' and anneeAcademique =:annee")
-	List<Deliberation> getDeliberationByModuleRattrapage(@Param("module") Modulee module,@Param("annee") AnneeAcademique annee);
 	
 	
 	@Query("select d from Deliberation d where d.semestre =:semestre and typeDeliberation='ORDINAIRE' and anneeAcademique =:annee")

@@ -19,4 +19,6 @@ public interface ModuleRepository extends JpaRepository<Modulee, Long>{
 	@Query("select m from Module m, Semestre s where m.semestre = s.id_semestre and s.filiere = :filiere")
 	List<Module> getModulesByFiliere(@Param("filiere") Filiere filiere);
 	*/
+	
+	
 }

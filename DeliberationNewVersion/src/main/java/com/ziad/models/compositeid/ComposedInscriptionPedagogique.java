@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
+import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 
 import com.ziad.models.Element;
@@ -16,9 +17,9 @@ public class ComposedInscriptionPedagogique implements Serializable {
 	 * Class identity key
 	 */
 	private static final long serialVersionUID = 1L;
-	@OneToOne(targetEntity = Etudiant.class,cascade = CascadeType.PERSIST)
+	@OneToOne(fetch = FetchType.EAGER,targetEntity = Etudiant.class,cascade = CascadeType.PERSIST)
 	private Etudiant etudiant;
-	@OneToOne(targetEntity = Element.class,cascade = CascadeType.PERSIST)
+	@OneToOne(fetch = FetchType.EAGER,targetEntity = Element.class,cascade = CascadeType.PERSIST)
 	private Element element;
 	
 	public ComposedInscriptionPedagogique() {

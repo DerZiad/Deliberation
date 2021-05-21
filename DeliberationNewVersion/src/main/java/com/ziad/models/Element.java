@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,10 +40,10 @@ public class Element implements Serializable{
 	/**
 	 * Relations
 	 * */
-	@ManyToOne(targetEntity = Modulee.class, cascade = {CascadeType.PERSIST,CascadeType.DETACH})
+	@ManyToOne(fetch = FetchType.EAGER,targetEntity = Modulee.class, cascade = {CascadeType.PERSIST,CascadeType.DETACH})
 	private Modulee module;
 
-	@ManyToMany(targetEntity = Professeur.class, cascade = {CascadeType.PERSIST,CascadeType.DETACH})
+	@ManyToMany(fetch = FetchType.EAGER,targetEntity = Professeur.class, cascade = {CascadeType.PERSIST,CascadeType.DETACH})
 	private List<Professeur> professeurs = new ArrayList<Professeur>();
 
 	public Element() {

@@ -57,5 +57,14 @@ public class DeliberationController {
 		deliberationMetier.deliberer(idFiliere, idAnneeAcademique, type, id_element, typeDeliberation, consideration);
 		return model;
 	}
+	
+	/**
+	 * Resultat deliberation par module
+	 * **/
 
+	public ModelAndView listerDeliberationParModule() {
+		ModelAndView model = new ModelAndView();
+		
+		return model;
+	}
 }

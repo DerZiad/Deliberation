@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
+import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 
 import com.ziad.models.Etudiant;
@@ -12,9 +13,9 @@ import com.ziad.models.Semestre;
 @Embeddable
 public class ComposedNoteSemestre implements Serializable{
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	private Semestre semestre;
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	private Etudiant etudiant;
 	
 	public ComposedNoteSemestre() {

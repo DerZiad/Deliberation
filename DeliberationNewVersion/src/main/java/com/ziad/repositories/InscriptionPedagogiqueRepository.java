@@ -32,10 +32,10 @@ public interface InscriptionPedagogiqueRepository
 	@Query("select s from InscriptionPedagogique s where s.id_inscription_pedagogique.element=:x and s.annee_academique =:a")
 	List<InscriptionPedagogique> getInscriptionPedagogiquesByElementAndAnneeAcademique(@Param("x") Element element,@Param("a")AnneeAcademique annee);
 
-	@Query("select e from Etudiant e,InscriptionPedagogique s where s.annee_academique =:annee and s.id_inscription_pedagogique.element.module =:module and s.type_inscription =:type")
-	List<Etudiant> getEtudiantParModule(@Param("module") Modulee module,@Param("annee")AnneeAcademique annee,@Param("type")TypeInscription type);
+	@Query("select s from InscriptionPedagogique s where s.annee_academique =:annee and s.id_inscription_pedagogique.element.module =:module")
+	List<InscriptionPedagogique> getInscriptionPedagogiqueParModule(@Param("module") Modulee module,@Param("annee")AnneeAcademique annee);
 	
-	@Query("select e from Etudiant e,InscriptionPedagogique s where s.annee_academique =:annee and s.id_inscription_pedagogique.element.module.semestre =:semestre and s.type_inscription = 'SEMESTRE'")
-	List<Etudiant> getEtudiantParSemestre(@Param("semestre") Semestre semestre,@Param("annee")AnneeAcademique annee);
+	@Query("select s from InscriptionPedagogique s where s.annee_academique =:annee and s.id_inscription_pedagogique.element.module.semestre =:semestre")
+	List<InscriptionPedagogique> getInscriptionPedagogiqueParSemestre(@Param("semestre") Semestre semestre,@Param("annee")AnneeAcademique annee);
 	
 }

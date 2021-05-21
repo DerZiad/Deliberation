@@ -128,8 +128,7 @@
 								class="metismenu-icon pe-7s-graph3"></i> Deliberation
 						</a></li>
 						<li><a href="/admin/delib/choixList" class="${importdelib}">
-								<i class="metismenu-icon pe-7s-graph3"></i> Resultat
-								Deliberation
+								<i class="metismenu-icon pe-7s-graph3"></i> Listes des deliberations
 						</a></li>
 
 					</ul></li>
