@@ -123,11 +123,19 @@
 						class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
 				</a>
 					<ul class="mm-collapse" style="height: 7.04px;">
-						<li><a href="/delib"
+						<li><a href="/delib/deliberationmodule"
 							class="${importdelib}"> <i
-								class="metismenu-icon pe-7s-graph3"></i> Deliberation
+								class="metismenu-icon pe-7s-graph3"></i> Deliberation de module
 						</a></li>
-						<li><a href="/admin/delib/choixList" class="${importdelib}">
+						<li><a href="/delib/deliberationsemestre"
+							class="${importdelib}"> <i
+								class="metismenu-icon pe-7s-graph3"></i> Deliberation de semestre
+						</a></li>
+						<li><a href="/delib/deliberationetape"
+							class="${importdelib}"> <i
+								class="metismenu-icon pe-7s-graph3"></i> Deliberation de etape
+						</a></li>
+						<li><a href="/delib/listerDelib" class="${importdelib}">
 								<i class="metismenu-icon pe-7s-graph3"></i> Listes des deliberations
 						</a></li>
 

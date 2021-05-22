@@ -19,6 +19,7 @@ import com.lowagie.text.DocumentException;
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Deliberation;
+import com.ziad.models.Etape;
 import com.ziad.models.Filiere;
 import com.ziad.models.Semestre;
 import com.ziad.utilities.JSONConverter;
@@ -27,21 +28,29 @@ import com.ziad.utilities.JSONConverter;
 @RequestMapping("/delib")
 public class DeliberationController {
 
-	private final static String PAGE_DELIBERATION = "admin/Ele";
+	private final static String PAGE_DELIBERATION_PAR_MODULE = "admin/Ele";
+	private final static String PAGE_DELIBERATION_PAR_SEMESTRE = "admin/DeliberationSemestre";
+	private final static String PAGE_DELIBERATION_PAR_ETAPE = "admin/DeliberationEtape";
 
+	
+	
 	private final static String ATTRIBUT_FILIERES = "filieres";
 	private final static String ATTRIBUT_ANNEES_ACADEMIQUES = "annees";
 	private final static String ATTRIBUT_SEMESTRES = "semestres";
+	private final static String ATTRIBUT_ETAPES = "etapes";
+	
 	private final static String ATTRIBUT_MODULES_JSON = "modulesjson";
 	private final static String ATTRIBUT_ETAPES_JSON = "etapesjson";
 	private final static String ATTRIBUT_SEMESTRES_JSON = "semestresjson";
-
+	
+	private final static String ATTRIBUT_DELIBERATIONS = "deliberations";
 	private final static String ATTRIBUT_DELIBERATION = "deliberation";
 	private final static String ATTRIBUT_NOTES_MODULE = "notejson";
 
 	private final static String PATH_DELIBERATION_LIST = "admin/ResultatModule";
-
-	private final static String REDIRECT_DELIBERATION_LIST_MODULE = "/delib/listerDelib?id=%d";
+	private final static String PATH_DELIBERATIONS_LIST = "admin/listesDeliberation";
+	
+	private final static String REDIRECT_DELIBERATION_LIST_MODULE = "redirect:/delib/listerDelib?id=%d";
 
 	@Autowired
 	private DeliberationInterface deliberationMetier;
@@ -50,19 +59,42 @@ public class DeliberationController {
 	private JSONConverter converter;
 
 	@SuppressWarnings("unchecked")
-	@GetMapping("")
-	public ModelAndView generatePageDelib() throws EntityNotFoundException, DataNotFoundExceptions {
-		ModelAndView model = new ModelAndView(PAGE_DELIBERATION);
-
-		List<Object> besoins = deliberationMetier.getPageBesoin();
+	@GetMapping("/deliberationmodule")
+	public ModelAndView getPageParModule() throws EntityNotFoundException, DataNotFoundExceptions {
+		ModelAndView model = new ModelAndView(PAGE_DELIBERATION_PAR_MODULE);
+		List<Object> besoins = deliberationMetier.getBesoinPageDeliberationParModule();
 		model.addObject(ATTRIBUT_FILIERES, (List<Filiere>) besoins.get(0));
 		model.addObject(ATTRIBUT_ANNEES_ACADEMIQUES, (List<AnneeAcademique>) besoins.get(1));
 		model.addObject(ATTRIBUT_SEMESTRES, (List<Semestre>) besoins.get(2));
 		model.addObject(ATTRIBUT_MODULES_JSON, (String) besoins.get(3));
 		model.addObject(ATTRIBUT_SEMESTRES_JSON, (String) besoins.get(4));
-		model.addObject(ATTRIBUT_ETAPES_JSON, (String) besoins.get(5));
 		return model;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@GetMapping("/deliberationsemestre")
+	public ModelAndView getPageParSemestre() throws EntityNotFoundException, DataNotFoundExceptions {
+		ModelAndView model = new ModelAndView(PAGE_DELIBERATION_PAR_SEMESTRE);
+		List<Object> besoins = deliberationMetier.getBesoinPageDeliberationParSemestre();
+		model.addObject(ATTRIBUT_FILIERES, (List<Filiere>) besoins.get(0));
+		model.addObject(ATTRIBUT_ANNEES_ACADEMIQUES, (List<AnneeAcademique>) besoins.get(1));
+		model.addObject(ATTRIBUT_SEMESTRES, (List<Semestre>) besoins.get(2));
+		model.addObject(ATTRIBUT_SEMESTRES_JSON, (String) besoins.get(3));
+		return model;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@GetMapping("/deliberationetape")
+	public ModelAndView getPageParEtape() throws EntityNotFoundException, DataNotFoundExceptions {
+		ModelAndView model = new ModelAndView(PAGE_DELIBERATION_PAR_ETAPE);
+		List<Object> besoins = deliberationMetier.getBesoinPageDeliberationParEtape();
+		model.addObject(ATTRIBUT_FILIERES, (List<Filiere>) besoins.get(0));
+		model.addObject(ATTRIBUT_ANNEES_ACADEMIQUES, (List<AnneeAcademique>) besoins.get(1));
+		model.addObject(ATTRIBUT_ETAPES, (List<Etape>) besoins.get(2));
+		model.addObject(ATTRIBUT_ETAPES_JSON, (String) besoins.get(3));
+		return model;
+	}
+	
 
 	@PostMapping("")
 	public ModelAndView deliberer(@RequestParam("filiere") Long idFiliere,
@@ -70,8 +102,8 @@ public class DeliberationController {
 			@RequestParam("element") Long id_element, @RequestParam("typedeliberation") String typeDeliberation,
 			@RequestParam(name = "consideration", required = false) Integer consideration)
 			throws EntityNotFoundException, DataNotFoundExceptions {
-		ModelAndView model = new ModelAndView();
-		deliberationMetier.deliberer(idFiliere, idAnneeAcademique, type, id_element, typeDeliberation, consideration);
+		Deliberation deliberation = deliberationMetier.deliberer(idFiliere, idAnneeAcademique, type, id_element, typeDeliberation, consideration);
+		ModelAndView model = new ModelAndView(String.format(REDIRECT_DELIBERATION_LIST_MODULE, deliberation.getIdDeliberation()));
 		return model;
 	}
 
@@ -79,10 +111,11 @@ public class DeliberationController {
 	 * Resultat deliberation par module
 	 **/
 	@GetMapping("/listerDelib")
-	public ModelAndView listerDeliberationParModule(@RequestParam(name = "id", required = false) Long idDelib) {
+	public ModelAndView listerDeliberationParModule(@RequestParam(name = "id", required = false) Long idDelib) throws DataNotFoundExceptions {
 		ModelAndView model = null;
 		if (idDelib == null) {
-			model = new ModelAndView();
+			model = new ModelAndView(PATH_DELIBERATIONS_LIST);
+			model.addObject(ATTRIBUT_DELIBERATIONS,deliberationMetier.listerDeliberation());
 		} else {
 			model = new ModelAndView(PATH_DELIBERATION_LIST);
 			Deliberation delib = deliberationMetier.piocherDeliberation(idDelib);
@@ -100,4 +133,5 @@ public class DeliberationController {
 		ModelAndView model = new ModelAndView(String.format(REDIRECT_DELIBERATION_LIST_MODULE, idDeliberation));
 		return model;
 	}
+
 }

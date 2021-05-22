@@ -76,7 +76,7 @@ public class Algorithme {
 		}
 	}
 
-	public void delibererModule(Modulee module, AnneeAcademique annee) {
+	public Deliberation delibererModule(Modulee module, AnneeAcademique annee) {
 		/**
 		 * Etape1 -> Verifier si on a deja deliberer Avant de deliberer on doit
 		 * récuperer quel etat de deliberation on est RATT OR ORDINARY
@@ -131,9 +131,10 @@ public class Algorithme {
 			}
 			deliberationRepository.save(deliberation);
 		}
+		return deliberation;
 	}
 
-	public void delibererSemestre(Semestre semestre, AnneeAcademique annee) {
+	public Deliberation delibererSemestre(Semestre semestre, AnneeAcademique annee) {
 		List<Deliberation> delibs = null;
 		/**
 		 * Etape 1 => Verifier si tous les deliberations inclus de rattrapage sont
@@ -148,9 +149,10 @@ public class Algorithme {
 		}
 
 		if (delibs.size() == 0) {
+			Deliberation deliberation = null;
 			try {
 				isDeliberationSemestreAllowed(semestre, annee);
-				Deliberation deliberation = new Deliberation(typeDelib.name(), annee, null, semestre, null);
+				deliberation = new Deliberation(typeDelib.name(), annee, null, semestre, null);
 				List<InscriptionPedagogique> inscriptionsPedagogiques = inscriptionPedagogiqueRepository.getInscriptionPedagogiqueParSemestre(semestre, annee);
 
 				for (InscriptionPedagogique inscription : inscriptionsPedagogiques) {
@@ -174,7 +176,9 @@ public class Algorithme {
 			} catch (DeliberationSemestreNotAllowed e) {
 				System.out.println("Can not deliberer");
 			}
+			return deliberation;
 		}
+		return delibs.get(0);
 	}
 
 	private List<Deliberation> isDeliberationSemestreAllowed(Semestre semestre, AnneeAcademique annee)
@@ -195,7 +199,7 @@ public class Algorithme {
 		return listesDeliberation;
 	}
 
-	public void delibererEtape(Etape etape, AnneeAcademique annee) {
+	public Deliberation delibererEtape(Etape etape, AnneeAcademique annee) {
 		List<Deliberation> delibs = null;
 		/**
 		 * Etape1 -> Verifier si on a deja deliberer
@@ -230,6 +234,7 @@ public class Algorithme {
 				deliberationRepository.save(deliberation);
 			}
 		}
+		return null;
 
 	}
 

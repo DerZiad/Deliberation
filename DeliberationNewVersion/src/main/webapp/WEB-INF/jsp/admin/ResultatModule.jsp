@@ -10,18 +10,29 @@
 		<div class="main-card mb-3 card">
 			<div class="card-body">
 				<h5 class="card-title">Filter</h5>
-				<form class="form-group"
-					action="/delib/generatePvModule"
+				<form class="form-group" action="/delib/generatePvModule"
 					method="GET">
-					<input type="hidden" name="type" value="MODULE"/>
-					<input type="hidden" name="idDeliberation" value="${deliberation.idDeliberation}"/>
+					<input type="hidden" name="type" value="MODULE" /> <input
+						type="hidden" name="idDeliberation"
+						value="${deliberation.idDeliberation}" />
+					<div class="col-md-6">
+						<div class="row">
+							<div class="col-md-3">
+								<div class="position-relative form-group">
+									<label for="name" class="">Rattrapage</label>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="position-relative form-group">
+									<input name="ratt" id="exampleSelect" class="form-check-input"
+										type="checkbox" value="1" />
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="col-md-6">
 						<div class="position-relative form-group">
-							<label for="name" class="">Rattrapage</label> <input name="ratt"
-								id="exampleSelect" class="form-control" type="checkbox" value="1" />
-						</div>
-						<div class="position-relative form-group">
-							<button class="btn btn-success">Download excel</button>
+							<button class="btn btn-success">Download Pdf</button>
 						</div>
 					</div>
 

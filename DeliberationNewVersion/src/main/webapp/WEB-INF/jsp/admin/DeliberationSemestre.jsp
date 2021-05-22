@@ -10,7 +10,7 @@
 
 		<div class="main-card mb-3 card">
 			<div class="card-body">
-				<h5 class="card-title">Déliberation par module</h5>
+				<h5 class="card-title">Déliberation par semstre</h5>
 				<form class="" action="/delib/" method="POST">
 					<div class="form-row">
 						<div class="col-md-6">
@@ -43,6 +43,7 @@
 								</select>
 							</div>
 						</div>
+
 						<button class="mt-2 btn btn-primary col-md-12" type="submit">Valider</button>
 					</div>
 				</form>
@@ -54,48 +55,16 @@ var semestres = JSON.parse('${semestresjson}');
 
 jQuery(document).ready(function(){
 	$('select[name=filiere]').change(function(){
-		filiterSemestre();
-	});
-
-	$('select[name=semestre]').change(function(){
-		filterModule();
-	});
-	
-	$('input[id=ordinaire]').click(function(){
-				$('div[id=noterattrapage]').hide();
-	});
-			
-	$('input[id=rattrapage]').click(function(){
-			$('div[id=noterattrapage]').show();
-	});
-	
-	filterModule();
+		var filiere = $('select[name=filiere]').val();
+		var chsemestre = "";
+		for(let i = 0;i<semestres.length;i++){
+			if(semestres[i].id_filiere == filiere){
+				chsemestre = chsemestre + '<option value="' + semestres[i].id_semestre +'">' + semestres[i].libelle_semestre + '</option>';
+			}
+		}
+		$('select[name=semestre]').html(chsemestre);
+	});	
 });
-function filterModule(){
-	var semestre = $('select[name=semestre]').val();
-
-	var chmodule = "";
-	for(let i = 0;i<modules.length;i++){
-		if(modules[i].id_semestre == semestre){
-			chmodule = chmodule + '<option value="' + modules[i].id_module + '">' + modules[i].libelle_module + '</option>';
-		}
-	}
-	$('select[name=module]').html(chmodule);
-}
-
-function filiterSemestre(){
-	var filiere = $('select[name=filiere]').val();
-
-	var chsemestre = "";
-	for(let i = 0;i<semestres.length;i++){
-		if(semestres[i].id_filiere == filiere){
-			chsemestre = chsemestre + '<option value="' + semestres[i].id_semestre +'">' + semestres[i].libelle_semestre + '</option>';
-		}
-	}
-	$('select[name=semestre]').html(chsemestre);
-}
-
-
-		</script>
+	</script>
 	</layout:put>
 </layout:extends>

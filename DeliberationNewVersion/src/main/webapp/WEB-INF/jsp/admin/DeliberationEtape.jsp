@@ -10,7 +10,7 @@
 
 		<div class="main-card mb-3 card">
 			<div class="card-body">
-				<h5 class="card-title">Déliberation par module</h5>
+				<h5 class="card-title">Déliberation par semstre</h5>
 				<form class="" action="/delib/" method="POST">
 					<div class="form-row">
 						<div class="col-md-6">
@@ -36,13 +36,14 @@
 						<div class="col-md-6">
 							<div class="position-relative form-group">
 								<label for="element-class" class="element-class">Semestre</label>
-								<select name=semestre id="exampleSelect" class="form-control">
-									<c:forEach items="${semestres }" var="semestre"> 
-										<option value="${semestre.id_semestre }">${semestre.libelle_semestre }</option>
+								<select name=etape id="exampleSelect" class="form-control">
+									<c:forEach items="${etapes }" var="etape"> 
+										<option value="${etape.id_etape }">${etape.libelle_etape }</option>
 									</c:forEach>
 								</select>
 							</div>
 						</div>
+
 						<button class="mt-2 btn btn-primary col-md-12" type="submit">Valider</button>
 					</div>
 				</form>
@@ -50,52 +51,20 @@
 		</div>
 		<script>
 var modules = JSON.parse('${modulesjson}');
-var semestres = JSON.parse('${semestresjson}');
+var etapes = JSON.parse('${etapesjson}');
 
 jQuery(document).ready(function(){
 	$('select[name=filiere]').change(function(){
-		filiterSemestre();
-	});
-
-	$('select[name=semestre]').change(function(){
-		filterModule();
-	});
-	
-	$('input[id=ordinaire]').click(function(){
-				$('div[id=noterattrapage]').hide();
-	});
-			
-	$('input[id=rattrapage]').click(function(){
-			$('div[id=noterattrapage]').show();
-	});
-	
-	filterModule();
+		var filiere = $('select[name=filiere]').val();
+		var chetape = "";
+		for(let i = 0;i<etapes.length;i++){
+			if(semestres[i].id_filiere == filiere){
+				chetape = chetape + '<option value="' + etapes[i].id_etape +'">' + etapes[i].libelle_etape + '</option>';
+			}
+		}
+		$('select[name=etape]').html(chetape);
+	});	
 });
-function filterModule(){
-	var semestre = $('select[name=semestre]').val();
-
-	var chmodule = "";
-	for(let i = 0;i<modules.length;i++){
-		if(modules[i].id_semestre == semestre){
-			chmodule = chmodule + '<option value="' + modules[i].id_module + '">' + modules[i].libelle_module + '</option>';
-		}
-	}
-	$('select[name=module]').html(chmodule);
-}
-
-function filiterSemestre(){
-	var filiere = $('select[name=filiere]').val();
-
-	var chsemestre = "";
-	for(let i = 0;i<semestres.length;i++){
-		if(semestres[i].id_filiere == filiere){
-			chsemestre = chsemestre + '<option value="' + semestres[i].id_semestre +'">' + semestres[i].libelle_semestre + '</option>';
-		}
-	}
-	$('select[name=semestre]').html(chsemestre);
-}
-
-
-		</script>
+	</script>
 	</layout:put>
 </layout:extends>

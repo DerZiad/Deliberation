@@ -49,10 +49,10 @@ public class DeliberationService implements DeliberationInterface {
 
 	@Autowired
 	private AnnneAcademiqueRepository anneeAcademiqueRepository;
-	
+
 	@Autowired
 	private DeliberationRepository deliberationRepository;
-	
+
 	@Autowired
 	private Algorithme algorithme;
 
@@ -67,7 +67,7 @@ public class DeliberationService implements DeliberationInterface {
 	private static final String TYPE_DELIBERATION_RATTRAPAGE = "rattrapage";
 
 	@Override
-	public ArrayList<Object> getPageBesoin() throws DataNotFoundExceptions, EntityNotFoundException {
+	public ArrayList<Object> getBesoinPageDeliberationParModule() throws DataNotFoundExceptions, EntityNotFoundException {
 		List<Filiere> filieres = filiereRepository.findAll();
 		List<AnneeAcademique> anneesAcademiques = anneeAcademiqueRepository.findAll();
 		List<Semestre> semestres = semestreRepository.findAll();
@@ -78,32 +78,34 @@ public class DeliberationService implements DeliberationInterface {
 		besoins.add(semestres);
 		besoins.add(converter.convertModulee(moduleRepository.findAll()));
 		besoins.add(converter.convertSemestre(semestreRepository.findAll()));
-		besoins.add(converter.convertEtape(etapeRepository.findAll()));
 		return besoins;
 	}
 
 	@Override
-	public void deliberer(Long idFiliere, Long idAnneeAcademique, String type, Long id_element, String typeDeliberation,
-			Integer consideration) throws DataNotFoundExceptions, EntityNotFoundException {
+	public Deliberation deliberer(Long idFiliere, Long idAnneeAcademique, String type, Long id_element,
+			String typeDeliberation, Integer consideration) throws DataNotFoundExceptions, EntityNotFoundException {
 		AnneeAcademique annee = anneeAcademiqueRepository.getOne(idAnneeAcademique);
 
 		if (typeDeliberation.equals(TYPE_DELIBERATION_ORDINAIRE)) {
 			algorithme.enableDeliberationOrdinaire();
 		} else if (typeDeliberation.equals(TYPE_DELIBERATION_RATTRAPAGE)) {
-			if(consideration != null)
+			if (consideration != null)
 				algorithme.enableConsideration(true);
 			algorithme.enableDeliberationRattrapage();
 		}
+		Deliberation delib = null;
+
 		if (type.equals(TYPE_DELIBERATION_ETAPE)) {
 			Etape etape = etapeRepository.getOne(id_element);
-			algorithme.delibererEtape(etape, annee);
+			delib = algorithme.delibererEtape(etape, annee);
 		} else if (type.equals(TYPE_DELIBERATION_MODULE)) {
 			Modulee module = moduleRepository.getOne(id_element);
-			algorithme.delibererModule(module, annee);
+			delib = algorithme.delibererModule(module, annee);
 		} else if (type.equals(TYPE_DELIBERATION_SEMESTRE)) {
 			Semestre semestre = semestreRepository.getOne(id_element);
-			algorithme.delibererSemestre(semestre, annee);
+			delib = algorithme.delibererSemestre(semestre, annee);
 		}
+		return delib;
 	}
 
 	@Override
@@ -115,16 +117,53 @@ public class DeliberationService implements DeliberationInterface {
 	public void generateExcel(HttpServletResponse response, String type, Long idDeliberation, Integer rattrapage)
 			throws EntityNotFoundException, DocumentException, IOException {
 		Deliberation deliberation = deliberationRepository.getOne(idDeliberation);
-		if(type.equals(DeliberationType.MODULE.name())) {
+		if (type.equals(DeliberationType.MODULE.name())) {
 			List<NoteModule> notes = deliberation.getNotesModule();
-			if(rattrapage != null) {
-				notes = notes.stream().filter(n -> n.getEtat().equals(DeliberationType.RATTRAPAGE.name())).collect(Collectors.toList());
+			if (rattrapage != null) {
+				notes = notes.stream().filter(n -> n.getEtat().equals(DeliberationType.RATTRAPAGE.name()))
+						.collect(Collectors.toList());
 			}
 			PDFExport pdf = new PDFExport(response, "notesModule");
 			pdf.generatePvModule(notes, deliberation.getModule());
 			pdf.closeDocument();
 		}
-		
+
+	}
+
+	@Override
+	public List<Deliberation> listerDeliberation() throws DataNotFoundExceptions {
+		List<Deliberation> listes = deliberationRepository.findAll();
+		if (listes.size() == 0)
+			throw new DataNotFoundExceptions();
+		return listes;
+	}
+
+	@Override
+	public ArrayList<Object> getBesoinPageDeliberationParSemestre()
+			throws DataNotFoundExceptions, EntityNotFoundException {
+		List<Filiere> filieres = filiereRepository.findAll();
+		List<AnneeAcademique> anneesAcademiques = anneeAcademiqueRepository.findAll();
+		List<Semestre> semestres = semestreRepository.findAll();
+		ArrayList<Object> besoins = new ArrayList<Object>();
+		besoins.add(filieres);
+		besoins.add(anneesAcademiques);
+		besoins.add(semestres);
+		besoins.add(converter.convertSemestre(semestreRepository.findAll()));
+		return besoins;
+	}
+
+	@Override
+	public ArrayList<Object> getBesoinPageDeliberationParEtape()
+			throws DataNotFoundExceptions, EntityNotFoundException {
+		List<Filiere> filieres = filiereRepository.findAll();
+		List<AnneeAcademique> anneesAcademiques = anneeAcademiqueRepository.findAll();
+		List<Etape> etapes = etapeRepository.findAll();
+		ArrayList<Object> besoins = new ArrayList<Object>();
+		besoins.add(filieres);
+		besoins.add(anneesAcademiques);
+		besoins.add(etapes);
+		besoins.add(converter.convertEtape(etapeRepository.findAll()));
+		return besoins;
 	}
 
 }
