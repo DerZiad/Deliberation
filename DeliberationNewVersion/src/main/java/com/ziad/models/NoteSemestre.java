@@ -1,5 +1,6 @@
 package com.ziad.models;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -8,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.ziad.enums.Etat;
 import com.ziad.models.compositeid.ComposedNoteSemestre;
 
 @Entity
@@ -16,12 +18,11 @@ public class NoteSemestre {
 	@EmbeddedId
 	private ComposedNoteSemestre idCompose;
 
-	private Double note=0d;
+	private Double note = 0d;
 	private boolean isValid = false;
 
 	private String etat = "";// Compensation ou elimine
-	
-	
+
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
 	private Deliberation deliberation;
 
@@ -83,12 +84,20 @@ public class NoteSemestre {
 
 	public void delibererSemestre(List<NoteModule> notesModule) {
 		boolean moduleValides = true;
-		for(NoteModule note:notesModule) {
+		for (NoteModule note : notesModule) {
 			moduleValides = moduleValides && note.isValid();
 		}
-		
-		if(note >= idCompose.getSemestre().getValidation()){
+
+		if (note >= idCompose.getSemestre().getValidation()) {
 			isValid = true && moduleValides;
+			etat = isValid ? Etat.VALIDE.name() : Etat.ELIMINIE.name();
 		}
+		boolean validByCompensation = true;
+		for (NoteModule noteModule : notesModule) {
+			validByCompensation = validByCompensation
+					&& noteModule.getNote() > noteModule.getIdComposed().getModule().getEliminatoire()
+					&& noteModule.getNote() <= noteModule.getIdComposed().getModule().getValidation();
+		}
+		etat = validByCompensation ? Etat.COMPONSE.name() : Etat.VALIDE.name();
 	}
 }

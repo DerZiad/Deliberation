@@ -27,6 +27,7 @@ import com.ziad.repositories.DeliberationRepository;
 import com.ziad.repositories.EtapeRepository;
 import com.ziad.repositories.FiliereRepository;
 import com.ziad.repositories.ModuleRepository;
+import com.ziad.repositories.NotesModuleRepository;
 import com.ziad.repositories.SemestreRepository;
 import com.ziad.utilities.JSONConverter;
 import com.ziad.utilities.PDFExport;
@@ -57,6 +58,9 @@ public class DeliberationService implements DeliberationInterface {
 	private Algorithme algorithme;
 
 	@Autowired
+	private NotesModuleRepository noteModuleRepository;
+
+	@Autowired
 	private JSONConverter converter;
 
 	private static final String TYPE_DELIBERATION_MODULE = "parmodule";
@@ -67,7 +71,8 @@ public class DeliberationService implements DeliberationInterface {
 	private static final String TYPE_DELIBERATION_RATTRAPAGE = "rattrapage";
 
 	@Override
-	public ArrayList<Object> getBesoinPageDeliberationParModule() throws DataNotFoundExceptions, EntityNotFoundException {
+	public ArrayList<Object> getBesoinPageDeliberationParModule()
+			throws DataNotFoundExceptions, EntityNotFoundException {
 		List<Filiere> filieres = filiereRepository.findAll();
 		List<AnneeAcademique> anneesAcademiques = anneeAcademiqueRepository.findAll();
 		List<Semestre> semestres = semestreRepository.findAll();
@@ -83,7 +88,8 @@ public class DeliberationService implements DeliberationInterface {
 
 	@Override
 	public Deliberation deliberer(Long idFiliere, Long idAnneeAcademique, String type, Long id_element,
-			String typeDeliberation, Integer consideration) throws DataNotFoundExceptions, EntityNotFoundException {
+			String typeDeliberation, Integer consideration) throws DataNotFoundExceptions, EntityNotFoundException,
+			DeliberationEtapeNotAllowed, DeliberationSemestreNotAllowed {
 		AnneeAcademique annee = anneeAcademiqueRepository.getOne(idAnneeAcademique);
 
 		if (typeDeliberation.equals(TYPE_DELIBERATION_ORDINAIRE)) {
@@ -114,19 +120,17 @@ public class DeliberationService implements DeliberationInterface {
 	}
 
 	@Override
-	public void generateExcel(HttpServletResponse response, String type, Long idDeliberation, Integer rattrapage)
+	public void generateExcel(HttpServletResponse response, Long idDeliberation, Integer rattrapage)
 			throws EntityNotFoundException, DocumentException, IOException {
 		Deliberation deliberation = deliberationRepository.getOne(idDeliberation);
-		if (type.equals(DeliberationType.MODULE.name())) {
-			List<NoteModule> notes = deliberation.getNotesModule();
-			if (rattrapage != null) {
-				notes = notes.stream().filter(n -> n.getEtat().equals(DeliberationType.RATTRAPAGE.name()))
-						.collect(Collectors.toList());
-			}
-			PDFExport pdf = new PDFExport(response, "notesModule");
-			pdf.generatePvModule(notes, deliberation.getModule());
-			pdf.closeDocument();
+		List<NoteModule> notes = deliberation.getNotesModule();
+		if (rattrapage != null) {
+			notes = notes.stream().filter(n -> n.getEtat().equals(DeliberationType.RATTRAPAGE.name()))
+					.collect(Collectors.toList());
 		}
+		PDFExport pdf = new PDFExport(response, "notesModule");
+		pdf.generatePvModule(notes, deliberation.getModule());
+		pdf.closeDocument();
 
 	}
 
@@ -164,6 +168,15 @@ public class DeliberationService implements DeliberationInterface {
 		besoins.add(etapes);
 		besoins.add(converter.convertEtape(etapeRepository.findAll()));
 		return besoins;
+	}
+
+	@Override
+	public void generateUltimatePv(Long idDeliberation, HttpServletResponse response)
+			throws EntityNotFoundException, DocumentException, IOException {
+		Deliberation deliberation = deliberationRepository.getOne(idDeliberation);
+		PDFExport pdf = new PDFExport(response, "PV");
+		pdf.generateUltimatePv(deliberation.getSemestre(), noteModuleRepository, deliberation);
+		pdf.closeDocument();
 	}
 
 }

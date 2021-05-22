@@ -10,26 +10,35 @@
 		<div class="main-card mb-3 card">
 			<div class="card-body">
 				<h5 class="card-title">Filter</h5>
-				<form class="form-group" action="/delib/generatePvModule"
-					method="GET">
-					<input type="hidden" name="type" value="MODULE" /> <input
-						type="hidden" name="idDeliberation"
+				<c:if test="${deliberation.module ne null }">
+					<c:url var="link" value="/delib/generatePvModule" />
+				</c:if>
+				<c:if test="${deliberation.semestre ne null}">
+					<c:url var="link" value="/delib/generateUltimatePv" />
+				</c:if>
+				<c:if test="${deliberation.etape ne null }">
+					<c:url var="link" value="/delib/generatePvEtape" />
+				</c:if>
+				<form class="form-group" action="${link}" method="GET">
+					<input type="hidden" name="idDeliberation"
 						value="${deliberation.idDeliberation}" />
-					<div class="col-md-6">
-						<div class="row">
-							<div class="col-md-3">
-								<div class="position-relative form-group">
-									<label for="name" class="">Rattrapage</label>
+					<c:if test="${deliberation.module ne null }">
+						<div class="col-md-6">
+							<div class="row">
+								<div class="col-md-3">
+									<div class="position-relative form-group">
+										<label for="name" class="">Rattrapage</label>
+									</div>
 								</div>
-							</div>
-							<div class="col-md-2">
-								<div class="position-relative form-group">
-									<input name="ratt" id="exampleSelect" class="form-check-input"
-										type="checkbox" value="1" />
+								<div class="col-md-2">
+									<div class="position-relative form-group">
+										<input name="ratt" id="exampleSelect" class="form-check-input"
+											type="checkbox" value="1" />
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
+					</c:if>
 					<div class="col-md-6">
 						<div class="position-relative form-group">
 							<button class="btn btn-success">Download Pdf</button>

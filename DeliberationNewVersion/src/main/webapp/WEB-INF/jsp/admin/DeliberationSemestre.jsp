@@ -12,6 +12,7 @@
 			<div class="card-body">
 				<h5 class="card-title">Déliberation par semstre</h5>
 				<form class="" action="/delib/" method="POST">
+					<input type="hidden" name="type" value="parsemestre"/>
 					<div class="form-row">
 						<div class="col-md-6">
 							<div class="position-relative form-group">
@@ -36,7 +37,7 @@
 						<div class="col-md-6">
 							<div class="position-relative form-group">
 								<label for="element-class" class="element-class">Semestre</label>
-								<select name=semestre id="exampleSelect" class="form-control">
+								<select name=element id="exampleSelect" class="form-control">
 									<c:forEach items="${semestres }" var="semestre"> 
 										<option value="${semestre.id_semestre }">${semestre.libelle_semestre }</option>
 									</c:forEach>
@@ -62,7 +63,7 @@ jQuery(document).ready(function(){
 				chsemestre = chsemestre + '<option value="' + semestres[i].id_semestre +'">' + semestres[i].libelle_semestre + '</option>';
 			}
 		}
-		$('select[name=semestre]').html(chsemestre);
+		$('select[name=element]').html(chsemestre);
 	});	
 });
 	</script>

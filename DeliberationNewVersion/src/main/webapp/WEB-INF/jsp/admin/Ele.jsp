@@ -10,8 +10,9 @@
 
 		<div class="main-card mb-3 card">
 			<div class="card-body">
-				<h5 class="card-title">Déliberation par module</h5>
+				<h5 class="card-title">Déliberation de Module</h5>
 				<form class="" action="/delib/" method="POST">
+					<input type="hidden" name="type" value="parmodule"/>
 					<div class="form-row">
 						<div class="col-md-6">
 							<div class="position-relative form-group">
@@ -43,6 +44,49 @@
 								</select>
 							</div>
 						</div>
+						<div class="col-md-6">
+							<div class="position-relative form-group">
+								<label for="element-class" class="element-class">Module</label>
+								<select name="element" id="exampleSelect" class="form-control">
+								</select>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="position-relative form-group">
+								<label for="typedeliberation" class="">Type de déliberation</label>
+								<div class="row">
+									<div class="col-md-4">
+										<input type="radio" id="ordinaire" name="typedeliberation" value="ordinaire">
+									</div>
+									<div class="col-md-4">
+										<label for="box">Déliberation ordinaire</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-4">
+										<input type="radio" id="rattrapage" name="typedeliberation" value="rattrapage"
+											checked>
+									</div>
+									<div class="col-md-4">
+										<label for="box">Déliberation rattrapage</label>
+									</div>
+
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6" id="noterattrapage">
+							<div class="position-relative form-group">
+								<div class="row">
+									<div class="col-md-4">
+										<input type="checkbox" name="consideration" value="1">
+									</div>
+									<div class="col-md-4">
+										<label for="box">La note de rattrapage sera calculé en prennant considération des autres notes</label>
+									</div>
+								</div>
+							</div>
+						</div>
+
 						<button class="mt-2 btn btn-primary col-md-12" type="submit">Valider</button>
 					</div>
 				</form>
@@ -80,7 +124,7 @@ function filterModule(){
 			chmodule = chmodule + '<option value="' + modules[i].id_module + '">' + modules[i].libelle_module + '</option>';
 		}
 	}
-	$('select[name=module]').html(chmodule);
+	$('select[name=element]').html(chmodule);
 }
 
 function filiterSemestre(){

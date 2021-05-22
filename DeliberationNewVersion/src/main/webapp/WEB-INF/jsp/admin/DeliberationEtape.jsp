@@ -10,7 +10,8 @@
 
 		<div class="main-card mb-3 card">
 			<div class="card-body">
-				<h5 class="card-title">Déliberation par semstre</h5>
+				<h5 class="card-title">Déliberation par etape</h5>
+				<input type="hidden" name="type" value="paretape"/>
 				<form class="" action="/delib/" method="POST">
 					<div class="form-row">
 						<div class="col-md-6">
@@ -35,7 +36,7 @@
 						</div>
 						<div class="col-md-6">
 							<div class="position-relative form-group">
-								<label for="element-class" class="element-class">Semestre</label>
+								<label for="element-class" class="element-class">Etapes</label>
 								<select name=etape id="exampleSelect" class="form-control">
 									<c:forEach items="${etapes }" var="etape"> 
 										<option value="${etape.id_etape }">${etape.libelle_etape }</option>
