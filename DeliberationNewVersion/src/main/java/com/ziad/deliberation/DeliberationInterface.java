@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,7 +16,7 @@ import com.ziad.models.Deliberation;
 
 public interface DeliberationInterface {
 
-	public ArrayList<Object> getBesoinPageDeliberationParModule()
+	public ArrayList<Object> getBesoinPageDeliberationParModule(HttpServletRequest req)
 			throws DataNotFoundExceptions, EntityNotFoundException;
 
 	public ArrayList<Object> getBesoinPageDeliberationParSemestre()

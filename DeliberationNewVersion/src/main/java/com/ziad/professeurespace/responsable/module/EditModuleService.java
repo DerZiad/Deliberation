@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Element;
@@ -24,6 +25,8 @@ import com.ziad.utilities.JSONConverter;
 @Service
 @Primary
 public class EditModuleService implements EditModuleInterface {
+	private final static String ATTRIBUT_SESSION = "utilisateur";
+
 	@Autowired
 	private ElementRepository elementRepository;
 
@@ -67,5 +70,4 @@ public class EditModuleService implements EditModuleInterface {
 		besoins.add(converter.convertElements(elements));
 		return besoins;
 	}
-
 }

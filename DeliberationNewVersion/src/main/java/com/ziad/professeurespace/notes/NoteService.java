@@ -9,8 +9,11 @@ import javax.persistence.EntityNotFoundException;
 import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.ziad.enums.TypeNote;
 import com.ziad.exceptions.CSVReaderOException;
@@ -19,16 +22,20 @@ import com.ziad.models.Element;
 import com.ziad.models.Etudiant;
 import com.ziad.models.Note;
 import com.ziad.models.NoteElement;
+import com.ziad.models.User;
 import com.ziad.models.compositeid.ComposedInscriptionPedagogique;
 import com.ziad.repositories.ElementRepository;
 import com.ziad.repositories.EtudiantRepository;
 import com.ziad.repositories.NoteElementRepository;
-import com.ziad.repositories.NoteRepository;
+import com.ziad.repositories.UserRepository;
 import com.ziad.utilities.ExcelReader;
 
 @Service
 @Primary
 public class NoteService implements NoteInterface {
+	
+	private final static String ATTRIBUT_SESSION = "utilisateur";
+	
 	@Autowired
 	private ElementRepository elementRepository;
 	@Autowired
@@ -37,6 +44,9 @@ public class NoteService implements NoteInterface {
 	private NoteElementRepository noteElementRepository;
 	@Autowired
 	private ExcelReader reader;
+	
+	@Autowired
+	private UserRepository userRepository;
 	
 	@Override
 	public void readExcel(MultipartFile file, String type,Double coefficient)
@@ -73,5 +83,4 @@ public class NoteService implements NoteInterface {
 		}
 
 	}
-
 }

@@ -113,15 +113,12 @@ public class SendEmailService {
 		message = message + EMAIL_HTML.substring(index, index_name);
 		message = message + name;
 		index_name = index_name + attribut_name.length();
-		System.out.println(index_name);
-		System.out.println(message);
-
+		
 		String attribut_body = "{{paragraphe}}";
 		int index_body = EMAIL_HTML.indexOf(attribut_body);
 		message = message + EMAIL_HTML.substring(index_name, index_body);
 		message = message + body;
 		index_body = index_body + attribut_body.length();
-		System.out.println(index_body);
 
 		String attribut_link = "{{link}}";
 		int index_link = EMAIL_HTML.indexOf(attribut_link);

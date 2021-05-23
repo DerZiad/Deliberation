@@ -29,6 +29,9 @@ public class EditModuleController {
 	private final static String ATTRIBUT_MODULES = "modules";
 	private final static String ATTRIBUT_ELEMENTS_JSON = "elementsjson";
 	
+	private final static String ACTIVE = "mm-active";
+	private final static String ATTRIBUT_NAVBAR_MES_MODULES = "mesmodules";
+	
 	
 	@Autowired
 	private EditModuleInterface editMetier;
@@ -41,6 +44,7 @@ public class EditModuleController {
 		model.addObject(ATTRIBUT_MODULES,(List<Modulee>)besoins.get(0));
 		model.addObject(ATTRIBUT_ELEMENTS,(List<Element>)besoins.get(1));
 		model.addObject(ATTRIBUT_ELEMENTS_JSON,(String)besoins.get(2));
+		model.addObject(ATTRIBUT_NAVBAR_MES_MODULES,ACTIVE);
 		return model;
 	}
 
@@ -48,6 +52,7 @@ public class EditModuleController {
 	public ModelAndView getElementProfile(@PathVariable("idElement") Long idElement) throws EntityNotFoundException {
 		ModelAndView model = new ModelAndView(PAGE_PROFILE_ELEMENT);
 		model.addObject(ATTRIBUT_ELEMENT, editMetier.getElement(idElement));
+		model.addObject(ATTRIBUT_NAVBAR_MES_MODULES,ACTIVE);
 		return model;
 	}
 
@@ -58,6 +63,7 @@ public class EditModuleController {
 		ModelAndView model = new ModelAndView(PAGE_PROFILE_ELEMENT);
 		editMetier.saveInformations(idElement, validation, coeficient);
 		model.addObject(ATTRIBUT_ELEMENT, editMetier.getElement(idElement));
+		model.addObject(ATTRIBUT_NAVBAR_MES_MODULES,ACTIVE);
 		return model;
 	}
 }

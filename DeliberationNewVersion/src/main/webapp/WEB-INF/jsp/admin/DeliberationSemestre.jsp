@@ -12,7 +12,8 @@
 			<div class="card-body">
 				<h5 class="card-title">Déliberation par semstre</h5>
 				<form class="" action="/delib/" method="POST">
-					<input type="hidden" name="type" value="parsemestre"/>
+					<input type="hidden" name="type" value="parsemestre" />
+					<c:if test=""></c:if>
 					<div class="form-row">
 						<div class="col-md-6">
 							<div class="position-relative form-group">
@@ -38,25 +39,29 @@
 							<div class="position-relative form-group">
 								<label for="element-class" class="element-class">Semestre</label>
 								<select name=element id="exampleSelect" class="form-control">
-									<c:forEach items="${semestres }" var="semestre"> 
+									<c:forEach items="${semestres }" var="semestre">
 										<option value="${semestre.id_semestre }">${semestre.libelle_semestre }</option>
 									</c:forEach>
 								</select>
 							</div>
 						</div>
-
 						<button class="mt-2 btn btn-primary col-md-12" type="submit">Valider</button>
 					</div>
 				</form>
+				<label for="element-class" class="element-class" style="color: red">${error}</label>
 			</div>
 		</div>
 		<script>
-var modules = JSON.parse('${modulesjson}');
 var semestres = JSON.parse('${semestresjson}');
 
 jQuery(document).ready(function(){
 	$('select[name=filiere]').change(function(){
-		var filiere = $('select[name=filiere]').val();
+		filter();
+	});	
+	filter();
+});
+function filter(){
+	var filiere = $('select[name=filiere]').val();
 		var chsemestre = "";
 		for(let i = 0;i<semestres.length;i++){
 			if(semestres[i].id_filiere == filiere){
@@ -64,8 +69,7 @@ jQuery(document).ready(function(){
 			}
 		}
 		$('select[name=element]').html(chsemestre);
-	});	
-});
+}
 	</script>
 	</layout:put>
 </layout:extends>

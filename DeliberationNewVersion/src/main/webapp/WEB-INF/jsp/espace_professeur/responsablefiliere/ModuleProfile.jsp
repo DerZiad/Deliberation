@@ -10,7 +10,7 @@
 			<div class="col-md-3">
 				<div class="main-card mb-3 card">
 					<div class="card-body">
-						<h5 class="card-title">module: ${element.module.libelle_module }</h5>
+						<h5 class="card-title">Module: ${module.libelle_module }</h5>
 					</div>
 				</div>
 			</div>
@@ -19,20 +19,15 @@
 					<div class="card-body">
 						<h5 class="card-title">Modification</h5>
 						<form
-							action="/professeur/responsablemodule/element/${element.id_element}"
+							action="/professeur/responsablefiliere/listermodules/${module.id_module}"
 							method="POST">
 							<div class="position-relative form-group">
-								<p>${element.libelle_element }</p>
+								<p>${module.libelle_module }</p>
 							</div>
 							<div class="position-relative form-group">
 								<label for="coefficient" class="">Coefficient: </label><input
-									name="coeficient" id="coeficient" placeholder="Coefficient"
-									type="text" class="form-control" value="${element.coeficient }">
-							</div>
-							<div class="position-relative form-group">
-								<label for="validation" class="">Validation: </label><input
-									name="validation" id="validation" placeholder="Validation"
-									type="text" class="form-control" value="${element.validation }">
+									name="coefficient" id="coeficient" placeholder="Coefficient"
+									type="text" class="form-control" value="${module.coeficient }">
 							</div>
 							<button class="mt-1 btn btn-primary">Modifier</button>
 						</form>

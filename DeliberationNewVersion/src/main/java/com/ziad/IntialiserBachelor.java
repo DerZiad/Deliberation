@@ -96,7 +96,7 @@ public class IntialiserBachelor {
 			System.out.println("============> Professeurs ");
 			users.stream().forEach(user -> System.out.println(user));
 			createAnneeAcademique();
-			//createStudents();
+			createStudents();
 		} catch (Exception e) {
 			System.err.println("[ - ] - Error \n" + e.getMessage());
 			e.printStackTrace();
@@ -132,7 +132,9 @@ public class IntialiserBachelor {
 		bekri.getUser().addRole(MonRole.ROLERESPONSABLEFILIERE);
 		bekri.getUser().addRole(MonRole.ROLEPROFESSEUR);
 		Filiere filiere = new Filiere("Informatique", etablissement, bekri);
+		Filiere filiere1 = new Filiere("Chimie", etablissement, bekri);
 		etablissement.addFiliere(filiere);
+		etablissement.addFiliere(filiere1);
 
 		int semester_number = 5;
 		int years = (int) (semester_number / 2) + semester_number % 2;
@@ -145,6 +147,19 @@ public class IntialiserBachelor {
 			etape.addSemestre(semestre2);
 			filiere.addEtape(etape);
 		}
+		
+		
+		semester_number = 6;
+		years = (int) (semester_number / 2) + semester_number % 2;
+		ordre = 0;
+		for (int i = 1; i <= years; i++) {
+			Etape etape = new Etape((i == 1) ? "1 ère Année" : i + " ème Année", false, 10d, filiere1);
+			Semestre semestre1 = new Semestre(10d, "Semestre " + ++ordre, etape, TypeSemestre.HIVER, ordre);
+			Semestre semestre2 = new Semestre(10d, "Semestre " + ++ordre, etape, TypeSemestre.PRINTEMPS, ordre);
+			etape.addSemestre(semestre1);
+			etape.addSemestre(semestre2);
+			filiere1.addEtape(etape);
+		}
 
 		Professeur oubelkacem = new Professeur("Ali", "Oubelkacem", "ali.oubelkacem@gmail.com",
 				new User("oubelkacem", passwordEncoder.encode("test123"), ""));
@@ -153,8 +168,8 @@ public class IntialiserBachelor {
 		for (Etape etape : filiere.getEtapes()) {
 			for (Semestre semestre : etape.getSemestres()) {
 				for (int i = 0; i < 5; i++) {
-					Modulee module = new Modulee("Algebre", 1d, 10d, 4d, false, semestre, oubelkacem);
-					Element element = new Element("Algebre", 1d, 10d, module);
+					Modulee module = new Modulee("Algebre" + i, 1d, 10d, 4d, false, semestre, oubelkacem);
+					Element element = new Element("Algebre" + i, 1d, 10d, module);
 					element.addProfesseur(oubelkacem);
 					module.addElement(element);
 					semestre.addModule(module);
@@ -166,21 +181,20 @@ public class IntialiserBachelor {
 		Professeur benhlima = new Professeur("Said", "Benhlima", "said.benhlima@gmail.com",
 				new User("benhlima", passwordEncoder.encode("test123"), ""));
 		benhlima.getUser().addRole(MonRole.ROLEPROFESSEUR);
-		professeurRepository.save(benhlima);
-		for (Etape etape : filiere.getEtapes()) {
+		benhlima.getUser().addRole(MonRole.ROLERESPONSABLEMODULE);
+		for (Etape etape : filiere1.getEtapes()) {
 			for (Semestre semestre : etape.getSemestres()) {
 				for (int i = 0; i < 5; i++) {
-					Modulee module = new Modulee("Analyse 2", 1d, 10d, 4d, false, semestre, oubelkacem);
-					Element element = new Element("Analyse 2", 1d, 10d, module);
-					element.addProfesseur(oubelkacem);
+					Modulee module = new Modulee("Chimie organique", 1d, 10d, 4d, false, semestre, benhlima);
+					Element element = new Element("Chimie organique", 1d, 10d, module);
+					element.addProfesseur(benhlima);
 					module.addElement(element);
 					semestre.addModule(module);
+					benhlima.addModule(module);
 
 				}
 			}
-		}
-		
-		
+		}		
 		etablissementRepository.save(etablissement);
 		System.out.println("[ + ] - University structure created succesfully");
 		List<User> users = Arrays.asList(benhlima.getUser(), bekri.getUser(), oubelkacem.getUser());
@@ -223,7 +237,10 @@ public class IntialiserBachelor {
 	}
 	
 	public void createStudents() {
-		Filiere filiere = filiereRepository.findAll().get(0);
+		
+		List<Filiere> filieres  = filiereRepository.findAll();
+		Filiere filiere = filieres.get(0);
+		Filiere chimie = filieres.get(1);
 		
 		for (int i = 0; i < 100; i++) {
 			Etudiant etudiant = new Etudiant();
@@ -275,9 +292,9 @@ public class IntialiserBachelor {
 			List<Etape> etapes = etapeRepository.getEtapeByFiliere(filiere);
 			Etape firststep = etapes.get(0);	
 			
-			for (Semestre semestre : firststep.getSemestres()) {
-				for (Modulee module : semestre.getModules()) {
-					for (Element element : module.getElements()) {
+			for (Semestre semestre : semestreRepository.getSemestreByEtape(firststep)) {
+				for (Modulee module : moduleRepository.getModuleBySemestre(semestre)) {
+					for (Element element : elementRepository.getElementsByModule(module)) {
 						ComposedInscriptionPedagogique compsedId = new ComposedInscriptionPedagogique(etudiant, element);
 						InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(compsedId,
 								annee_academique, false, TypeInscription.ELEMENT);
@@ -291,6 +308,75 @@ public class IntialiserBachelor {
 			inscriptionAdministrativeRepository.save(inscription_administrative);
 
 		}
+		
+		for (int i = 0; i < 100; i++) {
+			Etudiant etudiant = new Etudiant();
+			InscriptionEnLigne inscriptionEnLigne = new InscriptionEnLigne();
+			etudiant.setAcademy("Bachelor");
+			etudiant.setBac_place("Meknes");
+			etudiant.setBac_type("PC"+i);
+			etudiant.setBac_year(2018);
+			etudiant.setBirth_date(new java.util.Date());
+			etudiant.setBirth_place("Meknes");
+			etudiant.setCity("Meknes");
+			etudiant.setCne("D896565"+i);
+			etudiant.setFirst_name_ar("Ayman"+i);
+			etudiant.setFirst_name_fr("Ayman"+i);
+			etudiant.setGender(Gender.HOMME);
+			etudiant.setHigh_school("Tremplin");
+			etudiant.setLast_name_ar("Anouhali"+i);
+			etudiant.setLast_name_fr("Abouhali"+i);
+			etudiant.setMassar_edu("M13124589"+i);
+			etudiant.setMention("Tres bien");
+			etudiant.setNationality("Morrocain");
+			etudiant.setProvince("Kamilia");
+			etudiant.setRegistration_date(new java.util.Date());
+			etudiant.setEmail("ziadbougrine@gmail.com");
+
+			User user = new User();
+			user.setUsername(etudiant.getEmail());
+			// On met le mot de passe son prenom pour le changer apres
+			user.setPassword(passwordEncoder.encode(etudiant.getLast_name_fr().toLowerCase()));
+			user.setActive(1);
+			user.addRole(MonRole.ROLEETUDIANT);
+			etudiant.setUser(user);
+			etudiant.setInscription_en_ligne(new InscriptionEnLigne());
+			inscriptionEnLigne.setEtudiant(etudiant);
+			etudiant.setInscription_en_ligne(inscriptionEnLigne);
+			etudiantRepository.save(etudiant);
+			inscriptionEnLigneRepository.save(inscriptionEnLigne);
+
+			InscriptionAdministrative inscription_administrative = new InscriptionAdministrative();
+
+			AnneeAcademique annee_academique = this.annee_academique.findAll().get(0);
+			inscription_administrative.setAnnee_academique(annee_academique);
+			inscription_administrative.setDate_pre_inscription(new java.util.Date());
+			inscription_administrative.setComposite_association_id(new ComposedInscriptionAdministrative(etudiant, filiere));
+			LocalDate ld = LocalDate.now();
+			ZoneId defaultZoneId = ZoneId.systemDefault();
+			java.util.Date date = Date.from(ld.atStartOfDay(defaultZoneId).toInstant());
+
+			List<Etape> etapes = etapeRepository.getEtapeByFiliere(chimie);
+			Etape firststep = etapes.get(0);	
+			
+			for (Semestre semestre : semestreRepository.getSemestreByEtape(firststep)) {
+				for (Modulee module : moduleRepository.getModuleBySemestre(semestre)) {
+					for (Element element : elementRepository.getElementsByModule(module)) {
+						ComposedInscriptionPedagogique compsedId = new ComposedInscriptionPedagogique(etudiant, element);
+						InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(compsedId,
+								annee_academique, false, TypeInscription.ELEMENT);
+						this.inscriptionPedagogiqueRepository.save(inscription_pedagogique);
+						NoteElement note = new NoteElement(compsedId, 0d,
+								inscription_administrative.getAnnee_academique());
+						noteElementRepository.save(note);
+					}
+				}
+			}
+			inscriptionAdministrativeRepository.save(inscription_administrative);
+
+		}
+		
+		
 		
 	}
 }

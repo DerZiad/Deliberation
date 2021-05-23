@@ -6,10 +6,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.lowagie.text.DocumentException;
@@ -21,14 +24,18 @@ import com.ziad.models.Etape;
 import com.ziad.models.Filiere;
 import com.ziad.models.Modulee;
 import com.ziad.models.NoteModule;
+import com.ziad.models.Professeur;
 import com.ziad.models.Semestre;
+import com.ziad.models.User;
 import com.ziad.repositories.AnnneAcademiqueRepository;
 import com.ziad.repositories.DeliberationRepository;
 import com.ziad.repositories.EtapeRepository;
 import com.ziad.repositories.FiliereRepository;
 import com.ziad.repositories.ModuleRepository;
 import com.ziad.repositories.NotesModuleRepository;
+import com.ziad.repositories.ProfesseurRepository;
 import com.ziad.repositories.SemestreRepository;
+import com.ziad.repositories.UserRepository;
 import com.ziad.utilities.JSONConverter;
 import com.ziad.utilities.PDFExport;
 
@@ -56,7 +63,13 @@ public class DeliberationService implements DeliberationInterface {
 
 	@Autowired
 	private Algorithme algorithme;
+	
+	@Autowired
+	private ProfesseurRepository professeurRepository;
 
+	@Autowired
+	private UserRepository userRepository;
+	
 	@Autowired
 	private NotesModuleRepository noteModuleRepository;
 
@@ -69,19 +82,40 @@ public class DeliberationService implements DeliberationInterface {
 
 	private static final String TYPE_DELIBERATION_ORDINAIRE = "ordinaire";
 	private static final String TYPE_DELIBERATION_RATTRAPAGE = "rattrapage";
-
+	
+	
+	private static final String ATTRIBUT_CLASSE_MERE = "mero";
 	@Override
-	public ArrayList<Object> getBesoinPageDeliberationParModule()
+	public ArrayList<Object> getBesoinPageDeliberationParModule(HttpServletRequest req)
 			throws DataNotFoundExceptions, EntityNotFoundException {
 		List<Filiere> filieres = filiereRepository.findAll();
 		List<AnneeAcademique> anneesAcademiques = anneeAcademiqueRepository.findAll();
 		List<Semestre> semestres = semestreRepository.findAll();
-
+		
+		/**
+		 * Verifier la connexion
+		 * **/
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userRepository.getUserByUsername(auth.getName());
+		List<Modulee> modules = null;
+		if(user.isAdministrator()) {
+			req.setAttribute(ATTRIBUT_CLASSE_MERE, "../layout.jsp");
+		}else {
+			req.setAttribute(ATTRIBUT_CLASSE_MERE, "../espace_professeur/layout-prof.jsp");
+		}
+		if(user.isAdministrator() || user.isResponsableFiliere()) {
+			modules = moduleRepository.findAll();
+		}else {
+			if(user.isResponsableModule()) {
+				Professeur prof = professeurRepository.getProfesseurByUser(user);
+				modules = prof.getModules();
+			}
+		}
 		ArrayList<Object> besoins = new ArrayList<Object>();
 		besoins.add(filieres);
 		besoins.add(anneesAcademiques);
 		besoins.add(semestres);
-		besoins.add(converter.convertModulee(moduleRepository.findAll()));
+		besoins.add(converter.convertModulee(modules));
 		besoins.add(converter.convertSemestre(semestreRepository.findAll()));
 		return besoins;
 	}
@@ -91,14 +125,14 @@ public class DeliberationService implements DeliberationInterface {
 			String typeDeliberation, Integer consideration) throws DataNotFoundExceptions, EntityNotFoundException,
 			DeliberationEtapeNotAllowed, DeliberationSemestreNotAllowed {
 		AnneeAcademique annee = anneeAcademiqueRepository.getOne(idAnneeAcademique);
-
-		if (typeDeliberation.equals(TYPE_DELIBERATION_ORDINAIRE)) {
-			algorithme.enableDeliberationOrdinaire();
-		} else if (typeDeliberation.equals(TYPE_DELIBERATION_RATTRAPAGE)) {
-			if (consideration != null)
-				algorithme.enableConsideration(true);
-			algorithme.enableDeliberationRattrapage();
-		}
+		if (typeDeliberation != null)
+			if (typeDeliberation.equals(TYPE_DELIBERATION_ORDINAIRE)) {
+				algorithme.enableDeliberationOrdinaire();
+			} else if (typeDeliberation.equals(TYPE_DELIBERATION_RATTRAPAGE)) {
+				if (consideration != null)
+					algorithme.enableConsideration(true);
+				algorithme.enableDeliberationRattrapage();
+			}
 		Deliberation delib = null;
 
 		if (type.equals(TYPE_DELIBERATION_ETAPE)) {

@@ -43,26 +43,57 @@
 				<li><a href="/" class="${dashboard}"> <i
 						class="metismenu-icon pe-7s-rocket"></i> Tableau de bords
 				</a></li>
-				<li><a href="/professeur/listerElements" class="mm-active"> <i
-						class="metismenu-icon pe-7s-rocket"></i> Mes Elements
+				<li><a href="/professeur/listerElements" class="${meselements}">
+						<i class="metismenu-icon pe-7s-rocket"></i> Mes Elements
 				</a></li>
-				<li><a href="#" aria-expanded="false"> <i
-						class="metismenu-icon pe-7s-id"></i> Note Element de module <i
-						class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-				</a>
-					<ul class="mm-collapse" style="height: 7.04px;">
-						<li><a href="/professeur/note/ajouter"
-					class="${choixElement}"> <i
-						class="metismenu-icon pe-7s-graph3"></i> Ajouter une Note
+				<li><a href="/professeur/note/ajouter" class="${ajoutnote}">
+						<i class="metismenu-icon pe-7s-rocket"></i> Ajouter une Note
 				</a></li>
-						<li><a href="/note/choixList"
-					class="${choixElementList}"> <i
-						class="metismenu-icon pe-7s-graph3"></i> List des Note
-				</a></li>
-					</ul></li>
-				<layout:block name="responsable"></layout:block>		
-				<li><a href="/logout"
-					class=""> <i
+				<c:if test="${utilisateur.isResponsableModule() }">
+					<li><a href="/professeur/responsablemodule/listermodules"
+						class="${mesmodules}"> <i class="metismenu-icon pe-7s-rocket"></i>
+							Mes Modules
+					</a></li>
+				</c:if>
+
+				<c:if test="${utilisateur.isResponsableFiliere() }">
+					<li><a href="/professeur/responsablefiliere/listermodules"
+						class="${mesfilieres}"> <i class="metismenu-icon pe-7s-rocket"></i>
+							Mes Filieres
+					</a></li>
+				</c:if>
+				<c:if test="${utilisateur.isResponsableFiliere() or utilisateur.isResponsableModule() }">
+					<li><a href="#" aria-expanded="false"> <i
+							class="metismenu-icon pe-7s-id"></i>Deliberation<i
+							class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+					</a>
+						<ul class="mm-collapse" style="height: 7.04px;">
+							<li><a href="/delib/deliberationmodule"
+								class="${importdelib}"> <i
+									class="metismenu-icon pe-7s-graph3"></i> Deliberation de module
+							</a></li>
+							<c:if
+								test="${ utilisateur.isResponsableFiliere()}">
+								<li><a href="/delib/deliberationsemestre"
+									class="${importdelib}"> <i
+										class="metismenu-icon pe-7s-graph3"></i> Deliberation de
+										semestre
+								</a></li>
+								<li><a href="/delib/deliberationetape"
+									class="${importdelib}"> <i
+										class="metismenu-icon pe-7s-graph3"></i> Deliberation de etape
+								</a></li>
+							</c:if>
+							<li><a href="/delib/listerDelib" class="${importdelib}">
+									<i class="metismenu-icon pe-7s-graph3"></i> Listes des
+									deliberations
+							</a></li>
+
+						</ul></li>
+				</c:if>
+
+
+				<li><a href="/logout" class=""> <i
 						class="metismenu-icon pe-7s-graph3"></i> Se déconnecter
 				</a></li>
 			</ul>

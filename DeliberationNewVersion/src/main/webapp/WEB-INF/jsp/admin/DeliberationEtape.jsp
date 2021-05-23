@@ -44,7 +44,21 @@
 								</select>
 							</div>
 						</div>
-
+						<div class="col-md-6">
+							<div class="position-relative form-group">
+								<label for="name" class="">Années académiques</label> <select
+									name="annee" id="exampleSelect" class="form-control">
+									<c:forEach var="annee" items="${annees}">
+										<option value="${annee.id_annee_academique }">${annee.annee_academique }</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="position-relative form-group">
+								<label for="name" class=""></label>
+							</div>
+						</div>
 						<button class="mt-2 btn btn-primary col-md-12" type="submit">Valider</button>
 					</div>
 				</form>

@@ -26,11 +26,15 @@ public class NoteController {
 
 	private final static String ATTRIBUT_TYPES = "types";
 	
+	private final static String ACTIVE ="mm-active";
+	private final static String ATTRIBUT_NAVBAR_AJOUTER_NOTE = "ajoutnote";
+	
 	private final static String REDIRECT_TO_NOTE = "redirect:/professeur/note/ajouter";
 
 	@GetMapping("/ajouter")
 	public ModelAndView createPageNote() {
 		ModelAndView model = new ModelAndView("espace_professeur/ajouterNote");
+		model.addObject(ATTRIBUT_NAVBAR_AJOUTER_NOTE,ACTIVE);
 		model.addObject(ATTRIBUT_TYPES, TypeNote.values());
 		return model;
 	}

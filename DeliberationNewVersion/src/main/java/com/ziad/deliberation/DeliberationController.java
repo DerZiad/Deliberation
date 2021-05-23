@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,7 @@ public class DeliberationController {
 	private final static String PATH_DELIBERATIONS_LIST = "admin/listesDeliberation";
 
 	private final static String REDIRECT_DELIBERATION_LIST = "redirect:/delib/listerDelib?id=%d";
+	private final static String REDIRECT_DELIBERATION_PAR_SEMEESTRE = "redirect:/delib/deliberationsemestre";
 
 	@Autowired
 	private DeliberationInterface deliberationMetier;
@@ -62,9 +64,9 @@ public class DeliberationController {
 
 	@SuppressWarnings("unchecked")
 	@GetMapping("/deliberationmodule")
-	public ModelAndView getPageParModule() throws EntityNotFoundException, DataNotFoundExceptions {
+	public ModelAndView getPageParModule(HttpServletRequest req) throws EntityNotFoundException, DataNotFoundExceptions {
 		ModelAndView model = new ModelAndView(PAGE_DELIBERATION_PAR_MODULE);
-		List<Object> besoins = deliberationMetier.getBesoinPageDeliberationParModule();
+		List<Object> besoins = deliberationMetier.getBesoinPageDeliberationParModule(req);
 		model.addObject(ATTRIBUT_FILIERES, (List<Filiere>) besoins.get(0));
 		model.addObject(ATTRIBUT_ANNEES_ACADEMIQUES, (List<AnneeAcademique>) besoins.get(1));
 		model.addObject(ATTRIBUT_SEMESTRES, (List<Semestre>) besoins.get(2));
@@ -75,9 +77,12 @@ public class DeliberationController {
 
 	@SuppressWarnings("unchecked")
 	@GetMapping("/deliberationsemestre")
-	public ModelAndView getPageParSemestre() throws EntityNotFoundException, DataNotFoundExceptions {
+	public ModelAndView getPageParSemestre(@RequestParam(name = "message",required = false)String msg) throws EntityNotFoundException, DataNotFoundExceptions {
 		ModelAndView model = new ModelAndView(PAGE_DELIBERATION_PAR_SEMESTRE);
 		List<Object> besoins = deliberationMetier.getBesoinPageDeliberationParSemestre();
+		if(msg != null) {
+			model.addObject(ATTRIBUT_ERROR,msg);
+		}
 		model.addObject(ATTRIBUT_FILIERES, (List<Filiere>) besoins.get(0));
 		model.addObject(ATTRIBUT_ANNEES_ACADEMIQUES, (List<AnneeAcademique>) besoins.get(1));
 		model.addObject(ATTRIBUT_SEMESTRES, (List<Semestre>) besoins.get(2));
@@ -100,7 +105,7 @@ public class DeliberationController {
 	@PostMapping("")
 	public ModelAndView deliberer(@RequestParam("filiere") Long idFiliere,
 			@RequestParam("annee") Long idAnneeAcademique, @RequestParam("type") String type,
-			@RequestParam("element") Long id_element, @RequestParam("typedeliberation") String typeDeliberation,
+			@RequestParam("element") Long id_element, @RequestParam(name = "typedeliberation",required = false) String typeDeliberation,
 			@RequestParam(name = "consideration", required = false) Integer consideration)
 			throws EntityNotFoundException, DataNotFoundExceptions {
 		ModelAndView model = null;
@@ -113,10 +118,10 @@ public class DeliberationController {
 			model.addObject(ATTRIBUT_ERROR, e.getMessage());
 			model.addObject(ATTRIBUT_SEMESTRE, e.getSemestre());
 			return model;
-		} catch (DeliberationSemestreNotAllowed e1) {
-			model = new ModelAndView(PAGE_DELIBERATION_PAR_SEMESTRE);
-			model.addObject(ATTRIBUT_ERROR, e1.getMessage());
-			model.addObject(ATTRIBUT_MODULE, e1.getModule());
+		} catch (DeliberationSemestreNotAllowed e1) {			
+			String msg = e1.getModule().getLibelle_module() + " " + e1.getMessage();
+			String link = "?error=1&message="+msg;
+			model = new ModelAndView(REDIRECT_DELIBERATION_PAR_SEMEESTRE + link);
 			return model;
 		}
 		model = new ModelAndView(String.format(REDIRECT_DELIBERATION_LIST, deliberation.getIdDeliberation()));

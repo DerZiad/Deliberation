@@ -4,7 +4,7 @@
 	prefix="layout"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<layout:extends name="layout-resp.jsp">
+<layout:extends name="../layout-prof.jsp">
 	<layout:put block="content" type="REPLACE">
 
 

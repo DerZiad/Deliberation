@@ -30,7 +30,8 @@ public class ProfesseurController {
 	private final static String PAGE_ELEMENTS = "espace_professeur/myModulesProf";
 	private final static String PAGE_MES_ETUDIANTS = "espace_professeur/mesetudiants";
 	
-
+	private final static String ACTIVE ="mm-active";
+	private final static String ATTRIBUT_NAVBAR_MES_ELEMENTS = "meselements";
 	
 	private final static String ATTRIBUTS_INSCRIPTIONS_PEDAGOGIQUES = "inscriptions";
 	private final static String ATTRIBUTS_INSCRIPTIONS_PEDAGOGIQUES_JSON = "inscriptionsjson";
@@ -42,6 +43,7 @@ public class ProfesseurController {
 	@GetMapping("/listerElements")
 	public ModelAndView listerElements() throws DataNotFoundExceptions {
 		ModelAndView model = new ModelAndView(PAGE_ELEMENTS);
+		model.addObject(ATTRIBUT_NAVBAR_MES_ELEMENTS,ACTIVE);
 		model.addObject(ATTRIBUTS_ELEMENTS, professeur_metier.listerElements());
 		return model;
 	}
@@ -51,14 +53,14 @@ public class ProfesseurController {
 	public ModelAndView listerEtudiants(@PathVariable("id_element") Long id_element)
 			throws DataNotFoundExceptions, EntityNotFoundException {
 		ModelAndView model = new ModelAndView(PAGE_MES_ETUDIANTS);
+		model.addObject(ATTRIBUT_NAVBAR_MES_ELEMENTS,ACTIVE);
 		List<Object> besoins = professeur_metier.listerEtudiants(id_element);
 		model.addObject(ATTRIBUTS_INSCRIPTIONS_PEDAGOGIQUES, (List<InscriptionPedagogique>) besoins.get(0));
 		model.addObject(ATTRIBUTS_INSCRIPTIONS_PEDAGOGIQUES_JSON, (String) besoins.get(1));
 		model.addObject(ATTRIBUTS_ANNEES_ACADEMIQUES, (List<AnneeAcademique>) besoins.get(2));
 		model.addObject(ATTRIBUTS_ANNEES_ACADEMIQUES_JSON, (String) besoins.get(3));
 		model.addObject(ATTRIBUT_ELEMENT,(Element)besoins.get(4));
-		model.addObject(ATTRIBUT_TYPES_NOTES,TypeNote.values());
-		
+		model.addObject(ATTRIBUT_TYPES_NOTES,TypeNote.values());		
 		return model;
 	}
 

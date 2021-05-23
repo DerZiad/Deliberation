@@ -168,12 +168,12 @@ public class Algorithme {
 		for (Modulee module : semestre.getModules()) {
 			List<Deliberation> delibs = deliberationRepository.getDeliberationByModuleAnnneAcademique(module, annee);
 			if (delibs.size() == 0) {
-				throw new DeliberationSemestreNotAllowed(module, "Le module suivant n'est pas déliberer");
+				throw new DeliberationSemestreNotAllowed(module, "Le module suivant n'est pas deliberer");
 			} else {
 				Deliberation del = delibs.get(0);
 				if (!del.isDelibered())
 					throw new DeliberationSemestreNotAllowed(module,
-							"Le module suivant n'est pas déliberer en rattrapage");
+							"Le module suivant n est pas deliberer en rattrapage");
 			}
 		}
 	}
@@ -215,7 +215,7 @@ public class Algorithme {
 		for(Semestre semestre:etape.getSemestres()) {
 			List<Deliberation> delibs = deliberationRepository.getDeliberationBySemestreAnnneAcademique(semestre, annee);
 			if(delibs.size() == 0) {
-				throw new DeliberationEtapeNotAllowed(semestre, "Le semestre n'est pas deliberer");
+				throw new DeliberationEtapeNotAllowed(semestre, "Le semestre n est pas deliberer");
 			}
 		}
 	}

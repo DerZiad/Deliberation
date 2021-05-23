@@ -116,5 +116,25 @@ public class User implements Serializable{
 	public void setSms(String sms) {
 		this.sms = sms;
 	}
-
+	
+	public boolean isAdministrator() {
+		return getRoleList().contains("ADMIN");
+	}
+	
+	public boolean isResponsableFiliere() {
+		return getRoleList().contains("RESPONSABLEFILIERE");
+	}
+	
+	public boolean isResponsableModule() {
+		return getRoleList().contains("RESPONSABLEMODULE");
+	}
+	
+	public boolean isProfesseur() {
+		return getRoleList().contains("PROF");
+	}
+	
+	public boolean isStudent() {
+		return getRoleList().contains("ETUDIANT");
+	}
+	
 }
