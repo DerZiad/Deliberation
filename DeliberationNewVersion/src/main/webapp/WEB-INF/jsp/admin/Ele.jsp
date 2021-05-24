@@ -14,7 +14,7 @@
 					<input type="hidden" name="type" value="parmodule" />
 					<div class="form-row">
 						<c:if
-							test="${utilisateur.isResponsableFilier() or utilisateur.isAdministrator()}">
+							test="${utilisateur.isResponsableFiliere() or utilisateur.isAdministrator()}">
 							<div class="col-md-6">
 								<div class="position-relative form-group">
 
