@@ -1,6 +1,7 @@
 package com.ziad.models;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +13,8 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.apache.commons.codec.binary.Base64;
 
 import com.ziad.models.compositeid.ComposedInscriptionAdministrative;
 
@@ -269,6 +272,43 @@ public class InscriptionAdministrative implements Serializable{
 
 	public void setComposite_association_id(ComposedInscriptionAdministrative composite_association_id) {
 		this.composite_association_id = composite_association_id;
+	}
+	
+	public void encodeAll() throws UnsupportedEncodingException {
+		if (getPhoto() != null) {
+			byte[] photo = getPhoto();
+			byte[] encodeBase64Photo = Base64.encodeBase64(photo);
+			String base64Encoded = new String(encodeBase64Photo, "UTF-8");
+			setEncodedPhoto(base64Encoded);
+		}
+		if (getBac() != null) {
+
+			byte[] bac = getBac();
+			byte[] encodeBase64Bac = Base64.encodeBase64(bac);
+			String base64Encoded = new String(encodeBase64Bac, "UTF-8");
+			setEncodedBac(base64Encoded);
+		}
+		if (getReleve_note() != null) {
+
+			byte[] ReleveNote = getReleve_note();
+			byte[] encodeBase64Document1 = Base64.encodeBase64(ReleveNote);
+			String base64Encoded = new String(encodeBase64Document1, "UTF-8");
+			setEncodedRv(base64Encoded);
+		}
+		if (getActe_naissance() != null) {
+
+			byte[] ActeNaissance = getActe_naissance();
+			byte[] encodeBase64Document1 = Base64.encodeBase64(ActeNaissance);
+			String base64Encoded = new String(encodeBase64Document1, "UTF-8");
+			setEncodedAn(base64Encoded);
+		}
+		if (getCin() != null) {
+
+			byte[] cin = getCin();
+			byte[] encodeBase64Document1 = Base64.encodeBase64(cin);
+			String base64Encoded = new String(encodeBase64Document1, "UTF-8");
+			setEncodedCin(base64Encoded);
+		}
 	}
 
 }

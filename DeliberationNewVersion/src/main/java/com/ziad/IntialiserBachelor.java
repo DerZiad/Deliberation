@@ -242,7 +242,7 @@ public class IntialiserBachelor {
 		Filiere filiere = filieres.get(0);
 		Filiere chimie = filieres.get(1);
 		
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 5; i++) {
 			Etudiant etudiant = new Etudiant();
 			InscriptionEnLigne inscriptionEnLigne = new InscriptionEnLigne();
 			etudiant.setAcademy("Bachelor");
@@ -309,7 +309,7 @@ public class IntialiserBachelor {
 
 		}
 		
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 5; i++) {
 			Etudiant etudiant = new Etudiant();
 			InscriptionEnLigne inscriptionEnLigne = new InscriptionEnLigne();
 			etudiant.setAcademy("Bachelor");
@@ -351,7 +351,7 @@ public class IntialiserBachelor {
 			AnneeAcademique annee_academique = this.annee_academique.findAll().get(0);
 			inscription_administrative.setAnnee_academique(annee_academique);
 			inscription_administrative.setDate_pre_inscription(new java.util.Date());
-			inscription_administrative.setComposite_association_id(new ComposedInscriptionAdministrative(etudiant, filiere));
+			inscription_administrative.setComposite_association_id(new ComposedInscriptionAdministrative(etudiant, chimie));
 			LocalDate ld = LocalDate.now();
 			ZoneId defaultZoneId = ZoneId.systemDefault();
 			java.util.Date date = Date.from(ld.atStartOfDay(defaultZoneId).toInstant());

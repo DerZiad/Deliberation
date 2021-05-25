@@ -35,7 +35,7 @@ public interface InscriptionPedagogiqueRepository
 	@Query("select s from InscriptionPedagogique s where s.annee_academique =:annee and s.id_inscription_pedagogique.element.module =:module")
 	List<InscriptionPedagogique> getInscriptionPedagogiqueParModule(@Param("module") Modulee module,@Param("annee")AnneeAcademique annee);
 	
-	@Query("select s from InscriptionPedagogique s where s.annee_academique =:annee and s.id_inscription_pedagogique.element.module.semestre =:semestre")
+	@Query("select  s from InscriptionPedagogique s where s.annee_academique =:annee and s.id_inscription_pedagogique.element.module.semestre =:semestre ")
 	List<InscriptionPedagogique> getInscriptionPedagogiqueParSemestre(@Param("semestre") Semestre semestre,@Param("annee")AnneeAcademique annee);
 	
 }

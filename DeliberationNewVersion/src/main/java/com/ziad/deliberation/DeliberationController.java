@@ -64,7 +64,8 @@ public class DeliberationController {
 
 	@SuppressWarnings("unchecked")
 	@GetMapping("/deliberationmodule")
-	public ModelAndView getPageParModule(HttpServletRequest req) throws EntityNotFoundException, DataNotFoundExceptions {
+	public ModelAndView getPageParModule(HttpServletRequest req)
+			throws EntityNotFoundException, DataNotFoundExceptions {
 		ModelAndView model = new ModelAndView(PAGE_DELIBERATION_PAR_MODULE);
 		List<Object> besoins = deliberationMetier.getBesoinPageDeliberationParModule(req);
 		model.addObject(ATTRIBUT_FILIERES, (List<Filiere>) besoins.get(0));
@@ -77,11 +78,12 @@ public class DeliberationController {
 
 	@SuppressWarnings("unchecked")
 	@GetMapping("/deliberationsemestre")
-	public ModelAndView getPageParSemestre(@RequestParam(name = "message",required = false)String msg) throws EntityNotFoundException, DataNotFoundExceptions {
+	public ModelAndView getPageParSemestre(@RequestParam(name = "message", required = false) String msg)
+			throws EntityNotFoundException, DataNotFoundExceptions {
 		ModelAndView model = new ModelAndView(PAGE_DELIBERATION_PAR_SEMESTRE);
 		List<Object> besoins = deliberationMetier.getBesoinPageDeliberationParSemestre();
-		if(msg != null) {
-			model.addObject(ATTRIBUT_ERROR,msg);
+		if (msg != null) {
+			model.addObject(ATTRIBUT_ERROR, msg);
 		}
 		model.addObject(ATTRIBUT_FILIERES, (List<Filiere>) besoins.get(0));
 		model.addObject(ATTRIBUT_ANNEES_ACADEMIQUES, (List<AnneeAcademique>) besoins.get(1));
@@ -103,24 +105,24 @@ public class DeliberationController {
 	}
 
 	@PostMapping("")
-	public ModelAndView deliberer(@RequestParam("filiere") Long idFiliere,
-			@RequestParam("annee") Long idAnneeAcademique, @RequestParam("type") String type,
-			@RequestParam("element") Long id_element, @RequestParam(name = "typedeliberation",required = false) String typeDeliberation,
+	public ModelAndView deliberer(@RequestParam("annee") Long idAnneeAcademique, @RequestParam("type") String type,
+			@RequestParam("element") Long id_element,
+			@RequestParam(name = "typedeliberation", required = false) String typeDeliberation,
 			@RequestParam(name = "consideration", required = false) Integer consideration)
 			throws EntityNotFoundException, DataNotFoundExceptions {
 		ModelAndView model = null;
 		Deliberation deliberation = null;
 		try {
-			deliberation = deliberationMetier.deliberer(idFiliere, idAnneeAcademique, type, id_element,
-					typeDeliberation, consideration);
+			deliberation = deliberationMetier.deliberer(idAnneeAcademique, type, id_element, typeDeliberation,
+					consideration);
 		} catch (DeliberationEtapeNotAllowed e) {
 			model = new ModelAndView(PAGE_DELIBERATION_PAR_ETAPE);
 			model.addObject(ATTRIBUT_ERROR, e.getMessage());
 			model.addObject(ATTRIBUT_SEMESTRE, e.getSemestre());
 			return model;
-		} catch (DeliberationSemestreNotAllowed e1) {			
+		} catch (DeliberationSemestreNotAllowed e1) {
 			String msg = e1.getModule().getLibelle_module() + " " + e1.getMessage();
-			String link = "?error=1&message="+msg;
+			String link = "?error=1&message=" + msg;
 			model = new ModelAndView(REDIRECT_DELIBERATION_PAR_SEMEESTRE + link);
 			return model;
 		}
@@ -158,8 +160,8 @@ public class DeliberationController {
 
 	@GetMapping("/generateUltimatePv")
 	public ModelAndView generateUltimatePv(@RequestParam("idDeliberation") Long idDeliberation,
-			@RequestParam(name = "ratt", required = false) Integer rattrapage, @RequestParam("type") String type,
-			HttpServletResponse response) throws EntityNotFoundException, DocumentException, IOException {
+			@RequestParam(name = "ratt", required = false) Integer rattrapage, HttpServletResponse response)
+			throws EntityNotFoundException, DocumentException, IOException {
 		deliberationMetier.generateUltimatePv(idDeliberation, response);
 		ModelAndView model = new ModelAndView(String.format(REDIRECT_DELIBERATION_LIST, idDeliberation));
 		return model;

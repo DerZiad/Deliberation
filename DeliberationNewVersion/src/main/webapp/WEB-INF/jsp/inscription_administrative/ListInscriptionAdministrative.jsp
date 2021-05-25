@@ -7,37 +7,6 @@
 
 <layout:extends name="../layout.jsp">
 	<layout:put block="content" type="REPLACE">
-		<script>
-jQuery(document).ready(function(){
-		$("input[name=checkfiliere]").click(function(){
-				enable_cb($('input[name=checkfiliere]'),"select[id=listfiliere]","id_filiere");
-		});
-		
-		$("input[name=checkannee]").click(function(){
-				enable_cb($('input[name=checkannee]'),"select[id=listannee]","id_annee_academique");
-		});
-		
-		$("input[name=checksemestre]").click(function(){
-				enable_cb($('input[name=checksemestre]'),"select[id=listsemestre]","id_semestre");
-		});
-		
-		$("input[name=checkmodule]").click(function(){
-				enable_cb($('input[name=checkmodule]'),"select[id=listmodule]","id_module");
-		});
-});
-
-
-function enable_cb(checkboxobject,select,oldname) {
-	if (checkboxobject.is(':checked')) {
-		$(select).attr("name",oldname);
-		$(select).removeAttr("disabled");
-	} else {
-		console.log("je suis non checked");
-		$(select).attr("disabled", true);
-		$(select).attr("name","auto");
-	}
-}
-		</script>
 		<div class="main-card mb-3 card">
 			<div class="card-body">
 				<h5 class="card-title">Liste des inscriptions administratives
@@ -46,8 +15,8 @@ function enable_cb(checkboxobject,select,oldname) {
 					method="POST">
 					<div class="col-md-6">
 						<div class="position-relative form-group">
-							<input type="checkbox" class="form-class" name="checkfiliere" checked/>
-							<label for="Filiere" class="">Filiere</label> <select
+							<input type="checkbox" class="form-class" name="checkfiliere"
+								checked /> <label for="Filiere" class="">Filiere</label> <select
 								id="listfiliere" name="id_filiere" class="form-control">
 								<c:forEach var="filiere" items="${filieres}">
 									<option value="${filiere.id_filiere }">${filiere.nom_filiere }</option>
@@ -58,10 +27,11 @@ function enable_cb(checkboxobject,select,oldname) {
 					</div>
 					<div class="col-md-6">
 						<div class="position-relative form-group">
-							<input type="checkbox" class="form-class" name="checkannee" checked/> <label
-								for="Filiere" class="">Année universitaire</label> <select id="listannee"
-								name="id_annee_academique" id="myInput" class="form-control">
-								<c:forEach var="annee" items="${annees_academiques}" >
+							<input type="checkbox" class="form-class" name="checkannee"
+								checked /> <label for="Filiere" class="">Année
+								universitaire</label> <select id="listannee" name="id_annee_academique"
+								id="myInput" class="form-control">
+								<c:forEach var="annee" items="${annees_academiques}">
 									<option value="${annee.id_annee_academique }">${annee.annee_academique }</option>
 								</c:forEach>
 
@@ -70,12 +40,10 @@ function enable_cb(checkboxobject,select,oldname) {
 					</div>
 					<div class="col-md-6">
 						<div class="position-relative form-group">
-							<input type="checkbox" class="form-class" name="checksemestre" checked/>
-							<label for="semestre" class="">Semestre</label> <select id="listsemestre"
-								name="id_semestre" id="myInput" class="form-control">
-								<c:forEach var="semestre" items="${semestres}">
-									<option value="${semestre.id_semestre }">${semestre.libelle_semestre }</option>
-								</c:forEach>
+							<input type="checkbox" class="form-class" name="checksemestre"
+								checked /> <label for="semestre" class="">Semestre</label> <select
+								id="listsemestre" name="id_semestre" id="myInput"
+								class="form-control">
 
 							</select>
 						</div>
@@ -83,12 +51,10 @@ function enable_cb(checkboxobject,select,oldname) {
 					</div>
 					<div class="col-md-6">
 						<div class="position-relative form-group">
-							<input type="checkbox" class="form-class" name="checkmodule" checked/>
-							<label for="module" class="">Module</label> <select id="listmodule"
-								name="id_module" id="myInput" class="form-control">
-								<c:forEach var="module" items="${modules}">
-									<option value="${module.id_module }">${module.libelle_module }</option>
-								</c:forEach>
+							<input type="checkbox" class="form-class" name="checkmodule"
+								checked /> <label for="module" class="">Module</label> <select
+								id="listmodule" name="id_module" id="myInput"
+								class="form-control">
 
 							</select>
 						</div>
@@ -151,5 +117,105 @@ function enable_cb(checkboxobject,select,oldname) {
 				</table>
 			</div>
 		</div>
+		<script>
+var modules = JSON.parse('${modulesjson}');
+var semestres = JSON.parse('${semestresjson}');
+		
+jQuery(document).ready(function(){
+			$('select[name=id_filiere]').change(function(){
+				filiterSemestre();
+			});
+		
+			$('select[name=id_semestre]').change(function(){
+				filterModule();
+			});
+			
+
+			$("input[name=checkfiliere]").click(function(){
+				enable_cb($("input[name=checkfiliere]"),'select[id=listfiliere]',"id_filiere ");		
+				if ($('input[name=checkfiliere]').is(':checked')) {
+					$('select[id=listfiliere]').attr("name","id_filiere");
+					$('select[id=listfiliere]').removeAttr("disabled");
+					filiterSemestre();
+				} else {
+					$(select).attr("disabled", true);
+					$(select).attr("name","auto");
+					filiterSemestre();
+				}
+			});
+		
+			$("input[name=checkannee]").click(function(){
+				enable_cb($('input[name=checkannee]'),"select[id=listannee]","id_annee_academique");
+			});
+		
+			$("input[name=checksemestre]").click(function(){
+				enable_cb($('input[name=checksemestre]'),"select[id=listsemestre]","id_semestre",filterModule());
+			});
+		
+			$("input[name=checkmodule]").click(function(){
+				enable_cb($('input[name=checkmodule]'),"select[id=listmodule]","id_module");
+			});
+			filiterSemestre();
+});
+
+function enable_cb(checkboxobject,select,oldname,functionto) {
+	if (checkboxobject.is(':checked')) {
+		$(select).attr("name",oldname);
+		$(select).removeAttr("disabled");
+		functionto();
+	} else {
+		$(select).attr("disabled", true);
+		$(select).attr("name","auto");
+		functionto();
+	}
+}
+
+function filterModule(){
+			
+			var semestre = $('select[name=id_semestre]').val();
+			var filiere = $('select[name=id_filiere]').val();
+			
+			var chmodule = "";
+			var check  = false;
+			for(let i = 0;i<modules.length;i++){
+				check  = false;
+				
+				if($("input[name=checkfiliere]").is(':checked')){
+					if(modules[i].id_filiere == filiere){
+						check = true;
+					}
+				}
+				
+				if($("input[name=checksemestre]").is(':checked')){
+					check = false;
+					if(modules[i].id_semestre == semestre){
+						check = true;
+					}
+				}
+				
+
+				
+				if(check){
+					chmodule = chmodule + '<option value="' + modules[i].id_module + '">' + modules[i].libelle_module + '</option>';
+				}
+			}
+			$('select[name=id_module]').html(chmodule);
+}
+		
+function filiterSemestre(){
+			var filiere = $('select[name=id_filiere]').val();
+			
+			var chsemestre = "";
+			for(let i = 0;i<semestres.length;i++){
+				if($("input[name=checkfiliere]").is(':checked')){
+					if(semestres[i].id_filiere == filiere){
+						chsemestre = chsemestre + '<option value="' + semestres[i].id_semestre +'">' + semestres[i].libelle_semestre + '</option>';
+					}
+				}
+			}
+			$('select[name=id_semestre]').html(chsemestre);
+			filterModule();
+}
+		</script>
 	</layout:put>
 </layout:extends>

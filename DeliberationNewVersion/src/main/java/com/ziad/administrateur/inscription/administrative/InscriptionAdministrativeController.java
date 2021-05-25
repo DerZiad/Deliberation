@@ -37,8 +37,11 @@ public class InscriptionAdministrativeController {
 
 	private final static String ATTRIBUT_LIST_ETUDIANTS = "etudiants";
 	private final static String ATTRIBUT_LIST_FILIERES = "filieres";
-	private final static String ATTRIBUT_LIST_SEMESTRES = "semestres";
-	private final static String ATTRIBUT_LIST_MODULES = "modules";
+	
+	private final static String ATTRIBUT_LIST_SEMESTRES_JSON = "semestresjson";
+	private final static String ATTRIBUT_LIST_MODULES_JSON = "modulesjson";
+
+	
 	private final static String ATTRIBUT_LIST_ANNEE_ACADEMIQUES = "annees_academiques";
 	private final static String ATTRIBUT_INSCRIPTION_EN_LIGNE = "inscriptionenligne";
 	private final static String ATTRIBUT_LIST_INSCRIPTIONS_ADMINISTRATIVES = "InscriptionAssociative";
@@ -105,8 +108,8 @@ public class InscriptionAdministrativeController {
 		model.addObject("listAdministartive", "mm-active");
 		model.addObject(ATTRIBUT_LIST_ANNEE_ACADEMIQUES, (List<AnneeAcademique>)list.get(0));
 		model.addObject(ATTRIBUT_LIST_FILIERES,(List<Filiere>) list.get(1));
-		model.addObject(ATTRIBUT_LIST_SEMESTRES, (List<Semestre>)list.get(2));
-		model.addObject(ATTRIBUT_LIST_MODULES, (List<Modulee>)list.get(3));
+		model.addObject(ATTRIBUT_LIST_SEMESTRES_JSON, (String)list.get(2));
+		model.addObject(ATTRIBUT_LIST_MODULES_JSON, (String)list.get(3));
 		List<InscriptionAdministrative> l = (List<InscriptionAdministrative>) list.get(4);
 		model.addObject(ATTRIBUT_LIST_INSCRIPTIONS_ADMINISTRATIVES, l);
 		return model;
@@ -122,8 +125,8 @@ public class InscriptionAdministrativeController {
 		model.addObject("listAdministartive", "mm-active");
 		model.addObject(ATTRIBUT_LIST_ANNEE_ACADEMIQUES, list.get(0));
 		model.addObject(ATTRIBUT_LIST_FILIERES, list.get(1));
-		model.addObject(ATTRIBUT_LIST_SEMESTRES, list.get(2));
-		model.addObject(ATTRIBUT_LIST_MODULES, list.get(3));
+		model.addObject(ATTRIBUT_LIST_SEMESTRES_JSON, (String)list.get(2));
+		model.addObject(ATTRIBUT_LIST_MODULES_JSON, (String)list.get(3));
 		model.addObject(ATTRIBUT_LIST_INSCRIPTIONS_ADMINISTRATIVES, inscription_metier.listInscriptionAdministrativeByFilter(idFiliere, idAnneeAcademique, idSemestre, idModule));
 		return model;
 	}

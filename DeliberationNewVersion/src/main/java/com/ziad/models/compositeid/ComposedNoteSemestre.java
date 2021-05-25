@@ -44,4 +44,11 @@ public class ComposedNoteSemestre implements Serializable{
 		this.etudiant = etudiant;
 	}
 
+	@Override
+	public String toString() {
+		return "ComposedNoteSemestre [semestre=" + semestre.getId_semestre() + ", etudiant=" + etudiant.getId_etudiant() + "]";
+	}
+	
+	
+
 }

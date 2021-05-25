@@ -14,7 +14,7 @@ import com.ziad.models.compositeid.ComposedNoteSemestre;
 
 @Entity
 @Table(name = "notessemestre")
-public class NoteSemestre {
+public class NoteSemestre implements Comparable<NoteSemestre> {
 	@EmbeddedId
 	private ComposedNoteSemestre idCompose;
 
@@ -100,4 +100,21 @@ public class NoteSemestre {
 		}
 		etat = validByCompensation ? Etat.COMPONSE.name() : Etat.VALIDE.name();
 	}
+
+	@Override
+	public String toString() {
+		return "NoteSemestre [idCompose=" + idCompose + ", note=" + note + ", isValid=" + isValid + ", etat=" + etat
+				+ ", deliberation=" + deliberation + "]";
+	}
+
+	@Override
+	public int compareTo(NoteSemestre o) {
+		if (getNote() > o.getNote())
+			return 1;
+		else if (getNote() < o.getNote())
+			return -1;
+		else
+			return 0;
+	}
+
 }

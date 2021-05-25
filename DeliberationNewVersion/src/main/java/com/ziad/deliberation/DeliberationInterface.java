@@ -24,7 +24,7 @@ public interface DeliberationInterface {
 
 	public ArrayList<Object> getBesoinPageDeliberationParEtape() throws DataNotFoundExceptions, EntityNotFoundException;
 
-	public Deliberation deliberer(Long idFiliere, Long idAnneeAcademique, String type, Long id_element,
+	public Deliberation deliberer( Long idAnneeAcademique, String type, Long id_element,
 			String typeDeliberation, Integer consideration) throws DataNotFoundExceptions, EntityNotFoundException,
 			DeliberationEtapeNotAllowed, DeliberationSemestreNotAllowed;
 

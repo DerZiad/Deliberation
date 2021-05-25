@@ -12,15 +12,16 @@
 			<div class="page-title-wrapper">
 				<div class="page-title-heading">
 					<div class="page-title-icon">
-						<i class="pe-7s-car icon-gradient bg-mean-fruit" style="color: red;"> </i>
+						<i class="pe-7s-car icon-gradient bg-mean-fruit"
+							style="color: red;"> </i>
 					</div>
 					<div>
 						Tableau de bords
-						<div class="page-title-subheading">Les détails généraux en ce qui concerne les délibérations
-						des étudiants.</div>
+						<div class="page-title-subheading">Les détails généraux en
+							ce qui concerne les délibérations des étudiants.</div>
 					</div>
 				</div>
-				
+
 			</div>
 		</div>
 		<div class="row">
@@ -33,7 +34,7 @@
 						</div>
 						<div class="widget-content-right">
 							<div class="widget-numbers text-white">
-								<span>${nombreEtudiants}</span>
+								<span>${etudiants.size()}</span>
 							</div>
 						</div>
 					</div>
@@ -48,7 +49,7 @@
 						</div>
 						<div class="widget-content-right">
 							<div class="widget-numbers text-white">
-								<span>${nombreProfesseurs }</span>
+								<span>${professeurs.size() }</span>
 							</div>
 						</div>
 					</div>
@@ -58,12 +59,12 @@
 				<div class="card mb-3 widget-content bg-grow-early">
 					<div class="widget-content-wrapper text-white">
 						<div class="widget-content-left">
-							<div class="widget-heading">Nombre de responsable de filières</div>
+							<div class="widget-heading">Filières</div>
 							<div class="widget-subheading"></div>
 						</div>
 						<div class="widget-content-right">
 							<div class="widget-numbers text-white">
-								<span>${nombreResponsables }</span>
+								<span>${filieres.size() }</span>
 							</div>
 						</div>
 					</div>
@@ -78,7 +79,7 @@
 						</div>
 						<div class="widget-content-right">
 							<div class="widget-numbers text-warning">
-								<span>${nombreFilieres }</span>
+								<span>${filieres.size() }</span>
 							</div>
 						</div>
 					</div>
@@ -98,123 +99,46 @@
 						<div class="tab-content">
 							<div class="tab-pane fade show active" id="tabs-eg-77">
 								<!-- chart here -->
-								<center><div id="columnchart_material" style="width: 800px; height: 500px;"></div></center>
+								<center>
+									<div id="columnchart_material"
+										style="width: 800px; height: 500px;"></div>
+								</center>
 								<h6
-									class="text-muted text-uppercase font-size-md opacity-5 font-weight-normal">Meilleurs etudiants</h6>
+									class="text-muted text-uppercase font-size-md opacity-5 font-weight-normal">Meilleurs
+									etudiants</h6>
+
 								<div class="scroll-area-sm">
 									<div class="scrollbar-container">
 										<ul
 											class="rm-list-borders rm-list-borders-scroll list-group list-group-flush">
-											<li class="list-group-item">
-												<div class="widget-content p-0">
-													<div class="widget-content-wrapper">
-														<div class="widget-content-left mr-3">
-															<img width="42" class="rounded-circle"
-																src="/assets/images/avatars/9.jpg" alt="">
-														</div>
-														<div class="widget-content-left">
-															<div class="widget-heading">Coming soon ...</div>
-															<div class="widget-subheading">Coming soon ...</div>
-														</div>
-														<div class="widget-content-right">
-															<div class="font-size-xlg text-muted">
-																<small class="opacity-5 pr-1">$</small> <span>1337</span>
-																<small class="text-danger pl-2"> <i
-																	class="fa fa-angle-down"></i>
-																</small>
+											<c:forEach var="note" items="${notes}">
+												<li class="list-group-item">
+
+													<div class="widget-content p-0">
+														<div class="widget-content-wrapper">
+															<div class="widget-content-left mr-3">
+																<c:if test="${dic.get(note.idCompose.etudiant).encodedPhoto ne null }">
+																	<img width="42" class="rounded-circle"
+																	src="data:image/png;base64, ${dic.get(note.idCompose.etudiant).encodedPhoto }==" alt="">
+																</c:if>
+											
+															</div>
+															<div class="widget-content-left">
+																<div class="widget-heading">${note.idCompose.etudiant.first_name_fr }</div>
+																<div class="widget-subheading">${note.idCompose.etudiant.last_name_fr }</div>
+															</div>
+															<div class="widget-content-right">
+																<div class="font-size-xlg text-muted">
+																	<span>${note.note }</span>
+																	<small class="text-danger pl-2"> <i
+																		class="fa fa-angle-down"></i>
+																	</small>
+																</div>
 															</div>
 														</div>
 													</div>
-												</div>
-											</li>
-											<li class="list-group-item">
-												<div class="widget-content p-0">
-													<div class="widget-content-wrapper">
-														<div class="widget-content-left mr-3">
-															<img width="42" class="rounded-circle"
-																src="/assets/images/avatars/5.jpg" alt="">
-														</div>
-														<div class="widget-content-left">
-															<div class="widget-heading">Coming soon ...</div>
-															<div class="widget-subheading">Coming soon ...</div>
-														</div>
-														<div class="widget-content-right">
-															<div class="font-size-xlg text-muted">
-																<small class="opacity-5 pr-1">$</small> <span>1</span>
-																<small class="text-success pl-2"> <i
-																	class="fa fa-angle-up"></i>
-																</small>
-															</div>
-														</div>
-													</div>
-												</div>
-											</li>
-											<li class="list-group-item">
-												<div class="widget-content p-0">
-													<div class="widget-content-wrapper">
-														<div class="widget-content-left mr-3">
-															<img width="42" class="rounded-circle"
-																src="/assets/images/avatars/4.jpg" alt="">
-														</div>
-														<div class="widget-content-left">
-															<div class="widget-heading">Coming soon ...</div>
-															<div class="widget-subheading">Java Programmer</div>
-														</div>
-														<div class="widget-content-right">
-															<div class="font-size-xlg text-muted">
-																<small class="opacity-5 pr-1">$</small> <span>429</span>
-																<small class="text-warning pl-2"> <i
-																	class="fa fa-dot-circle"></i>
-																</small>
-															</div>
-														</div>
-													</div>
-												</div>
-											</li>
-											<li class="list-group-item">
-												<div class="widget-content p-0">
-													<div class="widget-content-wrapper">
-														<div class="widget-content-left mr-3">
-															<img width="42" class="rounded-circle"
-																src="/assets/images/avatars/3.jpg" alt="">
-														</div>
-														<div class="widget-content-left">
-															<div class="widget-heading">Coming soon ...</div>
-															<div class="widget-subheading">Web Developer</div>
-														</div>
-														<div class="widget-content-right">
-															<div class="font-size-xlg text-muted">
-																<small class="opacity-5 pr-1">$</small> <span>129</span>
-																<small class="text-danger pl-2"> <i
-																	class="fa fa-angle-down"></i>
-																</small>
-															</div>
-														</div>
-													</div>
-												</div>
-											</li>
-											<li class="list-group-item">
-												<div class="widget-content p-0">
-													<div class="widget-content-wrapper">
-														<div class="widget-content-left mr-3">
-															<img width="42" class="rounded-circle"
-																src="/assets/images/avatars/2.jpg" alt="">
-														</div>
-														<div class="widget-content-left">
-															<div class="widget-heading">Coming soon ...</div>
-															<div class="widget-subheading">UI Designer</div>
-														</div>
-														<div class="widget-content-right">
-															<div class="font-size-xlg text-muted">
-																<small class="opacity-5 pr-1">$</small> <span>54</span>
-																<small class="text-success pl-2"> <i
-																	class="fa fa-angle-up"></i>
-																</small>
-															</div>
-														</div>
-													</div>
-												</div>
-											</li>
+												</li>
+											</c:forEach>
 										</ul>
 									</div>
 								</div>
@@ -224,6 +148,8 @@
 				</div>
 			</div>
 		</div>
-
+		<script>
+				
+		</script>
 	</layout:put>
 </layout:extends>

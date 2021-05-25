@@ -52,6 +52,7 @@ import com.ziad.repositories.ModuleRepository;
 import com.ziad.repositories.NoteElementRepository;
 import com.ziad.repositories.SemestreRepository;
 import com.ziad.utilities.ExcelReader;
+import com.ziad.utilities.JSONConverter;
 
 @Service
 @Primary
@@ -79,8 +80,8 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 	private ExcelReader excel_service;
 	@Autowired
 	private NoteElementRepository noteElementRepository;
-	
-	
+	@Autowired
+	private JSONConverter converter;
 	@Autowired
 	private ModuleRepository moduleRepository;
 
@@ -172,6 +173,7 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 			inscription_administrative.setPhoto(photo.getBytes());
 		}
 		inscription_administrative.setComposite_association_id(id_compose);
+		inscription_administrative.encodeAll();
 		inscriptionAdministrative.save(inscription_administrative);
 
 		/*
@@ -213,63 +215,11 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 	public ArrayList<Object> listerInscriptionsAdministratives()
 			throws DataNotFoundExceptions, UnsupportedEncodingException {
 		List<Filiere> filieres = filiereRepository.findAll();
-		List<InscriptionAdministrative> lia = inscriptionAdministrative.findAll();
-
-		// --------------------les années universitaires utilisés comme filtre du
-		// tableau-----------------------//
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-		LocalDate localDate = LocalDate.now();
-		int ele[] = new int[3];
-		for (int i = 0; i < ele.length; i++) {
-			ele[i] = Integer.parseInt((dtf.format(localDate).toString().split("/")[i].trim()));
-		}
-		if (ele[1] > 8) {
-			ele[0]++;
-		}
-		// -----------------------------------------------------------------------------------------------//
-
-		for (int i = 0; i < lia.size(); i++) {
-			if (lia.get(i).getPhoto() != null) {
-
-				byte[] photo = lia.get(i).getPhoto();
-				byte[] encodeBase64Photo = Base64.encodeBase64(photo);
-				String base64Encoded = new String(encodeBase64Photo, "UTF-8");
-				lia.get(i).setEncodedPhoto(base64Encoded);
-			}
-			if (lia.get(i).getBac() != null) {
-
-				byte[] document1 = lia.get(i).getBac();
-				byte[] encodeBase64Document1 = Base64.encodeBase64(document1);
-				String base64Encoded = new String(encodeBase64Document1, "UTF-8");
-				lia.get(i).setEncodedBac(base64Encoded);
-			}
-			if (lia.get(i).getReleve_note() != null) {
-
-				byte[] document1 = lia.get(i).getReleve_note();
-				byte[] encodeBase64Document1 = Base64.encodeBase64(document1);
-				String base64Encoded = new String(encodeBase64Document1, "UTF-8");
-				lia.get(i).setEncodedRv(base64Encoded);
-			}
-			if (lia.get(i).getActe_naissance() != null) {
-
-				byte[] document1 = lia.get(i).getActe_naissance();
-				byte[] encodeBase64Document1 = Base64.encodeBase64(document1);
-				String base64Encoded = new String(encodeBase64Document1, "UTF-8");
-				lia.get(i).setEncodedAn(base64Encoded);
-			}
-			if (lia.get(i).getCin() != null) {
-
-				byte[] document1 = lia.get(i).getCin();
-				byte[] encodeBase64Document1 = Base64.encodeBase64(document1);
-				String base64Encoded = new String(encodeBase64Document1, "UTF-8");
-				lia.get(i).setEncodedCin(base64Encoded);
-			}
-		}
 		ArrayList<Object> list = new ArrayList<Object>();
 		list.add(annee_academique_repository.findAll());
 		list.add(filieres);
-		list.add(semestreRespository.findAll());
-		list.add(moduleRepository.findAll());
+		list.add(converter.convertSemestre(semestreRespository.findAll()));
+		list.add(converter.convertModulee(moduleRepository.findAll()));
 		list.add(inscription_admistrative_repository.findAll());
 
 		return list;
@@ -305,6 +255,9 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 		if (!photo.isEmpty()) {
 			inscription_administrative.setPhoto(photo.getBytes());
 		}
+		
+		inscription_administrative.encodeAll();
+		
 		inscription_admistrative_repository.save(inscription_administrative);
 		historiqueRepository.save(new Historique(
 				"documents de l'étudiant " + inscription_administrative.getEtudiant().getFirst_name_fr() + " "
@@ -489,27 +442,27 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 			System.out.println("Filtre module");
 			Modulee module = moduleRepository.getOne(idModule);
 			listesInscription = inscription_admistrative_repository.listerInscriptionsAdministrativesByModule(module);
+			System.out.println(listesInscription.size());
 		} else if (idSemestre != null) {
 			System.out.println("Filtre semestre");
 			Semestre semestre = semestreRespository.getOne(idSemestre);
 			listesInscription = inscription_admistrative_repository
 					.listerInscriptionsAdministrativesBySemestre(semestre);
+			System.out.println(listesInscription.size());
 		} else if (idFiliere != null) {
 			System.out.println("Filtre filiere");
 			Filiere filiere = filiereRepository.getOne(idFiliere);
 			listesInscription = inscription_admistrative_repository.listerInscriptionsAdministrativesByFiliere(filiere);
+			System.out.println(listesInscription.size());
 		}
 
 		if (idAnneeAcademique != null) {
 			System.out.println("Filtre annee academique");
 			listesInscription = listesInscription.stream()
-					.filter(inscri -> inscri.getAnnee_academique().getId_annee_academique() == idAnneeAcademique)
+					.filter(inscri -> inscri.getAnnee_academique().getId_annee_academique() != idAnneeAcademique)
 					.collect(Collectors.toList());
 		}
 		
-		if(listesInscription.size() == 0) {
-			listesInscription = inscription_admistrative_repository.findAll();
-		}
 		return listesInscription;
 	}
 

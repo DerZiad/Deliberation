@@ -39,13 +39,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 				// Gestion des espaces du système
 				.antMatchers(MonRole.ROLEADMIN.getEspace() + "/**").hasRole(MonRole.ROLEADMIN.getRole())
-				.antMatchers(MonRole.ROLEETUDIANT.getEspace()+ "/**").hasRole(MonRole.ROLEETUDIANT.getRole())
-				.antMatchers(MonRole.ROLEPROFESSEUR.getEspace()+ "/**").hasRole(MonRole.ROLEPROFESSEUR.getRole())
-				.antMatchers(MonRole.ROLERESPONSABLEFILIERE.getEspace()+ "/**").hasRole(MonRole.ROLERESPONSABLEFILIERE.getRole())
-				.antMatchers(MonRole.ROLERESPONSABLEMODULE.getEspace()+ "/**").hasRole(MonRole.ROLERESPONSABLEMODULE.getRole())
+				.antMatchers(MonRole.ROLEETUDIANT.getEspace() + "/**").hasRole(MonRole.ROLEETUDIANT.getRole())
+				.antMatchers(MonRole.ROLEPROFESSEUR.getEspace() + "/**").hasRole(MonRole.ROLEPROFESSEUR.getRole())
+				.antMatchers(MonRole.ROLERESPONSABLEFILIERE.getEspace() + "/**")
+				.hasRole(MonRole.ROLERESPONSABLEFILIERE.getRole())
+				.antMatchers(MonRole.ROLERESPONSABLEMODULE.getEspace() + "/**")
+				.hasRole(MonRole.ROLERESPONSABLEMODULE.getRole()).antMatchers("/delib")
+				.hasAnyRole(MonRole.ROLEADMIN.getRole(), MonRole.ROLERESPONSABLEMODULE.getRole(),
+						MonRole.ROLERESPONSABLEFILIERE.getRole())
+				.antMatchers("/delib/deliberationmodule")
+				.hasAnyRole(MonRole.ROLEADMIN.getRole(), MonRole.ROLERESPONSABLEMODULE.getRole(),
+						MonRole.ROLERESPONSABLEFILIERE.getRole())
+				.antMatchers("/delib/deliberationsemestre")
+				.hasAnyRole(MonRole.ROLEADMIN.getRole(), MonRole.ROLERESPONSABLEFILIERE.getRole())
+				.antMatchers("/delib/deliberationetape")
+				.hasAnyRole(MonRole.ROLEADMIN.getRole(), MonRole.ROLERESPONSABLEFILIERE.getRole())
 
-				.anyRequest().permitAll().and().formLogin().loginProcessingUrl("/signin").permitAll()
-				
+				.anyRequest().permitAll().and().formLogin().loginProcessingUrl("/login").permitAll()
+
 				.loginPage("/login").permitAll().successHandler(mySimpleUrlAuthenticationHandler())
 				.failureUrl("/login?error=true").usernameParameter("username").passwordParameter("password").and()
 				.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").and()

@@ -1,6 +1,7 @@
 package com.ziad.deliberation;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,10 +89,10 @@ public class Algorithme {
 			deliberation = delibs.get(0);
 			deliberationpermis = !deliberation.isDelibered() && typeDelib.equals(DeliberationType.RATTRAPAGE);
 			// On a
-																												// pas
-																												// encore
-																												// deliberer
-																												// rattrapage
+			// pas
+			// encore
+			// deliberer
+			// rattrapage
 			deliberation.setDelibered(deliberationpermis);
 		}
 
@@ -106,8 +107,6 @@ public class Algorithme {
 				Double noteDouble = 0d;
 				for (Element element : elementRepository.getElementsByModule(module)) {
 					NoteElement note = noteElementRepository.getOne(inscription.getId_inscription_pedagogique());
-					System.out
-							.println("Note element " + element.getLibelle_element() + " est " + note.getNote_element());
 					noteDouble = noteDouble + note.getNote_element() * element.getCoeficient();
 					coefficient = coefficient + element.getCoeficient();
 				}
@@ -138,7 +137,7 @@ public class Algorithme {
 			deliberation = new Deliberation(typeDelib.name(), annee, null, semestre, null);
 			List<InscriptionPedagogique> inscriptionsPedagogiques = inscriptionPedagogiqueRepository
 					.getInscriptionPedagogiqueParSemestre(semestre, annee);
-
+			inscriptionsPedagogiques = filterInscription(inscriptionsPedagogiques);
 			for (InscriptionPedagogique inscription : inscriptionsPedagogiques) {
 				Double coefficient = 0d;
 				Double noteSemestre = 0d;
@@ -155,8 +154,8 @@ public class Algorithme {
 						new ComposedNoteSemestre(semestre, inscription.getEtudiant()), noteSemestre, deliberation);
 				noteSemestreO.delibererSemestre(notess);
 				deliberation.addNoteSemestre(noteSemestreO);
-				deliberationRepository.save(deliberation);
 			}
+			deliberationRepository.save(deliberation);
 
 			return deliberation;
 		}
@@ -178,7 +177,7 @@ public class Algorithme {
 		}
 	}
 
-	public Deliberation delibererEtape(Etape etape, AnneeAcademique annee) throws DeliberationEtapeNotAllowed{
+	public Deliberation delibererEtape(Etape etape, AnneeAcademique annee) throws DeliberationEtapeNotAllowed {
 		List<Deliberation> delibs = deliberationRepository.getDeliberationByEtapeAnnneAcademique(etape, annee);
 		/**
 		 * Etape1 -> Verifier si on a deja deliberer
@@ -204,20 +203,38 @@ public class Algorithme {
 				deliberation.addNoteEtape(noteEtape);
 				deliberationRepository.save(deliberation);
 			}
-		}else {
+		} else {
 			deliberation = delibs.get(0);
 		}
 		return deliberation;
 
 	}
-	
-	private void isDeliberationEtapeAllowed(Etape etape,AnneeAcademique annee) throws DeliberationEtapeNotAllowed{
-		for(Semestre semestre:etape.getSemestres()) {
-			List<Deliberation> delibs = deliberationRepository.getDeliberationBySemestreAnnneAcademique(semestre, annee);
-			if(delibs.size() == 0) {
+
+	private void isDeliberationEtapeAllowed(Etape etape, AnneeAcademique annee) throws DeliberationEtapeNotAllowed {
+		for (Semestre semestre : etape.getSemestres()) {
+			List<Deliberation> delibs = deliberationRepository.getDeliberationBySemestreAnnneAcademique(semestre,
+					annee);
+			if (delibs.size() == 0) {
 				throw new DeliberationEtapeNotAllowed(semestre, "Le semestre n est pas deliberer");
 			}
 		}
+	}
+
+	private List<InscriptionPedagogique> filterInscription(List<InscriptionPedagogique> inscriptionsPedagogiques) {
+
+		boolean check = true;
+		List<InscriptionPedagogique> inscriptionsPedagogiquesFiltrer = new ArrayList<InscriptionPedagogique>();
+		for (InscriptionPedagogique inscriptionPedagogique : inscriptionsPedagogiques) {
+			check = true;
+			for (InscriptionPedagogique inscriptionPedagogique1 : inscriptionsPedagogiquesFiltrer) {
+				if (inscriptionPedagogique.getEtudiant().equals(inscriptionPedagogique1.getEtudiant()))
+					check = check && false;
+			}
+			if (check) {
+				inscriptionsPedagogiquesFiltrer.add(inscriptionPedagogique);
+			}
+		}
+		return inscriptionsPedagogiquesFiltrer;
 	}
 
 }

@@ -13,6 +13,16 @@
 				<form class="" action="/delib/" method="POST">
 					<input type="hidden" name="type" value="parmodule" />
 					<div class="form-row">
+						<div class="col-md-6">
+							<div class="position-relative form-group">
+								<label for="name" class="">Années académiques</label> <select
+									name="annee" id="exampleSelect" class="form-control">
+									<c:forEach var="annee" items="${annees}">
+										<option value="${annee.id_annee_academique }">${annee.annee_academique }</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
 						<c:if
 							test="${utilisateur.isResponsableFiliere() or utilisateur.isAdministrator()}">
 							<div class="col-md-6">
@@ -26,16 +36,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-md-6">
-								<div class="position-relative form-group">
-									<label for="name" class="">Années académiques</label> <select
-										name="annee" id="exampleSelect" class="form-control">
-										<c:forEach var="annee" items="${annees}">
-											<option value="${annee.id_annee_academique }">${annee.annee_academique }</option>
-										</c:forEach>
-									</select>
-								</div>
-							</div>
+
 							<div class="col-md-6">
 								<div class="position-relative form-group">
 									<label for="element-class" class="element-class">Semestre</label>
