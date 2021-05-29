@@ -39,7 +39,7 @@ public class NoteEtape implements Serializable {
 
 	public NoteEtape(Double note, Deliberation deliberation) {
 		super();
-		this.note = note;
+		this.note = arrondir(note);
 		this.deliberation = deliberation;
 	}
 
@@ -57,11 +57,11 @@ public class NoteEtape implements Serializable {
 	}
 
 	public Double getNote() {
-		return note;
+		return arrondir(note);
 	}
 
 	public void setNote(Double note) {
-		this.note = note;
+		this.note = arrondir(note);
 	}
 
 	public boolean isValid() {
@@ -89,10 +89,15 @@ public class NoteEtape implements Serializable {
 	}
 
 	public void delibererEtape() {
-		if (note >= idCompose.getEtape().getValidation())
+		if (note >= idCompose.getEtape().getValidation()) {
 			etat = Etat.VALIDE.name();
-		else
-			etat = Etat.COMPONSE.name();
+			isValid = true;
+		}else
+			etat = Etat.ELIMINIE.name();
 	}
-
+	
+	public double arrondir(Double note) {
+		return Math.round(note * 100.0)/100.0;
+	}
+	
 }

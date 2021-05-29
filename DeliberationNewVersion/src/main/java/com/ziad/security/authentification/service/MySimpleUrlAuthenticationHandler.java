@@ -35,7 +35,6 @@ public class MySimpleUrlAuthenticationHandler implements AuthenticationSuccessHa
 			throws IOException {
 
 		String path = request.getServletPath();
-		System.out.println(path);
 
 		String targetUrl = determineTargetUrl(authentication);
 

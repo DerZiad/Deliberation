@@ -40,7 +40,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				// Gestion des espaces du système
 				.antMatchers(MonRole.ROLEADMIN.getEspace() + "/**").hasRole(MonRole.ROLEADMIN.getRole())
 				.antMatchers(MonRole.ROLEETUDIANT.getEspace() + "/**").hasRole(MonRole.ROLEETUDIANT.getRole())
-				.antMatchers(MonRole.ROLEPROFESSEUR.getEspace() + "/**").hasRole(MonRole.ROLEPROFESSEUR.getRole())
+				.antMatchers(MonRole.ROLEPROFESSEUR.getEspace() + "/**")
+				.hasAnyRole(MonRole.ROLERESPONSABLEFILIERE.getRole(), MonRole.ROLERESPONSABLEMODULE.getRole(),
+						MonRole.ROLEPROFESSEUR.getRole())
 				.antMatchers(MonRole.ROLERESPONSABLEFILIERE.getEspace() + "/**")
 				.hasRole(MonRole.ROLERESPONSABLEFILIERE.getRole())
 				.antMatchers(MonRole.ROLERESPONSABLEMODULE.getEspace() + "/**")
@@ -59,7 +61,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 				.loginPage("/login").permitAll().successHandler(mySimpleUrlAuthenticationHandler())
 				.failureUrl("/login?error=true").usernameParameter("username").passwordParameter("password").and()
-				.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").and()
+				.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/").and()
 				.rememberMe().tokenValiditySeconds(30000).key("mySecret!")
 				.userDetailsService(userPrincipalDetailsService).rememberMeParameter("checkRememberMe");
 	}

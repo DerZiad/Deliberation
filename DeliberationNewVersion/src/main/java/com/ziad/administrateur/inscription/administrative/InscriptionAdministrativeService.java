@@ -203,12 +203,10 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 
 		Etudiant etudiant = etudiantRepository.getOne(id_etudiant);
 		Filiere filiere = filiereRepository.getOne(id_filiere);
-
+		
 		ComposedInscriptionAdministrative inscription_administrative = new ComposedInscriptionAdministrative(etudiant,
-				filiere);
-		InscriptionAdministrative inscription_adminisrative = inscriptionAdministrative
-				.getOne(inscription_administrative);
-		inscription_admistrative_repository.delete(inscription_adminisrative);
+				filiere);		
+		inscription_admistrative_repository.deleteById(inscription_administrative);
 	}
 
 	@Override

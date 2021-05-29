@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.ziad.enums.TypeInscription;
 import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Element;
+import com.ziad.models.Etape;
 import com.ziad.models.Etudiant;
 import com.ziad.models.InscriptionPedagogique;
 import com.ziad.models.Modulee;
@@ -38,4 +39,6 @@ public interface InscriptionPedagogiqueRepository
 	@Query("select  s from InscriptionPedagogique s where s.annee_academique =:annee and s.id_inscription_pedagogique.element.module.semestre =:semestre ")
 	List<InscriptionPedagogique> getInscriptionPedagogiqueParSemestre(@Param("semestre") Semestre semestre,@Param("annee")AnneeAcademique annee);
 	
+	@Query("select  s from InscriptionPedagogique s where s.annee_academique =:annee and s.id_inscription_pedagogique.element.module.semestre.etape =:etape ")
+	List<InscriptionPedagogique> getInscriptionPedagogiqueParEtape(@Param("etape") Etape etape,@Param("annee")AnneeAcademique annee);
 }

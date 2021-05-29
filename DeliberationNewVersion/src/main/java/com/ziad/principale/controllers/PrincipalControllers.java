@@ -33,7 +33,7 @@ public class PrincipalControllers {
 				}
 			}
 		} catch (AnonymousException e) {
-			model = new ModelAndView("redirect:/login");
+			model = new ModelAndView("home");
 		}
 		return model;
 	}

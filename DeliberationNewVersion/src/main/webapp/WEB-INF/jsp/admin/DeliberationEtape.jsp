@@ -11,8 +11,8 @@
 		<div class="main-card mb-3 card">
 			<div class="card-body">
 				<h5 class="card-title">Déliberation par etape</h5>
-				<input type="hidden" name="type" value="paretape"/>
 				<form class="" action="/delib/" method="POST">
+					<input type="hidden" name="type" value="paretape"/>
 					<div class="form-row">
 						<div class="col-md-6">
 							<div class="position-relative form-group">
@@ -29,7 +29,7 @@
 								<label for="name" class="">Années académiques</label> <select
 									name="annee" id="exampleSelect" class="form-control">
 									<c:forEach var="annee" items="${annees}">
-										<option value="${annee.id_annee_academique }">${annee.annee_academique }</option>
+										<option value="${annee.id_annee_academique}">${annee.annee_academique }</option>
 									</c:forEach>
 								</select>
 							</div>
@@ -37,19 +37,9 @@
 						<div class="col-md-6">
 							<div class="position-relative form-group">
 								<label for="element-class" class="element-class">Etapes</label>
-								<select name=etape id="exampleSelect" class="form-control">
-									<c:forEach items="${etapes }" var="etape"> 
-										<option value="${etape.id_etape }">${etape.libelle_etape }</option>
-									</c:forEach>
-								</select>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="position-relative form-group">
-								<label for="name" class="">Années académiques</label> <select
-									name="annee" id="exampleSelect" class="form-control">
-									<c:forEach var="annee" items="${annees}">
-										<option value="${annee.id_annee_academique }">${annee.annee_academique }</option>
+								<select name=element id="exampleSelect" class="form-control">
+									<c:forEach items="${etapes}" var="etape"> 
+										<option value="${etape.id_etape}">${etape.libelle_etape}</option>
 									</c:forEach>
 								</select>
 							</div>

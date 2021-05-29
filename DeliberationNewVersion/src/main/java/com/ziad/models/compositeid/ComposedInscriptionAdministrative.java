@@ -19,10 +19,10 @@ public class ComposedInscriptionAdministrative implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.DETACH)
 	private Etudiant etudiant;
 
-	@OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.DETACH)
+	@OneToOne(cascade = CascadeType.ALL)
 	private Filiere filiere;
 
 	public ComposedInscriptionAdministrative() {

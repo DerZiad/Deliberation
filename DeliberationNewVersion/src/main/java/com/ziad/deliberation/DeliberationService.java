@@ -23,6 +23,7 @@ import com.ziad.models.Deliberation;
 import com.ziad.models.Etape;
 import com.ziad.models.Filiere;
 import com.ziad.models.Modulee;
+import com.ziad.models.NoteEtape;
 import com.ziad.models.NoteModule;
 import com.ziad.models.Professeur;
 import com.ziad.models.Semestre;
@@ -164,6 +165,17 @@ public class DeliberationService implements DeliberationInterface {
 		}
 		PDFExport pdf = new PDFExport(response, "notesModule");
 		pdf.generatePvModule(notes, deliberation.getModule());
+		pdf.closeDocument();
+
+	}
+	
+	@Override
+	public void generateExcelEtape(HttpServletResponse response, Long idDeliberation)
+			throws EntityNotFoundException, DocumentException, IOException {
+		Deliberation deliberation = deliberationRepository.getOne(idDeliberation);
+		List<NoteEtape> notes = deliberation.getNotesEtape();
+		PDFExport pdf = new PDFExport(response, "notesEtape");
+		pdf.generatePvEtape(notes, deliberation.getEtape());
 		pdf.closeDocument();
 
 	}

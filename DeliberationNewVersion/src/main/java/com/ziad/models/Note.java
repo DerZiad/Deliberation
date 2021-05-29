@@ -39,7 +39,7 @@ public class Note {
 	
 	public Note(Double note, Double coeficient, TypeNote type, NoteElement noteelement) {
 		super();
-		this.note = note;
+		this.note = arrondir(note);
 		this.coeficient = coeficient;
 		this.type = type;
 		this.noteelement = noteelement;
@@ -48,7 +48,7 @@ public class Note {
 	public Note(Long idNote, Double note, Double coeficient, TypeNote type, NoteElement noteelement) {
 		super();
 		this.idNote = idNote;
-		this.note = note;
+		this.note = arrondir(note);
 		this.coeficient = coeficient;
 		this.type = type;
 		this.noteelement = noteelement;
@@ -63,11 +63,11 @@ public class Note {
 	}
 
 	public Double getNote() {
-		return note;
+		return arrondir(note);
 	}
 
 	public void setNote(Double note) {
-		this.note = note;
+		this.note = arrondir(note);
 	}
 
 	public Double getCoeficient() {
@@ -94,4 +94,7 @@ public class Note {
 		this.noteelement = noteelement;
 	}
 
+	public double arrondir(Double note) {
+		return Math.round(note * 100.0)/100.0;
+	}
 }

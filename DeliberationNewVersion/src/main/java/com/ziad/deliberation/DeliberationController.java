@@ -127,6 +127,7 @@ public class DeliberationController {
 			return model;
 		}
 		model = new ModelAndView(String.format(REDIRECT_DELIBERATION_LIST, deliberation.getIdDeliberation()));
+
 		return model;
 	}
 
@@ -144,7 +145,18 @@ public class DeliberationController {
 			model = new ModelAndView(PATH_DELIBERATION_LIST);
 			Deliberation delib = deliberationMetier.piocherDeliberation(idDelib);
 			model.addObject(ATTRIBUT_DELIBERATION, delib);
-			model.addObject(ATTRIBUT_NOTES_MODULE, converter.convertNotesModule(delib.getNotesModule()));
+			if (delib.getModule() != null) {
+				model.addObject(ATTRIBUT_NOTES_MODULE, converter.convertNotesModule(delib.getNotesModule()));
+			}
+
+			if (delib.getSemestre() != null) {
+				model.addObject(ATTRIBUT_NOTES_MODULE, converter.convertNotesSemestre(delib.getNotesSemestre()));
+			}
+
+			if (delib.getEtape() != null) {
+				model.addObject(ATTRIBUT_NOTES_MODULE, converter.convertNotesEtape(delib.getNotesEtape()));
+			}
+
 		}
 		return model;
 	}
@@ -154,6 +166,14 @@ public class DeliberationController {
 			@RequestParam(name = "ratt", required = false) Integer rattrapage, HttpServletResponse response)
 			throws EntityNotFoundException, DocumentException, IOException {
 		deliberationMetier.generateExcel(response, idDeliberation, rattrapage);
+		ModelAndView model = new ModelAndView(String.format(REDIRECT_DELIBERATION_LIST, idDeliberation));
+		return model;
+	}
+
+	@GetMapping("/generatePvEtape")
+	public ModelAndView generatePvEtape(@RequestParam("idDeliberation") Long idDeliberation,
+			HttpServletResponse response) throws EntityNotFoundException, DocumentException, IOException {
+		deliberationMetier.generateExcelEtape(response, idDeliberation);
 		ModelAndView model = new ModelAndView(String.format(REDIRECT_DELIBERATION_LIST, idDeliberation));
 		return model;
 	}

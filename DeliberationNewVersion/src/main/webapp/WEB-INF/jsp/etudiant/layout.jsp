@@ -14,22 +14,18 @@
 
 
 </head>
+<style>
 
+</style>
 
 <body>
-	<div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+	<div class="app-container app-theme-white body-tabs-shadow">
 		
-		
-		<!-- header / search-bar -->
-		<jsp:include page="search-bar.jsp"></jsp:include>
-		
+				
 		
 		<div class="app-main">
 			
-			<!-- nav-bar -->
-			<jsp:include page="nav-bar.jsp"></jsp:include>
-			
-			
+					
 			<div class="app-main__outer">
 				<div class="app-main__inner">
 				
@@ -49,7 +45,6 @@
 			</div>
 			
 			<!-- scripts -->
-			<jsp:include page="scripts.jsp"></jsp:include>
 		</div>
 	</div>
 	<script type="text/javascript" src="/assets/scripts/main.js"></script>

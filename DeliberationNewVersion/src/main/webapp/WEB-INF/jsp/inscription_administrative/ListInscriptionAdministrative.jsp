@@ -99,9 +99,9 @@
 									title="Copy to use pencil-square-o"><a
 										href="PageModifierInscriptionAdministrative/${inscription.composite_association_id.filiere.id_filiere}/${inscription.composite_association_id.etudiant.id_etudiant }"
 										style="font-size: 20px;"></a></i> <i class="fa fa-fw"
-									aria-hidden="true" title="Copy to use trash"> <a
+									aria-hidden="true" title="Copy to use trash"> <!--  <a
 										href="SupprimerInscriptionAdministrative/${inscription.composite_association_id.filiere.id_filiere}/${inscription.composite_association_id.etudiant.id_etudiant }"
-										style="color: red; font-size: 20px;"></a>
+										style="color: red; font-size: 20px;"></a>-->
 								</i></td>
 
 								<td><a

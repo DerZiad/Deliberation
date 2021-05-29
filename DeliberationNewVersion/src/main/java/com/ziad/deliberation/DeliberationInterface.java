@@ -37,4 +37,9 @@ public interface DeliberationInterface {
 
 	public void generateUltimatePv(Long idDeliberation, HttpServletResponse response)
 			throws EntityNotFoundException, DocumentException, IOException;
+
+	public void generateExcelEtape(HttpServletResponse response, Long idDeliberation)
+			throws EntityNotFoundException, DocumentException, IOException;
 }
+
+

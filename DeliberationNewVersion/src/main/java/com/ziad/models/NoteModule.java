@@ -33,13 +33,13 @@ public class NoteModule {
 	public NoteModule(ComposedNoteModule idComposed, Double note, Deliberation deliberation) {
 		super();
 		this.idComposed = idComposed;
-		this.note = note;
+		this.note = arrondir(note);
 		this.deliberation = deliberation;
 	}
 
 	public NoteModule(Double note, Deliberation deliberation) {
 		super();
-		this.note = note;
+		this.note = arrondir(note);
 		this.deliberation = deliberation;
 	}
 
@@ -52,11 +52,11 @@ public class NoteModule {
 	}
 
 	public Double getNote() {
-		return note;
+		return arrondir(note);
 	}
 
 	public void setNote(Double note) {
-		this.note = note;
+		this.note = arrondir(note);
 	}
 
 	public boolean isValid() {
@@ -103,6 +103,10 @@ public class NoteModule {
 	public String toString() {
 		return "NoteModule [idComposed=" + idComposed + ", note=" + note + ", isValid=" + isValid + ", etat=" + etat
 				+ ", deliberation=" + deliberation + "]";
+	}
+	
+	public double arrondir(Double note) {
+		return Math.round(note * 100.0)/100.0;
 	}
 
 }

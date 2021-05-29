@@ -174,30 +174,11 @@ public class FiliereService implements FiliereInterface {
 	}
 
 	@Override
-	public Filiere diplomerEtapes(HttpServletRequest request) throws EntityNotFoundException {
-		String id_filiere_String = request.getParameter("id_filiere");
-		Long id_filiere = null;
-		try {
-			id_filiere = Long.parseLong(id_filiere_String);
-		} catch (Exception e) {
-			throw new EntityNotFoundException();
-		}
-		Filiere filiere = filiereRepository.getOne(id_filiere);
-		List<Etape> etapes = filiere.getEtapes();
-		etapes.stream().forEach(etape -> etape.setDiplomante(false));
-		etapeRepository.saveAll(etapes);
-
-		ArrayList<Long> ips = new ArrayList<Long>();
-		for (Etape etape : etapes) {
-			String id_etape_String = request.getParameter(etape.getId_etape() + "");
-			if (id_etape_String != null)
-				ips.add(Long.parseLong(id_etape_String));
-		}
-
-		List<Etape> etape_recus = etapeRepository.findAllById(ips);
-		etape_recus.stream().forEach(etape -> etape.setDiplomante(true));
-		etapeRepository.saveAll(etape_recus);
-		return filiere;
+	public Filiere diplomerEtapes(Long id_etape,Integer action) throws EntityNotFoundException {
+		Etape etape = etapeRepository.getOne(id_etape);
+		etape.setDiplomante(action == 1);
+		etapeRepository.save(etape);
+		return etape.getFiliere();
 	}
 
 }

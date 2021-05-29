@@ -30,6 +30,6 @@ public interface FiliereInterface {
 	
 	public Filiere listerEtapes(Long id_filire) throws DataNotFoundExceptions;
 	
-	public Filiere diplomerEtapes(HttpServletRequest request) throws EntityNotFoundException;
+	public Filiere diplomerEtapes(Long id_etape,Integer action) throws EntityNotFoundException;
 	
 }

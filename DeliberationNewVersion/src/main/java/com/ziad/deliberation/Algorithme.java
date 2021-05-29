@@ -85,7 +85,9 @@ public class Algorithme {
 		if (delibs.size() == 0) {
 			deliberationpermis = true;
 			deliberation = new Deliberation(typeDelib.name(), annee, module, null, null);
+			System.out.println("I m here creating delib");
 		} else {
+			System.out.println("I found one");
 			deliberation = delibs.get(0);
 			deliberationpermis = !deliberation.isDelibered() && typeDelib.equals(DeliberationType.RATTRAPAGE);
 			// On a
@@ -95,8 +97,9 @@ public class Algorithme {
 			// rattrapage
 			deliberation.setDelibered(deliberationpermis);
 		}
-
+		System.out.println("I m here");
 		if (deliberationpermis) {
+			System.out.println("Deliberation permise");
 			for (Element element : elementRepository.getElementsByModule(module)) {
 				delibererElement(element, annee);
 			}
@@ -105,20 +108,25 @@ public class Algorithme {
 			for (InscriptionPedagogique inscription : listeInscriptionsPedagogique) {
 				Double coefficient = 0d;
 				Double noteDouble = 0d;
+				System.out.println("Etudiants ");
 				for (Element element : elementRepository.getElementsByModule(module)) {
 					NoteElement note = noteElementRepository.getOne(inscription.getId_inscription_pedagogique());
 					noteDouble = noteDouble + note.getNote_element() * element.getCoeficient();
 					coefficient = coefficient + element.getCoeficient();
 				}
 				noteDouble = noteDouble / coefficient;
+				System.out.println("Note element " + noteDouble);
 				NoteModule noteParModule = null;
 				if (typeDelib.equals(DeliberationType.RATTRAPAGE)) {
 					noteParModule = notesModuleRepository
 							.getOne(new ComposedNoteModule(module, inscription.getEtudiant()));
 					noteParModule.setNote(noteDouble);
+					System.out.println("Test 1");
 				} else {
+					
 					noteParModule = new NoteModule(new ComposedNoteModule(module, inscription.getEtudiant()),
 							noteDouble, deliberation);
+					System.out.println("Test 2");
 				}
 				noteParModule.delibererModule(typeDelib);
 				deliberation.addNoteModule(noteParModule);
@@ -185,19 +193,23 @@ public class Algorithme {
 		 **/
 		Deliberation deliberation = null;
 		if (delibs.size() == 0) {
+			System.out.println("Allowed");
 			isDeliberationEtapeAllowed(etape, annee);
 			deliberation = new Deliberation(typeDelib.name(), annee, null, null, etape);
-
-			List<Etudiant> etudiants = new ArrayList<Etudiant>();
-			for (Etudiant etudiant : etudiants) {
+			System.out.println("Created");
+			List<InscriptionPedagogique> inscriptions = inscriptionPedagogiqueRepository.getInscriptionPedagogiqueParEtape(etape, annee);
+			inscriptions = filterInscription(inscriptions);
+			for (InscriptionPedagogique inscription : inscriptions) {
+				System.out.println("Inside boocle");
 				Double noteParEtapeD = 0d;
 				for (Semestre semestre : etape.getSemestres()) {
 					NoteSemestre noteSemestre = notesSemestreRepository
-							.getOne(new ComposedNoteSemestre(semestre, etudiant));
+							.getOne(new ComposedNoteSemestre(semestre, inscription.getEtudiant()));
 					noteParEtapeD = noteParEtapeD + noteSemestre.getNote();
 				}
+				System.out.println("Notee ");
 				noteParEtapeD = noteParEtapeD / 2;
-				NoteEtape noteEtape = new NoteEtape(new ComposedNoteEtape(etape, etudiant), noteParEtapeD,
+				NoteEtape noteEtape = new NoteEtape(new ComposedNoteEtape(etape, inscription.getEtudiant()), noteParEtapeD,
 						deliberation);
 				noteEtape.delibererEtape();
 				deliberation.addNoteEtape(noteEtape);

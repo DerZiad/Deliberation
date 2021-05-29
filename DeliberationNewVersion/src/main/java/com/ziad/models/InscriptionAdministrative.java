@@ -310,5 +310,6 @@ public class InscriptionAdministrative implements Serializable{
 			setEncodedCin(base64Encoded);
 		}
 	}
+	
 
 }

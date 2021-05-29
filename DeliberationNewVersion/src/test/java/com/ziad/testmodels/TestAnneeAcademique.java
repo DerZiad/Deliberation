@@ -30,6 +30,7 @@ import com.ziad.repositories.DeliberationRepository;
 import com.ziad.repositories.EtapeRepository;
 import com.ziad.repositories.EtudiantRepository;
 import com.ziad.repositories.FiliereRepository;
+import com.ziad.repositories.InscriptionAdministrativeRepository;
 import com.ziad.repositories.ModuleRepository;
 import com.ziad.repositories.NotesModuleRepository;
 import com.ziad.repositories.ProfesseurRepository;
@@ -62,6 +63,9 @@ public class TestAnneeAcademique {
 
 	@Autowired
 	private AnnneAcademiqueRepository anneeAcademique;
+	
+	@Autowired
+	private InscriptionAdministrativeRepository inscriptionAdministrativeRepo;
 
 	@Test
 	public void testCff() {
@@ -91,5 +95,16 @@ public class TestAnneeAcademique {
 			deliberationRepository.save(deliberation);
 			
 		}
+	}
+	
+	@Test
+	public void deleteInscriptionAdministrative() {
+		List<InscriptionAdministrative> list = inscriptionAdministrativeRepo.findAll();
+		
+		InscriptionAdministrative ia = list.get(0);
+		inscriptionAdministrativeRepo.deleteInscriptionAdministrative(ia.getFiliere(), ia.getEtudiant());
+		List<InscriptionAdministrative> listes = inscriptionAdministrativeRepo.findAll();
+		assertEquals(listes.size(), list.size() - 1);
+		
 	}
 }

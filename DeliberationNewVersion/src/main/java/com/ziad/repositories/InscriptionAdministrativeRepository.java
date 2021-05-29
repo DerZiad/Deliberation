@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.ziad.models.Etudiant;
 import com.ziad.models.Filiere;
 import com.ziad.models.InscriptionAdministrative;
 import com.ziad.models.Modulee;
@@ -40,4 +41,6 @@ public interface InscriptionAdministrativeRepository extends JpaRepository<Inscr
 	@Query("select ia from InscriptionAdministrative ia,InscriptionPedagogique ip where ia.composite_association_id.etudiant = ip.id_inscription_pedagogique.etudiant and ip.id_inscription_pedagogique.element.module.semestre=:semestre")
 	public List<InscriptionAdministrative> listerInscriptionsAdministrativesBySemestre(@Param("semestre")Semestre semestre);
 	
+	@Query("delete from InscriptionAdministrative ia where ia.composite_association_id.filiere =:filiere and ia.composite_association_id.etudiant =:etudiant")
+	public void deleteInscriptionAdministrative(@Param("filiere")Filiere filiere,@Param("etudiant")Etudiant etudiant);
 }

@@ -52,7 +52,7 @@ public class NoteElement implements Serializable {
 	
 	public NoteElement(Double note_element, AnneeAcademique annee_academique) {
 		super();
-		this.note_element = note_element;
+		this.note_element = arrondir(note_element);
 		this.annee_academique = annee_academique;
 	}
 
@@ -60,7 +60,7 @@ public class NoteElement implements Serializable {
 			AnneeAcademique annee_academique) {
 		super();
 		this.idCompose = idCompose;
-		this.note_element = note_element;
+		this.note_element = arrondir(note_element);
 		this.annee_academique = annee_academique;		
 	}
 
@@ -73,11 +73,11 @@ public class NoteElement implements Serializable {
 	}
 
 	public Double getNote_element() {
-		return note_element;
+		return arrondir(note_element);
 	}
 
 	public void setNote_element(Double note_element) {
-		this.note_element = note_element;
+		this.note_element = arrondir(note_element);
 	}
 
 	public boolean isValid() {
@@ -193,5 +193,8 @@ public class NoteElement implements Serializable {
 				+ ", notes=" + notes + ", annee_academique=" + annee_academique + "]";
 	}
 	
+	public double arrondir(Double note) {
+		return Math.round(note * 100.0)/100.0;
+	}
 	
 }

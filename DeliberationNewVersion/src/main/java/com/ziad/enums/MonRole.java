@@ -7,8 +7,8 @@ package com.ziad.enums;
  */
 public enum MonRole {
 	ROLEADMIN("ADMIN", "/admin"), ROLEPROFESSEUR("PROF", "/professeur"),
-	ROLERESPONSABLEFILIERE("RESPONSABLEFILIERE", "/professeur/responsablefiliere"),
-	ROLERESPONSABLEMODULE("RESPONSABLEMODULE", "/professeur/responsablemodule"), ROLEETUDIANT("ETUDIANT", "/etudiant");
+	ROLERESPONSABLEFILIERE("RESPONSABLEFILIERE", "/professeur"),
+	ROLERESPONSABLEMODULE("RESPONSABLEMODULE", "/professeur"), ROLEETUDIANT("ETUDIANT", "/etudiant");
 
 	private String role;
 	private String espace;

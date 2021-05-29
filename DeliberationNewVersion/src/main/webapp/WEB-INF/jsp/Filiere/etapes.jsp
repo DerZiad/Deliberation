@@ -9,8 +9,8 @@
 
 		<div class="main-card mb-3 card">
 			<div class="card-body">
-				<form action="/admin/filiere/profile/${filiere.id_filiere}/etapes" method="POST">
-					<input type="hidden" name="id_filiere" value="${filiere.id_filiere }"/>
+					<input type="hidden" name="id_filiere"
+						value="${filiere.id_filiere }" />
 					<h5 class="card-title">Liste des etapes</h5>
 					<table class="mb-0 table table-striped">
 						<thead>
@@ -27,14 +27,25 @@
 									<td><c:forEach var="semestre" items="${etape.semestres}">
 									${semestre.libelle_semestre}
 								</c:forEach></td>
-									<td><input class="" type="checkbox"
-										name="${etape.id_etape }" value="1" /></td>
+									<c:if test="${etape.diplomante eq true}">
+										<td><a class="btn btn-primary"
+											href="/admin/filiere/profile/${filiere.id_filiere}/etapes/${etape.id_etape }?diplomante=0">suprimer
+												diplomation</a></td>
+									</c:if>
+
+
+									<c:if test="${etape.diplomante eq false}">
+										<td><a class="btn btn-primary"
+											href="/admin/filiere/profile/${filiere.id_filiere}/etapes/${etape.id_etape }?diplomante=1">ajouter
+												diplomation</a></td>
+									</c:if>
+
+
+
 								</tr>
 							</c:forEach>
 						</tbody>
 					</table>
-					<input class="" type="submit" value="valider"/>
-				</form>
 			</div>
 		</div>
 
