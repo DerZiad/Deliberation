@@ -1,8 +1,5 @@
 package com.ziad;
 
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -285,9 +282,6 @@ public class IntialiserBachelor {
 			inscription_administrative.setAnnee_academique(annee_academique);
 			inscription_administrative.setDate_pre_inscription(new java.util.Date());
 			inscription_administrative.setComposite_association_id(new ComposedInscriptionAdministrative(etudiant, filiere));
-			LocalDate ld = LocalDate.now();
-			ZoneId defaultZoneId = ZoneId.systemDefault();
-			java.util.Date date = Date.from(ld.atStartOfDay(defaultZoneId).toInstant());
 
 			List<Etape> etapes = etapeRepository.getEtapeByFiliere(filiere);
 			Etape firststep = etapes.get(0);	
@@ -352,9 +346,6 @@ public class IntialiserBachelor {
 			inscription_administrative.setAnnee_academique(annee_academique);
 			inscription_administrative.setDate_pre_inscription(new java.util.Date());
 			inscription_administrative.setComposite_association_id(new ComposedInscriptionAdministrative(etudiant, chimie));
-			LocalDate ld = LocalDate.now();
-			ZoneId defaultZoneId = ZoneId.systemDefault();
-			java.util.Date date = Date.from(ld.atStartOfDay(defaultZoneId).toInstant());
 
 			List<Etape> etapes = etapeRepository.getEtapeByFiliere(chimie);
 			Etape firststep = etapes.get(0);	

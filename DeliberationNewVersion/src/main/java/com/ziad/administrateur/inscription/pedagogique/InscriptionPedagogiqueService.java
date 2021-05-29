@@ -29,7 +29,6 @@ import com.ziad.repositories.ElementRepository;
 import com.ziad.repositories.EtapeRepository;
 import com.ziad.repositories.EtudiantRepository;
 import com.ziad.repositories.FiliereRepository;
-import com.ziad.repositories.HistoriqueRepository;
 import com.ziad.repositories.InscriptionAdministrativeRepository;
 import com.ziad.repositories.InscriptionPedagogiqueRepository;
 import com.ziad.repositories.ModuleRepository;
@@ -54,8 +53,6 @@ public class InscriptionPedagogiqueService implements InscriptionPedagogiqueInte
 	private ModuleRepository moduleRepository;
 	@Autowired
 	private EtapeRepository etapeRepository;
-	@Autowired
-	private HistoriqueRepository historiqueRepository;
 	@Autowired
 	private ElementRepository elementRepository;
 	@Autowired

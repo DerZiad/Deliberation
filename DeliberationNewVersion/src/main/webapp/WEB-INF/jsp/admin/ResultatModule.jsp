@@ -4,7 +4,7 @@
 	prefix="layout"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<layout:extends name="../layout.jsp">
+<layout:extends name="${mero}">
 	<layout:put block="content" type="REPLACE">
 
 		<div class="main-card mb-3 card">

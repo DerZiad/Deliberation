@@ -99,7 +99,7 @@ public class HomeController {
 
 		String username = authentication.getName();
 		User user = userRespository.getUserByUsername(username);
-
+		System.out.println("i m professeur");
 		saveSession(req);
 
 		ModelAndView model = new ModelAndView(PAGE_PROFESSEUR);

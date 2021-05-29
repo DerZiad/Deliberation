@@ -29,6 +29,7 @@ public class PrincipalControllers {
 			Collection<? extends GrantedAuthority> autorities = authentication.getAuthorities();
 			for (MonRole role : MonRole.values()) {
 				if (autorities.contains(new SimpleGrantedAuthority("ROLE_" + role.getRole()))) {
+					System.out.println("redirect:" + role.getEspace());
 					model = new ModelAndView("redirect:" + role.getEspace());
 				}
 			}
@@ -49,7 +50,6 @@ public class PrincipalControllers {
 			model = new ModelAndView("login");
 			String err = request.getParameter("error");
 			if (err != null && err.equals("true")) {
-				System.out.println("error is :" + err);
 				model.addObject("err", "Vos identifiants sont incorrects.");
 			}
 		}

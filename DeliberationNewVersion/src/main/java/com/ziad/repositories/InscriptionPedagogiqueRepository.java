@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.ziad.enums.TypeInscription;
 import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Element;
 import com.ziad.models.Etape;

@@ -7,8 +7,6 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.web.servlet.ModelAndView;
-
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Element;
 

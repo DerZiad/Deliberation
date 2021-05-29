@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,7 +41,6 @@ public class DeliberationController {
 	private final static String ATTRIBUT_ETAPES_JSON = "etapesjson";
 	private final static String ATTRIBUT_SEMESTRES_JSON = "semestresjson";
 
-	private final static String ATTRIBUT_MODULE = "module";
 	private final static String ATTRIBUT_SEMESTRE = "semestre";
 	private final static String ATTRIBUT_ERROR = "error";
 
@@ -78,10 +76,10 @@ public class DeliberationController {
 
 	@SuppressWarnings("unchecked")
 	@GetMapping("/deliberationsemestre")
-	public ModelAndView getPageParSemestre(@RequestParam(name = "message", required = false) String msg)
+	public ModelAndView getPageParSemestre(@RequestParam(name = "message", required = false) String msg,HttpServletRequest req)
 			throws EntityNotFoundException, DataNotFoundExceptions {
 		ModelAndView model = new ModelAndView(PAGE_DELIBERATION_PAR_SEMESTRE);
-		List<Object> besoins = deliberationMetier.getBesoinPageDeliberationParSemestre();
+		List<Object> besoins = deliberationMetier.getBesoinPageDeliberationParSemestre(req);
 		if (msg != null) {
 			model.addObject(ATTRIBUT_ERROR, msg);
 		}
@@ -94,9 +92,9 @@ public class DeliberationController {
 
 	@SuppressWarnings("unchecked")
 	@GetMapping("/deliberationetape")
-	public ModelAndView getPageParEtape() throws EntityNotFoundException, DataNotFoundExceptions {
+	public ModelAndView getPageParEtape(HttpServletRequest req) throws EntityNotFoundException, DataNotFoundExceptions {
 		ModelAndView model = new ModelAndView(PAGE_DELIBERATION_PAR_ETAPE);
-		List<Object> besoins = deliberationMetier.getBesoinPageDeliberationParEtape();
+		List<Object> besoins = deliberationMetier.getBesoinPageDeliberationParEtape(req);
 		model.addObject(ATTRIBUT_FILIERES, (List<Filiere>) besoins.get(0));
 		model.addObject(ATTRIBUT_ANNEES_ACADEMIQUES, (List<AnneeAcademique>) besoins.get(1));
 		model.addObject(ATTRIBUT_ETAPES, (List<Etape>) besoins.get(2));
@@ -135,13 +133,15 @@ public class DeliberationController {
 	 * Resultat deliberation par module
 	 **/
 	@GetMapping("/listerDelib")
-	public ModelAndView listerDeliberationParModule(@RequestParam(name = "id", required = false) Long idDelib)
+	public ModelAndView listerDeliberationParModule(@RequestParam(name = "id", required = false) Long idDelib,HttpServletRequest req)
 			throws DataNotFoundExceptions {
 		ModelAndView model = null;
 		if (idDelib == null) {
 			model = new ModelAndView(PATH_DELIBERATIONS_LIST);
-			model.addObject(ATTRIBUT_DELIBERATIONS, deliberationMetier.listerDeliberation());
+			model.addObject(ATTRIBUT_DELIBERATIONS, deliberationMetier.listerDeliberation(req));
 		} else {
+			
+			
 			model = new ModelAndView(PATH_DELIBERATION_LIST);
 			Deliberation delib = deliberationMetier.piocherDeliberation(idDelib);
 			model.addObject(ATTRIBUT_DELIBERATION, delib);
@@ -156,7 +156,8 @@ public class DeliberationController {
 			if (delib.getEtape() != null) {
 				model.addObject(ATTRIBUT_NOTES_MODULE, converter.convertNotesEtape(delib.getNotesEtape()));
 			}
-
+			
+			deliberationMetier.saveExtendsLayout(req);
 		}
 		return model;
 	}

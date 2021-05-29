@@ -1,7 +1,6 @@
 package com.ziad.deliberation;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Deliberation;
 import com.ziad.models.Element;
 import com.ziad.models.Etape;
-import com.ziad.models.Etudiant;
 import com.ziad.models.InscriptionPedagogique;
 import com.ziad.models.Modulee;
 import com.ziad.models.NoteElement;

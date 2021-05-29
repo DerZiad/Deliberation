@@ -6,7 +6,6 @@ import javax.persistence.EntityNotFoundException;
 
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Etablissement;
-import com.ziad.models.Etudiant;
 import com.ziad.models.Filiere;
 import com.ziad.models.Professeur;
 

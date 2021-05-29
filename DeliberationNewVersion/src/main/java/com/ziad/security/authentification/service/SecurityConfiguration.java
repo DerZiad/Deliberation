@@ -38,15 +38,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.authenticated() // Doît être authentifier pour se deconnecter
 
 				// Gestion des espaces du système
-				.antMatchers(MonRole.ROLEADMIN.getEspace() + "/**").hasRole(MonRole.ROLEADMIN.getRole())
-				.antMatchers(MonRole.ROLEETUDIANT.getEspace() + "/**").hasRole(MonRole.ROLEETUDIANT.getRole())
-				.antMatchers(MonRole.ROLEPROFESSEUR.getEspace() + "/**")
+				.antMatchers(MonRole.ROLEADMIN.getEspace()).hasRole(MonRole.ROLEADMIN.getRole())
+				.antMatchers(MonRole.ROLEETUDIANT.getEspace()).hasRole(MonRole.ROLEETUDIANT.getRole())
+				.antMatchers(MonRole.ROLEPROFESSEUR.getEspace())
 				.hasAnyRole(MonRole.ROLERESPONSABLEFILIERE.getRole(), MonRole.ROLERESPONSABLEMODULE.getRole(),
 						MonRole.ROLEPROFESSEUR.getRole())
-				.antMatchers(MonRole.ROLERESPONSABLEFILIERE.getEspace() + "/**")
-				.hasRole(MonRole.ROLERESPONSABLEFILIERE.getRole())
-				.antMatchers(MonRole.ROLERESPONSABLEMODULE.getEspace() + "/**")
-				.hasRole(MonRole.ROLERESPONSABLEMODULE.getRole()).antMatchers("/delib")
+				.antMatchers("/delib")
 				.hasAnyRole(MonRole.ROLEADMIN.getRole(), MonRole.ROLERESPONSABLEMODULE.getRole(),
 						MonRole.ROLERESPONSABLEFILIERE.getRole())
 				.antMatchers("/delib/deliberationmodule")

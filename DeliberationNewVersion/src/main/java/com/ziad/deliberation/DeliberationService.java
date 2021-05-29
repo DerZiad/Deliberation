@@ -181,7 +181,18 @@ public class DeliberationService implements DeliberationInterface {
 	}
 
 	@Override
-	public List<Deliberation> listerDeliberation() throws DataNotFoundExceptions {
+	public List<Deliberation> listerDeliberation(HttpServletRequest req) throws DataNotFoundExceptions {
+		/**
+		 * Verifier la connexion
+		 * **/
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userRepository.getUserByUsername(auth.getName());
+		if(user.isAdministrator()) {
+			req.setAttribute(ATTRIBUT_CLASSE_MERE, "../layout.jsp");
+		}else {
+			req.setAttribute(ATTRIBUT_CLASSE_MERE, "../espace_professeur/layout-prof.jsp");
+		}
+		
 		List<Deliberation> listes = deliberationRepository.findAll();
 		if (listes.size() == 0)
 			throw new DataNotFoundExceptions();
@@ -189,11 +200,32 @@ public class DeliberationService implements DeliberationInterface {
 	}
 
 	@Override
-	public ArrayList<Object> getBesoinPageDeliberationParSemestre()
+	public ArrayList<Object> getBesoinPageDeliberationParSemestre(HttpServletRequest req)
 			throws DataNotFoundExceptions, EntityNotFoundException {
-		List<Filiere> filieres = filiereRepository.findAll();
+		
+
+		/**
+		 * Verifier la connexion
+		 * **/
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userRepository.getUserByUsername(auth.getName());
+		List<Filiere> filieres = new ArrayList<Filiere>();
+		List<Semestre> semestres = new ArrayList<Semestre>();
+		if(user.isAdministrator()) {
+			req.setAttribute(ATTRIBUT_CLASSE_MERE, "../layout.jsp");
+			filieres = filiereRepository.findAll();
+			semestres = semestreRepository.findAll();
+		}else {
+			req.setAttribute(ATTRIBUT_CLASSE_MERE, "../espace_professeur/layout-prof.jsp");
+			Professeur prof = professeurRepository.getProfesseurByUser(user);
+			filieres = prof.getFilieres();
+			for (Filiere filiere : filieres) {
+				for(Etape etape:filiere.getEtapes())
+					semestres.addAll(etape.getSemestres());
+			}
+		}
+		
 		List<AnneeAcademique> anneesAcademiques = anneeAcademiqueRepository.findAll();
-		List<Semestre> semestres = semestreRepository.findAll();
 		ArrayList<Object> besoins = new ArrayList<Object>();
 		besoins.add(filieres);
 		besoins.add(anneesAcademiques);
@@ -203,11 +235,29 @@ public class DeliberationService implements DeliberationInterface {
 	}
 
 	@Override
-	public ArrayList<Object> getBesoinPageDeliberationParEtape()
+	public ArrayList<Object> getBesoinPageDeliberationParEtape(HttpServletRequest req)
 			throws DataNotFoundExceptions, EntityNotFoundException {
-		List<Filiere> filieres = filiereRepository.findAll();
+		/**
+		 * Verifier la connexion
+		 * **/
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userRepository.getUserByUsername(auth.getName());
+		List<Filiere> filieres = new ArrayList<Filiere>();
+		List<Etape> etapes = new ArrayList<Etape>();
+		if(user.isAdministrator()) {
+			req.setAttribute(ATTRIBUT_CLASSE_MERE, "../layout.jsp");
+			filieres = filiereRepository.findAll();
+			etapes = etapeRepository.findAll();
+		}else {
+			req.setAttribute(ATTRIBUT_CLASSE_MERE, "../espace_professeur/layout-prof.jsp");
+			Professeur prof = professeurRepository.getProfesseurByUser(user);
+			filieres = prof.getFilieres();
+			for (Filiere filiere : filieres) {
+				etapes.addAll(filiere.getEtapes());
+			}
+		}
+		
 		List<AnneeAcademique> anneesAcademiques = anneeAcademiqueRepository.findAll();
-		List<Etape> etapes = etapeRepository.findAll();
 		ArrayList<Object> besoins = new ArrayList<Object>();
 		besoins.add(filieres);
 		besoins.add(anneesAcademiques);
@@ -224,5 +274,16 @@ public class DeliberationService implements DeliberationInterface {
 		pdf.generateUltimatePv(deliberation.getSemestre(), noteModuleRepository, deliberation);
 		pdf.closeDocument();
 	}
-
+	
+	@Override
+	public void saveExtendsLayout(HttpServletRequest req) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userRepository.getUserByUsername(auth.getName());
+		if(user.isAdministrator()) {
+			req.setAttribute(ATTRIBUT_CLASSE_MERE, "../layout.jsp");
+		}else {
+			req.setAttribute(ATTRIBUT_CLASSE_MERE, "../espace_professeur/layout-prof.jsp");
+		}
+	}
+	
 }

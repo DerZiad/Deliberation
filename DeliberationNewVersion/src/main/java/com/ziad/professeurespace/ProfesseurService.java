@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.AnneeAcademique;
@@ -34,7 +33,6 @@ import com.ziad.utilities.JSONConverter;
 @Primary
 public class ProfesseurService implements ProfesseurInterface {
 	
-	private final static String ATTRIBUT_SESSION = "utilisateur";
 	
 	
 	@Autowired

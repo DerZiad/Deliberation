@@ -5,7 +5,6 @@ import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -13,7 +12,6 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;

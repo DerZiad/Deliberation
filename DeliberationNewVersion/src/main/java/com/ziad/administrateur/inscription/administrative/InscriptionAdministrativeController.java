@@ -26,8 +26,6 @@ import com.ziad.models.Etudiant;
 import com.ziad.models.Filiere;
 import com.ziad.models.InscriptionAdministrative;
 import com.ziad.models.InscriptionEnLigne;
-import com.ziad.models.Modulee;
-import com.ziad.models.Semestre;
 
 @Controller
 @RequestMapping("/admin")

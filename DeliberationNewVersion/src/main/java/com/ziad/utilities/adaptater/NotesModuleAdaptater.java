@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.ziad.models.NoteModule;
-import com.ziad.models.Semestre;
 
 public class NotesModuleAdaptater implements JsonSerializer<NoteModule>{
 

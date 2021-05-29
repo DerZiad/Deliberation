@@ -22,7 +22,6 @@ public class EditFiliereController {
 	private final static String ACTIVE = "mm-active";
 	
 	private final static String ATTRIBUT_NAVBAR_FILIERE = "mesfilieres";
-	private final static String ATTRIBUT_LISTE_MODULE= "modulesfiliere";
 	
 	private final static String PAGE_LISTE_MODULE ="espace_professeur/responsablefiliere/mafiliere";
 	private final static String PAGE_MODULE_PROFILE = "espace_professeur/responsablefiliere/ModuleProfile";
