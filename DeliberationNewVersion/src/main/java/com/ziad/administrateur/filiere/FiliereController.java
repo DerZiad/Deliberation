@@ -24,7 +24,6 @@ public class FiliereController {
 	@Autowired
 	private FiliereInterface filiere_metier;
 	
-	private final static String REDIRECT_TO_LISTER_ETAPE="redirect:/admin/filiere/profile/%d/etapes";
 	
 	
 	@GetMapping("/filiere/creer")
@@ -63,20 +62,7 @@ public class FiliereController {
 		model.addObject("etapes",filiere.getEtapes());
 		return model;
 	}
-	@GetMapping("/filiere/profile/{id_filiere}/etapes")
-	public ModelAndView listerEtapes(@PathVariable("id_filiere") Long id_filiere)throws DataNotFoundExceptions {
-		ModelAndView model = new ModelAndView("Filiere/etapes");
-		Filiere filiere = filiere_metier.listerEtapes(id_filiere);
-		model.addObject("etapes",filiere.getEtapes());
-		model.addObject("filiere",filiere);
-		return model;
-	}
-	@GetMapping("/filiere/profile/{id_filiere}/etapes/{id_etape}")
-	public ModelAndView diplomerEtape(@PathVariable("id_etape")Long id_etape,@RequestParam("diplomante")Integer diplomante) throws EntityNotFoundException{
-		Filiere filiere = filiere_metier.diplomerEtapes(id_etape,diplomante);
-		ModelAndView model = new ModelAndView(String.format(REDIRECT_TO_LISTER_ETAPE, filiere.getId_filiere()));
-		return model;
-	}
+
 
 	@PostMapping("/filiere/profile/{id}")
 	public ModelAndView modifyFiliere(@PathVariable("id") Long id, @RequestParam("name") String name,

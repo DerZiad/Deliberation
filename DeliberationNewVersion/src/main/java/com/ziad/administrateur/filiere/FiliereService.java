@@ -166,18 +166,4 @@ public class FiliereService implements FiliereInterface {
 		return professeurRepository.findAll();
 	}
 
-	@Override
-	public Filiere listerEtapes(Long id_filire) throws DataNotFoundExceptions, EntityNotFoundException {
-		Filiere filiere = filiereRepository.getOne(id_filire);
-		return filiere;
-	}
-
-	@Override
-	public Filiere diplomerEtapes(Long id_etape,Integer action) throws EntityNotFoundException {
-		Etape etape = etapeRepository.getOne(id_etape);
-		etape.setDiplomante(action == 1);
-		etapeRepository.save(etape);
-		return etape.getFiliere();
-	}
-
 }

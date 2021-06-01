@@ -27,8 +27,6 @@ public interface FiliereInterface {
 	
 	public void suprimerFiliere(Long id) throws EntityNotFoundException;
 	
-	public Filiere listerEtapes(Long id_filire) throws DataNotFoundExceptions;
-	
-	public Filiere diplomerEtapes(Long id_etape,Integer action) throws EntityNotFoundException;
+
 	
 }

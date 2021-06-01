@@ -22,7 +22,7 @@ import com.ziad.enums.TypeSemestre;
 
 @Entity
 @Table(name = "Semestre")
-public class Semestre implements Serializable {
+public class Semestre implements Serializable,Comparable<Integer> {
 	/**
 	 * 
 	 */
@@ -134,6 +134,12 @@ public class Semestre implements Serializable {
 	}
 	public void addModule(Modulee module) {
 		modules.add(module);
+	}
+
+	@Override
+	public int compareTo(Integer o) {
+		Integer ordre = this.ordre;
+		return ordre.compareTo(o);
 	}
 
 }
