@@ -9,6 +9,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class DeliberationNewVersionApplication implements CommandLineRunner {
 	@Autowired
 	private IntialiserBachelor initializer;
+	
+	@Autowired
+	private ServerConfiguration server;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(DeliberationNewVersionApplication.class, args);
 	}
@@ -18,6 +22,8 @@ public class DeliberationNewVersionApplication implements CommandLineRunner {
 		if (initializer.isEmpty()) {
 			initializer.inistializeSchool();
 		}
+		
+		System.out.println("Server Link =======+> " + server.getApiUrl());
 	}
 	
 
