@@ -70,7 +70,7 @@ public class Algorithme {
 		}
 	}
 
-	public Deliberation delibererModule(Modulee module, AnneeAcademique annee) {
+	public Deliberation delibererModule(Modulee module, AnneeAcademique annee) throws DeliberationModuleNotAllowed {
 		/**
 		 * Etape1 -> Verifier si on a deja deliberer Avant de deliberer on doit
 		 * récuperer quel etat de deliberation on est RATT OR ORDINARY
@@ -81,57 +81,50 @@ public class Algorithme {
 
 		boolean deliberationpermis = false;
 		if (delibs.size() == 0) {
-			deliberationpermis = true;
 			deliberation = new Deliberation(typeDelib.name(), annee, module, null, null);
-			System.out.println("I m here creating delib");
 		} else {
-			System.out.println("I found one");
 			deliberation = delibs.get(0);
-			deliberationpermis = !deliberation.isDelibered() && typeDelib.equals(DeliberationType.RATTRAPAGE);
+			boolean delibRatt = !deliberation.isDelibered() && typeDelib.equals(DeliberationType.RATTRAPAGE);
 			// On a
 			// pas
 			// encore
 			// deliberer
 			// rattrapage
-			deliberation.setDelibered(deliberationpermis);
+			deliberation.setDelibered(delibRatt);
 		}
-		System.out.println("I m here");
-		if (deliberationpermis) {
-			System.out.println("Deliberation permise");
-			for (Element element : elementRepository.getElementsByModule(module)) {
-				delibererElement(element, annee);
-			}
-			List<InscriptionPedagogique> listeInscriptionsPedagogique = inscriptionPedagogiqueRepository
-					.getInscriptionPedagogiqueParModule(module, annee);
+		for (Element element : elementRepository.getElementsByModule(module)) {
+			delibererElement(element, annee);
+		}
+		List<InscriptionPedagogique> listeInscriptionsPedagogique = inscriptionPedagogiqueRepository
+				.getInscriptionPedagogiqueParModule(module, annee);
+		try {
 			for (InscriptionPedagogique inscription : listeInscriptionsPedagogique) {
 				Double coefficient = 0d;
 				Double noteDouble = 0d;
-				System.out.println("Etudiants ");
 				for (Element element : elementRepository.getElementsByModule(module)) {
 					NoteElement note = noteElementRepository.getOne(inscription.getId_inscription_pedagogique());
 					noteDouble = noteDouble + note.getNote_element() * element.getCoeficient();
 					coefficient = coefficient + element.getCoeficient();
 				}
 				noteDouble = noteDouble / coefficient;
-				System.out.println("Note element " + noteDouble);
 				NoteModule noteParModule = null;
 				if (typeDelib.equals(DeliberationType.RATTRAPAGE)) {
 					noteParModule = notesModuleRepository
 							.getOne(new ComposedNoteModule(module, inscription.getEtudiant()));
 					noteParModule.setNote(noteDouble);
-					System.out.println("Test 1");
 				} else {
-					
 					noteParModule = new NoteModule(new ComposedNoteModule(module, inscription.getEtudiant()),
 							noteDouble, deliberation);
-					System.out.println("Test 2");
 				}
 				noteParModule.delibererModule(typeDelib);
 				deliberation.addNoteModule(noteParModule);
 			}
 			deliberationRepository.save(deliberation);
+			return deliberation;
+		} catch (Exception e) {
+			System.out.println("Throwable");
+			throw new DeliberationModuleNotAllowed(module, "Les notes ne sont pas encore prêtes");
 		}
-		return deliberation;
 	}
 
 	public Deliberation delibererSemestre(Semestre semestre, AnneeAcademique annee)
@@ -195,7 +188,8 @@ public class Algorithme {
 			isDeliberationEtapeAllowed(etape, annee);
 			deliberation = new Deliberation(typeDelib.name(), annee, null, null, etape);
 			System.out.println("Created");
-			List<InscriptionPedagogique> inscriptions = inscriptionPedagogiqueRepository.getInscriptionPedagogiqueParEtape(etape, annee);
+			List<InscriptionPedagogique> inscriptions = inscriptionPedagogiqueRepository
+					.getInscriptionPedagogiqueParEtape(etape, annee);
 			inscriptions = filterInscription(inscriptions);
 			for (InscriptionPedagogique inscription : inscriptions) {
 				System.out.println("Inside boocle");
@@ -207,8 +201,8 @@ public class Algorithme {
 				}
 				System.out.println("Notee ");
 				noteParEtapeD = noteParEtapeD / 2;
-				NoteEtape noteEtape = new NoteEtape(new ComposedNoteEtape(etape, inscription.getEtudiant()), noteParEtapeD,
-						deliberation);
+				NoteEtape noteEtape = new NoteEtape(new ComposedNoteEtape(etape, inscription.getEtudiant()),
+						noteParEtapeD, deliberation);
 				noteEtape.delibererEtape();
 				deliberation.addNoteEtape(noteEtape);
 				deliberationRepository.save(deliberation);

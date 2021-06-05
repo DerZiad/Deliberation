@@ -124,7 +124,7 @@ public class DeliberationService implements DeliberationInterface {
 	@Override
 	public Deliberation deliberer(Long idAnneeAcademique, String type, Long id_element,
 			String typeDeliberation, Integer consideration) throws DataNotFoundExceptions, EntityNotFoundException,
-			DeliberationEtapeNotAllowed, DeliberationSemestreNotAllowed {
+			DeliberationEtapeNotAllowed, DeliberationSemestreNotAllowed,DeliberationModuleNotAllowed {
 		AnneeAcademique annee = anneeAcademiqueRepository.getOne(idAnneeAcademique);
 		if (typeDeliberation != null)
 			if (typeDeliberation.equals(TYPE_DELIBERATION_ORDINAIRE)) {

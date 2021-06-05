@@ -97,6 +97,7 @@
 						<button class="mt-2 btn btn-primary col-md-12" type="submit">Valider</button>
 					</div>
 				</form>
+  					${error}
 			</div>
 		</div>
 		<script>

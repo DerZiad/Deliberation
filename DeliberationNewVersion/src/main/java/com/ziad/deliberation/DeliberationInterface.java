@@ -24,7 +24,7 @@ public interface DeliberationInterface {
 
 	public Deliberation deliberer( Long idAnneeAcademique, String type, Long id_element,
 			String typeDeliberation, Integer consideration) throws DataNotFoundExceptions, EntityNotFoundException,
-			DeliberationEtapeNotAllowed, DeliberationSemestreNotAllowed;
+			DeliberationEtapeNotAllowed, DeliberationSemestreNotAllowed,DeliberationModuleNotAllowed;
 
 	public Deliberation piocherDeliberation(Long idDelib) throws EntityNotFoundException;
 

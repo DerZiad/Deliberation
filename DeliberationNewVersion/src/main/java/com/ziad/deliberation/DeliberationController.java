@@ -53,7 +53,8 @@ public class DeliberationController {
 
 	private final static String REDIRECT_DELIBERATION_LIST = "redirect:/delib/listerDelib?id=%d";
 	private final static String REDIRECT_DELIBERATION_PAR_SEMEESTRE = "redirect:/delib/deliberationsemestre";
-
+	private final static String REDIRECT_DELIBERATION_PAR_MODULE = "redirect:/delib/deliberationmodule";
+	
 	@Autowired
 	private DeliberationInterface deliberationMetier;
 
@@ -122,6 +123,11 @@ public class DeliberationController {
 			String msg = e1.getModule().getLibelle_module() + " " + e1.getMessage();
 			String link = "?error=1&message=" + msg;
 			model = new ModelAndView(REDIRECT_DELIBERATION_PAR_SEMEESTRE + link);
+			return model;
+		}catch (DeliberationModuleNotAllowed e2) {
+			String msg = e2.getModule().getLibelle_module() + " "  + e2.getMessage();
+			String link = "?error=" + msg;
+			model = new ModelAndView(REDIRECT_DELIBERATION_PAR_MODULE + link);
 			return model;
 		}
 		model = new ModelAndView(String.format(REDIRECT_DELIBERATION_LIST, deliberation.getIdDeliberation()));
