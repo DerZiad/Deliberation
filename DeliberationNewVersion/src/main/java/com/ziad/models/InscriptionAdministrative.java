@@ -202,8 +202,14 @@ public class InscriptionAdministrative implements Serializable{
 		this.cin = cin;
 	}
 
-	public String getEncodedPhoto() {
-		return encodedPhoto;
+	public String getEncodedPhoto() throws UnsupportedEncodingException {
+		if (getPhoto() != null) {
+			byte[] photo = getPhoto();
+			byte[] encodeBase64Photo = Base64.encodeBase64(photo);
+			String base64Encoded = new String(encodeBase64Photo, "UTF-8");
+			return base64Encoded;
+		}
+		return "";
 	}
 
 	public void setEncodedPhoto(String encodedPhoto) {
@@ -275,19 +281,8 @@ public class InscriptionAdministrative implements Serializable{
 	}
 	
 	public void encodeAll() throws UnsupportedEncodingException {
-		if (getPhoto() != null) {
-			byte[] photo = getPhoto();
-			byte[] encodeBase64Photo = Base64.encodeBase64(photo);
-			String base64Encoded = new String(encodeBase64Photo, "UTF-8");
-			setEncodedPhoto(base64Encoded);
-		}
-		if (getBac() != null) {
 
-			byte[] bac = getBac();
-			byte[] encodeBase64Bac = Base64.encodeBase64(bac);
-			String base64Encoded = new String(encodeBase64Bac, "UTF-8");
-			setEncodedBac(base64Encoded);
-		}
+		
 		if (getReleve_note() != null) {
 
 			byte[] ReleveNote = getReleve_note();

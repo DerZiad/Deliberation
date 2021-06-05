@@ -77,7 +77,7 @@ public class InscriptionAdministrativeController {
 	public ModelAndView ModifierInscriptionAdministrative(
 			@RequestParam("date_pre_inscription") Date date_pre_inscription,
 			@RequestParam("date_valid_inscription") Date date_valid_inscription,
-			@PathVariable("id_etudiant") Long id_etudiant, @RequestParam("filiere") Long id_filiere,
+			@PathVariable("id_etudiant") Long id_etudiant, @PathVariable("id_filiere") Long id_filiere,
 			@RequestParam("photo") MultipartFile photo, @RequestParam("bac") MultipartFile bac,
 			@RequestParam("rn") MultipartFile relevee_note, @RequestParam("an") MultipartFile acte_de_naissance,
 			@RequestParam("cin") MultipartFile cin, @RequestParam("annee_academique") Long id_annee_academique)

@@ -14,7 +14,175 @@
 				<form class=""
 					action="/admin/inscription/ModifierInscriptionAdministrative/${ia.composite_association_id.filiere.id_filiere}/${ia.composite_association_id.etudiant.id_etudiant}"
 					method="POST" enctype="multipart/form-data">
+					
+					<div class="form-row">
+						<div class="col-md-6">
+							<div class="position-relative form-group">
+								<label for="last_name_fr" class="">Nom en français</label><input
+									name="last_name_fr" id="last_name_fr" placeholder=""
+									type="text" class="form-control">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="position-relative form-group">
+								<label for="last_name_ar" class="">Nom en arabe</label><input
+									name="last_name_ar" id="last_name_ar" placeholder=""
+									type="text" class="form-control">
+							</div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-md-6">
+							<div class="position-relative form-group">
+								<label for="first_name_fr" class="">Prénom en français</label><input
+									name="first_name_fr" id="first_name_fr" placeholder=""
+									type="text" class="form-control">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="position-relative form-group">
+								<label for="first_name_ar" class="">Prénom en arabe</label><input
+									name="first_name_ar" id="first_name_ar" placeholder=""
+									type="text" class="form-control">
+							</div>
+						</div>
+					</div>
 
+					<div class="form-row">
+						<div class="col-md-6">
+							<div class="position-relative form-group">
+								<label for="massar_edu" class="">Code Massar</label><input
+									name="massar_edu" id="massar_edu" placeholder="" type="text"
+									class="form-control">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="position-relative form-group">
+								<label for="cne" class="">CNE</label><input name="cne" id="cne"
+									placeholder="" type="text" class="form-control">
+							</div>
+						</div>
+					</div>
+
+					<div class="form-row">
+						<div class="col-md-3">
+							<div class="position-relative form-group">
+								<label for="nationality" class="">Nationalité</label>
+								<jsp:include page="../etudiant/country-select.jsp"></jsp:include>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="position-relative form-group">
+								<label for="city" class="">Ville</label><input name="city"
+									id="city" placeholder="" type="text" class="form-control">
+							</div>
+						</div>
+
+						<div class="col-md-6">
+
+							<div class="card-body">
+								<h5 class="card-title">Sexe</h5>
+								<div class="position-relative form-group">
+									<div>
+										<div
+											class="custom-radio custom-control">
+											<input type="radio" id="male" value="HOMME" name="gender"
+												class="custom-control-input" checked><label
+												class="custom-control-label" for="male">Homme</label>
+										</div>
+										<div
+											class="custom-radio custom-control">
+											<input type="radio" id="female" value="FEMME" name="gender"
+												class="custom-control-input"><label
+												class="custom-control-label" for="female">Femme</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					
+					<div class="form-row">
+						<div class="col-md-6">
+							<div class="position-relative form-group">
+								<label for="birth_date" class="">Date de naissance</label><input
+									name="birth_date" id="birth_date"
+									type="date" class="form-control">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="position-relative form-group">
+								<label for="birth_place" class="">Lieu de naissance</label><input
+									name="birth_place" id="birth_place" placeholder=""
+									type="text" class="form-control">
+							</div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-md-6">
+							<div class="position-relative form-group">
+								<label for="province" class="">Province</label><input
+									name="province" id="province" placeholder=""
+									type="text" class="form-control">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="position-relative form-group">
+								<label for="bac_year" class="">Année bac</label><input
+									name="bac_year" id="bac_year" placeholder=""
+									type="number" class="form-control">
+							</div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-md-6">
+							<div class="position-relative form-group">
+								<label for="bac_type" class="">Type du bac</label><input
+									name="bac_type" id="bac_type" placeholder=""
+									type="text" class="form-control">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="position-relative form-group">
+								<label for="mention" class="">Mention</label><input
+									name="mention" id="mention" placeholder=""
+									type="text" class="form-control">
+							</div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-md-3">
+							<div class="position-relative form-group">
+								<label for="high_school" class="">Lycée</label><input
+									name="high_school" id="high_school" placeholder=""
+									type="text" class="form-control">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="position-relative form-group">
+								<label for="bac_place" class="">Lieu d'obtention du bac</label><input
+									name="bac_place" id="bac_place" placeholder=""
+									type="text" class="form-control">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="position-relative form-group">
+								<label for="academy" class="">Académie</label><input
+									name="academy" id="academy" placeholder=""
+									type="text" class="form-control">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="position-relative form-group">
+								<label for="email" class="">Email</label><input
+									name="email" id="email" placeholder=""
+									type="text" class="form-control" disabled>
+							</div>
+						</div>
+					</div>
+	
+										
 					<div class="col-md-6">
 						<div class="position-relative form-group">
 							<label for="Filiere" class="">Filiere</label> <select
@@ -140,6 +308,12 @@
 						</div>
 					</div>
 
+
+			<img style='display:block; width:100px;height:100px;' id='base64image'                 
+       src='data:image/jpeg;base64,${ia.encodedPhoto}' />
+			
+			
+			<img src="data:image/jpeg;base64, LzlqLzRBQ...<!-- base64 data -->" class="rounded mx-auto d-block" alt="...">
 					<button class="mt-2 btn btn-primary col-md-12" type="submit">Valider</button>
 
 				</form>

@@ -259,7 +259,6 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 				"documents de l'étudiant " + inscription_administrative.getEtudiant().getFirst_name_fr() + " "
 						+ inscription_administrative.getEtudiant().getLast_name_fr() + " modifié à l'administration",
 				new java.util.Date()));
-
 	}
 
 	@Override
@@ -435,25 +434,19 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 			Long idSemestre, Long idModule) throws DataNotFoundExceptions, EntityNotFoundException {
 		List<InscriptionAdministrative> listesInscription = new ArrayList<InscriptionAdministrative>();
 		if (idModule != null) {
-			System.out.println("Filtre module");
 			Modulee module = moduleRepository.getOne(idModule);
 			listesInscription = inscription_admistrative_repository.listerInscriptionsAdministrativesByModule(module);
 			System.out.println(listesInscription.size());
 		} else if (idSemestre != null) {
-			System.out.println("Filtre semestre");
 			Semestre semestre = semestreRespository.getOne(idSemestre);
 			listesInscription = inscription_admistrative_repository
 					.listerInscriptionsAdministrativesBySemestre(semestre);
-			System.out.println(listesInscription.size());
 		} else if (idFiliere != null) {
-			System.out.println("Filtre filiere");
 			Filiere filiere = filiereRepository.getOne(idFiliere);
 			listesInscription = inscription_admistrative_repository.listerInscriptionsAdministrativesByFiliere(filiere);
-			System.out.println(listesInscription.size());
 		}
 
 		if (idAnneeAcademique != null) {
-			System.out.println("Filtre annee academique");
 			listesInscription = listesInscription.stream()
 					.filter(inscri -> inscri.getAnnee_academique().getId_annee_academique() != idAnneeAcademique)
 					.collect(Collectors.toList());
