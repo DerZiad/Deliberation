@@ -39,7 +39,7 @@
 								<td><a style="color: black" href="#">${etudiant.last_name_fr}</a></td>
 								<td><a style="color: black" href="#">${etudiant.first_name_fr}</a></td>
 								<td><a style="color: black" href="#">${etudiant.gender}</a></td>
-								<td><a style="color: black" href="#">${etudiant.nationality}</a></td>
+								<td><a style="color: black" href="#">${etudiant.nationality.valueCountry}</a></td>
 								<c:set var="date" value="${etudiant.birth_date}"></c:set>
 								<c:set var="birth_date" value="${fn:substring(date,0,10)}"></c:set>
 								<td><a style="color: black" href="#">${birth_date}</a></td>

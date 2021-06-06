@@ -14,6 +14,10 @@ import com.ziad.models.Modulee;
 @Embeddable
 public class ComposedNoteModule implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	@JoinColumn(nullable = true)
 	private Modulee module;

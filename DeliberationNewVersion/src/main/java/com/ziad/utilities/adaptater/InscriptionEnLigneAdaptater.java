@@ -22,7 +22,7 @@ public class InscriptionEnLigneAdaptater implements JsonSerializer<InscriptionEn
 		json.addProperty("last_name_fr", src.getLast_name_fr());
 		json.addProperty("last_name_ar", src.getLast_name_ar());
 		json.addProperty("cne", src.getCne());
-		json.addProperty("nationality", src.getNationality());
+		json.addProperty("nationality", src.getNationality().getValueCountry());
 		json.addProperty("gender", src.getGender().name());
 		json.addProperty("birth_date", src.getBirth_date().toLocaleString());
 		json.addProperty("birth_place", src.getBirth_place());

@@ -31,7 +31,7 @@ public class InscriptionEnLigne implements Serializable {
 	@Column(name = "email")
 	private String email;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = {CascadeType.DETACH,CascadeType.PERSIST})
 	private Etudiant etudiant;
 	@Column(name = "massar_edu", unique = true)
 	private String massar_edu;
@@ -66,8 +66,8 @@ public class InscriptionEnLigne implements Serializable {
 	/**
 	 * Nationalité
 	 */
-	@Column(name = "nationality")
-	private String nationality;
+	@OneToOne(cascade = {CascadeType.DETACH,CascadeType.PERSIST})
+	private Country nationality;
 
 	/**
 	 * sexe: HOMME ou FEMME
@@ -151,7 +151,7 @@ public class InscriptionEnLigne implements Serializable {
 	}
 
 	public InscriptionEnLigne(String email, Etudiant etudiant, String massar_edu, String first_name_fr,
-			String first_name_ar, String last_name_fr, String last_name_ar, String cne, String nationality,
+			String first_name_ar, String last_name_fr, String last_name_ar, String cne, Country nationality,
 			Gender gender, Date birth_date, String birth_place, String city, String province, Integer bac_year,
 			String bac_type, String mention, String high_school, String bac_place, String academy,
 			Date registration_date, int accepted, int acceptedParAdmin, Etablissement etablissement) {
@@ -184,7 +184,7 @@ public class InscriptionEnLigne implements Serializable {
 
 	public InscriptionEnLigne(Long id_inscription_en_ligne, String email, Etudiant etudiant, String massar_edu,
 			String first_name_fr, String first_name_ar, String last_name_fr, String last_name_ar, String cne,
-			String nationality, Gender gender, Date birth_date, String birth_place, String city, String province,
+			Country nationality, Gender gender, Date birth_date, String birth_place, String city, String province,
 			Integer bac_year, String bac_type, String mention, String high_school, String bac_place, String academy,
 			Date registration_date, int accepted, int acceptedParAdmin, Etablissement etablissement) {
 		this(email, etudiant, massar_edu, first_name_fr, first_name_ar, last_name_fr, last_name_ar, cne, nationality,
@@ -266,11 +266,11 @@ public class InscriptionEnLigne implements Serializable {
 		this.cne = cne;
 	}
 
-	public String getNationality() {
+	public Country getNationality() {
 		return nationality;
 	}
 
-	public void setNationality(String nationality) {
+	public void setNationality(Country nationality) {
 		this.nationality = nationality;
 	}
 

@@ -13,6 +13,10 @@ import com.ziad.models.Semestre;
 @Embeddable
 public class ComposedNoteSemestre implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	private Semestre semestre;
 	@OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)

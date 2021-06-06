@@ -13,6 +13,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -20,7 +21,7 @@ import com.ziad.models.compositeid.ComposedInscriptionAdministrative;
 
 @Entity
 @Table(name = "InscriptionAdministrative")
-public class InscriptionAdministrative implements Serializable{
+public class InscriptionAdministrative implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -57,17 +58,22 @@ public class InscriptionAdministrative implements Serializable{
 	@Lob
 	private byte[] cin;
 
+	@Transient
 	private String encodedPhoto;
 
+	@Transient
 	private String encodedBac;
 
+	@Transient
 	private String encodedRv;
 
+	@Transient
 	private String encodedAn;
 
+	@Transient
 	private String encodedCin;
-	
-	@OneToMany(cascade = CascadeType.ALL,mappedBy = "inscription_administrative")
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "inscription_administrative")
 	private List<DocumentDePlus> documents;
 
 	public InscriptionAdministrative() {
@@ -77,7 +83,7 @@ public class InscriptionAdministrative implements Serializable{
 	public InscriptionAdministrative(AnneeAcademique annee_academique, Date date_pre_inscription,
 			Date date_valid_inscription, String operateur, boolean bourse, byte[] photo, byte[] bac, byte[] releve_note,
 			byte[] acte_naissance, byte[] cin, String encodedPhoto, String encodedBac, String encodedRv,
-			String encodedAn, String encodedCin, List<DocumentDePlus> documents) {
+			String encodedAn, String encodedCin, List<DocumentDePlus> documents) throws UnsupportedEncodingException {
 		super();
 		this.annee_academique = annee_academique;
 		this.date_pre_inscription = date_pre_inscription;
@@ -89,37 +95,17 @@ public class InscriptionAdministrative implements Serializable{
 		this.releve_note = releve_note;
 		this.acte_naissance = acte_naissance;
 		this.cin = cin;
-		this.encodedPhoto = encodedPhoto;
-		this.encodedBac = encodedBac;
-		this.encodedRv = encodedRv;
-		this.encodedAn = encodedAn;
-		this.encodedCin = encodedCin;
-		this.documents = documents;
+		encodeAll();
 	}
 
 	public InscriptionAdministrative(ComposedInscriptionAdministrative composite_association_id,
 			AnneeAcademique annee_academique, Date date_pre_inscription, Date date_valid_inscription, String operateur,
 			boolean bourse, byte[] photo, byte[] bac, byte[] releve_note, byte[] acte_naissance, byte[] cin,
 			String encodedPhoto, String encodedBac, String encodedRv, String encodedAn, String encodedCin,
-			List<DocumentDePlus> documents) {
-		super();
+			List<DocumentDePlus> documents) throws UnsupportedEncodingException {
+		this(annee_academique, date_pre_inscription, date_valid_inscription, operateur, bourse, photo, bac, releve_note,
+				acte_naissance, cin, encodedPhoto, encodedBac, encodedRv, encodedAn, encodedCin, documents);
 		this.composite_association_id = composite_association_id;
-		this.annee_academique = annee_academique;
-		this.date_pre_inscription = date_pre_inscription;
-		this.date_valid_inscription = date_valid_inscription;
-		this.operateur = operateur;
-		this.bourse = bourse;
-		this.photo = photo;
-		this.bac = bac;
-		this.releve_note = releve_note;
-		this.acte_naissance = acte_naissance;
-		this.cin = cin;
-		this.encodedPhoto = encodedPhoto;
-		this.encodedBac = encodedBac;
-		this.encodedRv = encodedRv;
-		this.encodedAn = encodedAn;
-		this.encodedCin = encodedCin;
-		this.documents = documents;
 	}
 
 	public AnneeAcademique getAnnee_academique() {
@@ -203,13 +189,7 @@ public class InscriptionAdministrative implements Serializable{
 	}
 
 	public String getEncodedPhoto() throws UnsupportedEncodingException {
-		if (getPhoto() != null) {
-			byte[] photo = getPhoto();
-			byte[] encodeBase64Photo = Base64.encodeBase64(photo);
-			String base64Encoded = new String(encodeBase64Photo, "UTF-8");
-			return base64Encoded;
-		}
-		return "";
+		return encodedPhoto;
 	}
 
 	public void setEncodedPhoto(String encodedPhoto) {
@@ -279,32 +259,36 @@ public class InscriptionAdministrative implements Serializable{
 	public void setComposite_association_id(ComposedInscriptionAdministrative composite_association_id) {
 		this.composite_association_id = composite_association_id;
 	}
-	
-	public void encodeAll() throws UnsupportedEncodingException {
 
+	public void encodeAll() throws UnsupportedEncodingException {
+		if (getPhoto() != null) {
+			byte[] encodedphotobyte = Base64.encodeBase64(photo);
+			String base64Encoded = new String(encodedphotobyte, "UTF-8");
+			setEncodedPhoto(base64Encoded);
+		}
 		
+		if (getBac() != null) {
+			byte[] encodedbacbyte = Base64.encodeBase64(bac);
+			String base64Encoded = new String(encodedbacbyte, "UTF-8");
+			setEncodedBac(base64Encoded);
+		}
+
 		if (getReleve_note() != null) {
 
-			byte[] ReleveNote = getReleve_note();
-			byte[] encodeBase64Document1 = Base64.encodeBase64(ReleveNote);
+			byte[] encodeBase64Document1 = Base64.encodeBase64(releve_note);
 			String base64Encoded = new String(encodeBase64Document1, "UTF-8");
 			setEncodedRv(base64Encoded);
 		}
 		if (getActe_naissance() != null) {
-
-			byte[] ActeNaissance = getActe_naissance();
-			byte[] encodeBase64Document1 = Base64.encodeBase64(ActeNaissance);
+			byte[] encodeBase64Document1 = Base64.encodeBase64(acte_naissance);
 			String base64Encoded = new String(encodeBase64Document1, "UTF-8");
 			setEncodedAn(base64Encoded);
 		}
 		if (getCin() != null) {
-
-			byte[] cin = getCin();
 			byte[] encodeBase64Document1 = Base64.encodeBase64(cin);
 			String base64Encoded = new String(encodeBase64Document1, "UTF-8");
 			setEncodedCin(base64Encoded);
 		}
 	}
-	
 
 }

@@ -258,7 +258,6 @@ public class IntialiserBachelor {
 			etudiant.setLast_name_fr("Ziad");
 			etudiant.setMassar_edu("M13124589"+i);
 			etudiant.setMention("Tres bien");
-			etudiant.setNationality("Morrocain");
 			etudiant.setProvince("Kamilia");
 			etudiant.setRegistration_date(new java.util.Date());
 			etudiant.setEmail("ziadbougrine@gmail.com");
@@ -322,7 +321,6 @@ public class IntialiserBachelor {
 			etudiant.setLast_name_fr("Abouhali"+i);
 			etudiant.setMassar_edu("M13124589"+i);
 			etudiant.setMention("Tres bien");
-			etudiant.setNationality("Morrocain");
 			etudiant.setProvince("Kamilia");
 			etudiant.setRegistration_date(new java.util.Date());
 			etudiant.setEmail("ziadbougrine@gmail.com");

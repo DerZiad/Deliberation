@@ -11,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -60,8 +61,8 @@ public class Etudiant implements Serializable{
 	/**
 	 * Nationalité
 	 */
-	@Column(name = "nationality")
-	private String nationality;
+	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.PERSIST})
+	private Country nationality;
 
 	/**
 	 * sexe: HOMME ou FEMME
@@ -141,7 +142,7 @@ public class Etudiant implements Serializable{
 	}
 
 	public Etudiant(String massar_edu, String first_name_fr, String first_name_ar, String last_name_fr,
-			String last_name_ar, String cne, String nationality, Gender gender, Date birth_date, String birth_place,
+			String last_name_ar, String cne, Country nationality, Gender gender, Date birth_date, String birth_place,
 			String city, String province, Integer bac_year, String bac_type, String mention, String high_school,
 			String bac_place, String academy, Date registration_date, String email,
 			InscriptionEnLigne inscription_en_ligne, User user) {
@@ -171,7 +172,7 @@ public class Etudiant implements Serializable{
 	}
 
 	public Etudiant(Long id_etudiant, String massar_edu, String first_name_fr, String first_name_ar,
-			String last_name_fr, String last_name_ar, String cne, String nationality, Gender gender, Date birth_date,
+			String last_name_fr, String last_name_ar, String cne, Country nationality, Gender gender, Date birth_date,
 			String birth_place, String city, String province, Integer bac_year, String bac_type, String mention,
 			String high_school, String bac_place, String academy, Date registration_date, String email,
 			InscriptionEnLigne inscription_en_ligne, User user) {
@@ -257,11 +258,11 @@ public class Etudiant implements Serializable{
 		this.cne = cne;
 	}
 
-	public String getNationality() {
+	public Country getNationality() {
 		return nationality;
 	}
 
-	public void setNationality(String nationality) {
+	public void setNationality(Country nationality) {
 		this.nationality = nationality;
 	}
 
@@ -395,6 +396,14 @@ public class Etudiant implements Serializable{
 				+ mention + ", high_school=" + high_school + ", bac_place=" + bac_place + ", academy=" + academy
 				+ ", registration_date=" + registration_date + ", email=" + email + ", inscription_en_ligne="
 				+ inscription_en_ligne + ", user=" + user + "]";
+	}
+	
+	public boolean isHomme() {
+		return gender.equals(Gender.HOMME);	
+	}
+	
+	public boolean isFemme() {
+		return gender.equals(Gender.FEMME);
 	}
 	
 	

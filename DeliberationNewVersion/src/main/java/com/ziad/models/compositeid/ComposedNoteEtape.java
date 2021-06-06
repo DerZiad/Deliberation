@@ -12,6 +12,10 @@ import com.ziad.models.Etudiant;
 
 @Embeddable
 public class ComposedNoteEtape implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	private Etape etape;
 	@OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)

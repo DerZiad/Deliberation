@@ -13,6 +13,9 @@ public class DeliberationNewVersionApplication implements CommandLineRunner {
 	@Autowired
 	private ServerConfiguration server;
 	
+	@Autowired
+	private CountryInitialiser countryInitializer;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(DeliberationNewVersionApplication.class, args);
 	}
@@ -22,7 +25,9 @@ public class DeliberationNewVersionApplication implements CommandLineRunner {
 		if (initializer.isEmpty()) {
 			initializer.inistializeSchool();
 		}
-		
+			
+		if(countryInitializer.isEmpty())
+			countryInitializer.remplirBaseDonnee();
 		System.out.println("Server Link =======+> " + server.getApiUrl());
 	}
 	

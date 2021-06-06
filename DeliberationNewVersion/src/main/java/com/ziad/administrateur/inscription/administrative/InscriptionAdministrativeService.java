@@ -2,14 +2,15 @@ package com.ziad.administrateur.inscription.administrative;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 
 import org.apache.poi.ss.usermodel.Row;
@@ -19,12 +20,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ziad.enums.Gender;
 import com.ziad.enums.MonRole;
 import com.ziad.enums.TypeInscription;
 import com.ziad.exceptions.CSVReaderOException;
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.exceptions.FormatReaderException;
 import com.ziad.models.AnneeAcademique;
+import com.ziad.models.Country;
 import com.ziad.models.Element;
 import com.ziad.models.Etape;
 import com.ziad.models.Etudiant;
@@ -40,6 +43,7 @@ import com.ziad.models.User;
 import com.ziad.models.compositeid.ComposedInscriptionAdministrative;
 import com.ziad.models.compositeid.ComposedInscriptionPedagogique;
 import com.ziad.repositories.AnnneAcademiqueRepository;
+import com.ziad.repositories.CountryRepository;
 import com.ziad.repositories.EtudiantRepository;
 import com.ziad.repositories.FiliereRepository;
 import com.ziad.repositories.HistoriqueRepository;
@@ -51,6 +55,8 @@ import com.ziad.repositories.NoteElementRepository;
 import com.ziad.repositories.SemestreRepository;
 import com.ziad.utilities.ExcelReader;
 import com.ziad.utilities.JSONConverter;
+import com.ziad.utilities.SendEmailService;
+import com.ziad.utilities.beans.HtmlMessage;
 
 @Service
 @Primary
@@ -84,7 +90,13 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 	private ModuleRepository moduleRepository;
 
 	@Autowired
+	private CountryRepository countryRepository;
+
+	@Autowired
 	private SemestreRepository semestreRespository;
+
+	@Autowired
+	private SendEmailService mailer;
 
 	@Override
 	public ArrayList<Object> prepareInscriptionDatas() throws DataNotFoundExceptions {
@@ -101,7 +113,7 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 	@Override
 	public void createInscriptionAdministrative(Long id_annee_academique, Long id_inscription_en_ligne, Long id_filiere,
 			MultipartFile photo, MultipartFile bac, MultipartFile relevee_de_note, MultipartFile acte_naissance,
-			MultipartFile cin) throws EntityNotFoundException, IOException {
+			MultipartFile cin) throws EntityNotFoundException, IOException, MessagingException {
 		InscriptionAdministrative inscription_administrative = new InscriptionAdministrative();
 		Etudiant etudiant = new Etudiant();
 		Filiere filiere = filiereRepository.getOne(id_filiere);
@@ -172,7 +184,19 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 		}
 		inscription_administrative.setComposite_association_id(id_compose);
 		inscription_administrative.encodeAll();
+
 		inscriptionAdministrative.save(inscription_administrative);
+
+		inscriptionEnLigneRepository.delete(inscriptionEnLigne);
+
+		String body = "Vous avez bien été inscrit administrativement, le compte de Déliberation \n Username :"
+				+ inscription_administrative.getEtudiant().getUser().getUsername() + "\n Password :"
+				+ inscription_administrative.getEtudiant().getLast_name_fr().toLowerCase();
+
+		HtmlMessage htmlmessage = new HtmlMessage(inscription_administrative.getEtudiant().getEmail(), body,
+				"L'inscription administrative faites", inscription_administrative.getEtudiant().getLast_name_fr() + " "
+						+ inscription_administrative.getEtudiant().getFirst_name_fr());
+		mailer.sendEmail(htmlmessage);
 
 		/*
 		 * Inscription pédagogique automatique
@@ -187,7 +211,7 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 					InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(compsedId,
 							annee_academique, false, TypeInscription.SEMESTRE);
 					this.inscriptionPedagogiqueRepository.save(inscription_pedagogique);
-					NoteElement note = new NoteElement(compsedId,-1d,
+					NoteElement note = new NoteElement(compsedId, -1d,
 							inscription_administrative.getAnnee_academique());
 					noteElementRepository.save(note);
 				}
@@ -201,15 +225,14 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 
 		Etudiant etudiant = etudiantRepository.getOne(id_etudiant);
 		Filiere filiere = filiereRepository.getOne(id_filiere);
-		
+
 		ComposedInscriptionAdministrative inscription_administrative = new ComposedInscriptionAdministrative(etudiant,
-				filiere);		
+				filiere);
 		inscription_admistrative_repository.deleteById(inscription_administrative);
 	}
 
 	@Override
-	public ArrayList<Object> listerInscriptionsAdministratives()
-			throws DataNotFoundExceptions, UnsupportedEncodingException {
+	public ArrayList<Object> listerInscriptionsAdministratives() throws DataNotFoundExceptions {
 		List<Filiere> filieres = filiereRepository.findAll();
 		ArrayList<Object> list = new ArrayList<Object>();
 		list.add(annee_academique_repository.findAll());
@@ -222,48 +245,8 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 	}
 
 	@Override
-	public void modifierInscriptionAdministrative(Date date_pre_inscription, Date date_valid_inscription,
-			Long id_etudiant, Long id_filiere, MultipartFile photo, MultipartFile bac, MultipartFile relevee_note,
-			MultipartFile acte_de_naissance, MultipartFile cin, Long id_annee_academique) throws IOException {
-		Etudiant etudiant = etudiantRepository.getOne(id_etudiant);
-		Filiere filiere = filiereRepository.getOne(id_filiere);
-
-		ComposedInscriptionAdministrative composed_id = new ComposedInscriptionAdministrative(etudiant, filiere);
-		InscriptionAdministrative inscription_administrative = inscription_admistrative_repository.getOne(composed_id);
-		AnneeAcademique annee_academique = annee_academique_repository.getOne(id_annee_academique);
-
-		inscription_administrative.setAnnee_academique(annee_academique);
-		inscription_administrative.setDate_pre_inscription(date_pre_inscription);
-		inscription_administrative.setDate_valid_inscription(date_valid_inscription);
-
-		if (!bac.isEmpty()) {
-			inscription_administrative.setBac(bac.getBytes());
-		}
-		if (!acte_de_naissance.isEmpty()) {
-			inscription_administrative.setActe_naissance(acte_de_naissance.getBytes());
-		}
-		if (!relevee_note.isEmpty()) {
-			inscription_administrative.setReleve_note(relevee_note.getBytes());
-		}
-		if (!cin.isEmpty()) {
-			inscription_administrative.setCin(cin.getBytes());
-		}
-		if (!photo.isEmpty()) {
-			inscription_administrative.setPhoto(photo.getBytes());
-		}
-		
-		inscription_administrative.encodeAll();
-		
-		inscription_admistrative_repository.save(inscription_administrative);
-		historiqueRepository.save(new Historique(
-				"documents de l'étudiant " + inscription_administrative.getEtudiant().getFirst_name_fr() + " "
-						+ inscription_administrative.getEtudiant().getLast_name_fr() + " modifié à l'administration",
-				new java.util.Date()));
-	}
-
-	@Override
 	public ArrayList<Object> getInscriptionAdministrative(Long id_filiere, Long id_etudiant)
-			throws EntityNotFoundException {
+			throws EntityNotFoundException, UnsupportedEncodingException {
 		Filiere filiere = filiereRepository.getOne(id_filiere);
 		Etudiant etudiant = etudiantRepository.getOne(id_etudiant);
 
@@ -271,11 +254,14 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 				etudiant, filiere);
 		InscriptionAdministrative inscription_administrative = inscription_admistrative_repository
 				.getOne(inscription_administrative_id);
+		inscription_administrative.encodeAll();
 		ArrayList<Object> besoins = new ArrayList<Object>();
 		besoins.add(inscription_administrative);
 		besoins.add(inscriptionEnLigneRepository.findAll());
 		besoins.add(filiereRepository.findAll());
 		besoins.add(annee_academique_repository.findAll());
+		besoins.add(countryRepository.findAll());
+
 		return besoins;
 	}
 
@@ -451,8 +437,94 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 					.filter(inscri -> inscri.getAnnee_academique().getId_annee_academique() != idAnneeAcademique)
 					.collect(Collectors.toList());
 		}
-		
+
 		return listesInscription;
+	}
+
+	@Override
+	public void modifierInscriptionAdministrative(String last_name_fr, String last_name_ar, String first_name_fr,
+			String first_name_ar, String massar_edu, String cne, String nationality, Gender gender, String birth_date,
+			String birth_place, String city, String province, Integer bac_year, String bac_type, String mention,
+			String high_school, String bac_place, String academy, String date_pre_inscription,
+			String date_valid_inscription, Long id_etudiant, Long id_filiere, MultipartFile photo, MultipartFile bac,
+			MultipartFile relevee_note, MultipartFile acte_de_naissance, MultipartFile cin, Long id_annee_academique)
+			throws IOException {
+		Etudiant etudiant = etudiantRepository.getOne(id_etudiant);
+		Filiere filiere = filiereRepository.getOne(id_filiere);
+
+		ComposedInscriptionAdministrative composed_id = new ComposedInscriptionAdministrative(etudiant, filiere);
+		InscriptionAdministrative inscription_administrative = inscription_admistrative_repository.getOne(composed_id);
+		AnneeAcademique annee_academique = annee_academique_repository.getOne(id_annee_academique);
+
+		inscription_administrative.setAnnee_academique(annee_academique);
+		inscription_administrative.setDate_pre_inscription(convertDate(date_pre_inscription));
+		inscription_administrative.setDate_valid_inscription(convertDate(date_valid_inscription));
+
+		if (!bac.isEmpty()) {
+			inscription_administrative.setBac(bac.getBytes());
+		}
+		if (!acte_de_naissance.isEmpty()) {
+			inscription_administrative.setActe_naissance(acte_de_naissance.getBytes());
+		}
+		if (!relevee_note.isEmpty()) {
+			inscription_administrative.setReleve_note(relevee_note.getBytes());
+		}
+		if (!cin.isEmpty()) {
+			inscription_administrative.setCin(cin.getBytes());
+		}
+		if (!photo.isEmpty()) {
+			inscription_administrative.setPhoto(photo.getBytes());
+		}
+
+		inscription_administrative.getEtudiant();
+
+		inscription_administrative.getEtudiant().setLast_name_fr(last_name_fr);
+		inscription_administrative.getEtudiant().setLast_name_ar(last_name_ar);
+		inscription_administrative.getEtudiant().setFirst_name_fr(first_name_fr);
+		inscription_administrative.getEtudiant().setFirst_name_ar(first_name_ar);
+		inscription_administrative.getEtudiant().setMassar_edu(massar_edu);
+		inscription_administrative.getEtudiant().setCne(cne);
+
+		/**
+		 * Grabbing country
+		 */
+		Country country = countryRepository.getOne(nationality);
+
+		inscription_administrative.getEtudiant().setNationality(country);
+		inscription_administrative.getEtudiant().setGender(gender);
+		inscription_administrative.getEtudiant().setBirth_date(convertDate(birth_date));
+		inscription_administrative.getEtudiant().setBirth_place(birth_place);
+		inscription_administrative.getEtudiant().setCity(city);
+		inscription_administrative.getEtudiant().setProvince(province);
+		inscription_administrative.getEtudiant().setBac_year(bac_year);
+		inscription_administrative.getEtudiant().setBac_type(bac_type);
+		inscription_administrative.getEtudiant().setMention(mention);
+		inscription_administrative.getEtudiant().setHigh_school(high_school);
+		inscription_administrative.getEtudiant().setBac_place(bac_place);
+		inscription_administrative.getEtudiant().setAcademy(academy);
+
+		inscription_admistrative_repository.save(inscription_administrative);
+		historiqueRepository.save(new Historique(
+				"documents de l'étudiant " + inscription_administrative.getEtudiant().getFirst_name_fr() + " "
+						+ inscription_administrative.getEtudiant().getLast_name_fr() + " modifié à l'administration",
+				new java.util.Date()));
+
+	}
+
+	@SuppressWarnings({ "deprecation", "unused" })
+	private Date convertDate(String dateString) throws EntityNotFoundException {
+		try {
+			Date date = new Date();
+			String year = dateString.substring(0, 4);
+			String month = dateString.substring(5, 7);
+			String day = dateString.substring(8, 10);
+			date.setYear(Integer.parseInt(year));
+			date.setMonth(Integer.parseInt(month));
+			date.setDate(Integer.parseInt(day));
+			return date;
+		} catch (Exception e) {
+			throw new EntityNotFoundException();
+		}
 	}
 
 }
