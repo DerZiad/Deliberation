@@ -83,6 +83,7 @@ public class InscriptionService implements InscriptionInterface {
 				inscription_en_ligne.getFirst_name_fr() + " " + inscription_en_ligne.getLast_name_fr(),
 				"/student/confirmation/" + inscription_en_ligne.getId_inscription_en_ligne());
 		mailer.sendEmail(message);
+		
 		historique_repository
 				.save(new Historique("etudiant " + first_name_fr + " " + last_name_fr + " créé", new java.util.Date()));
 	}

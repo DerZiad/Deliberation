@@ -243,11 +243,11 @@ public class HtmlMessage {
 		this.topic = topic;
 	}
 
-	public void generateMessage() {
+	public String generateMessage() {
 		html.replace("{{titre}}", topic);
 		html.replace("{{nom}}", name);
 		html.replace("{{paragraphe}}", body);
-		body = html;
+		return html;
 	}
 
 }
