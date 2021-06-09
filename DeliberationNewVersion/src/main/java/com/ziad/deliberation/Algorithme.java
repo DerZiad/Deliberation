@@ -1,16 +1,19 @@
 package com.ziad.deliberation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ziad.enums.DeliberationType;
+import com.ziad.enums.TypeInscription;
 import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Deliberation;
 import com.ziad.models.Element;
 import com.ziad.models.Etape;
+import com.ziad.models.Etudiant;
 import com.ziad.models.InscriptionPedagogique;
 import com.ziad.models.Modulee;
 import com.ziad.models.NoteElement;
@@ -18,15 +21,18 @@ import com.ziad.models.NoteEtape;
 import com.ziad.models.NoteModule;
 import com.ziad.models.NoteSemestre;
 import com.ziad.models.Semestre;
+import com.ziad.models.compositeid.ComposedInscriptionPedagogique;
 import com.ziad.models.compositeid.ComposedNoteEtape;
 import com.ziad.models.compositeid.ComposedNoteModule;
 import com.ziad.models.compositeid.ComposedNoteSemestre;
+import com.ziad.repositories.AnnneAcademiqueRepository;
 import com.ziad.repositories.DeliberationRepository;
 import com.ziad.repositories.ElementRepository;
 import com.ziad.repositories.InscriptionPedagogiqueRepository;
 import com.ziad.repositories.NoteElementRepository;
 import com.ziad.repositories.NotesModuleRepository;
 import com.ziad.repositories.NotesSemestreRepository;
+import com.ziad.repositories.SemestreRepository;
 
 @Service
 public class Algorithme {
@@ -42,6 +48,12 @@ public class Algorithme {
 	private DeliberationRepository deliberationRepository;
 	@Autowired
 	private ElementRepository elementRepository;;
+
+	@Autowired
+	private SemestreRepository semestreRepository;
+
+	@Autowired
+	private AnnneAcademiqueRepository anneeAcademiqueRepository;
 
 	private DeliberationType typeDelib = DeliberationType.ORDINAIRE;
 	private Integer consideration = 0;// Consideration encas du rattrapage
@@ -79,7 +91,6 @@ public class Algorithme {
 		delibs = deliberationRepository.getDeliberationByModuleAnnneAcademique(module, annee);
 		Deliberation deliberation = null;
 
-		boolean deliberationpermis = false;
 		if (delibs.size() == 0) {
 			deliberation = new Deliberation(typeDelib.name(), annee, module, null, null);
 		} else {
@@ -137,7 +148,9 @@ public class Algorithme {
 			List<InscriptionPedagogique> inscriptionsPedagogiques = inscriptionPedagogiqueRepository
 					.getInscriptionPedagogiqueParSemestre(semestre, annee);
 			inscriptionsPedagogiques = filterInscription(inscriptionsPedagogiques);
+
 			for (InscriptionPedagogique inscription : inscriptionsPedagogiques) {
+				boolean inscritpedagogique = true;
 				Double coefficient = 0d;
 				Double noteSemestre = 0d;
 				List<NoteModule> notess = new ArrayList<NoteModule>();
@@ -147,12 +160,41 @@ public class Algorithme {
 					noteSemestre = noteSemestre + noteParModule.getNote() * module.getCoeficient();
 					coefficient = coefficient + module.getCoeficient();
 					notess.add(noteParModule);
+					inscritpedagogique = inscritpedagogique && noteParModule.isValid();
 				}
 				noteSemestre = noteSemestre / coefficient;
 				NoteSemestre noteSemestreO = new NoteSemestre(
 						new ComposedNoteSemestre(semestre, inscription.getEtudiant()), noteSemestre, deliberation);
 				noteSemestreO.delibererSemestre(notess);
 				deliberation.addNoteSemestre(noteSemestreO);
+
+				if (inscritpedagogique) {
+					/**
+					 * Grab semestre
+					 **/
+					List<Semestre> listeSemestre = semestreRepository.findAll();
+					Collections.sort(listeSemestre);
+
+					int index = semestre.getOrdre() + 2;
+					AnneeAcademique anneeSuivant = anneeAcademiqueRepository
+							.getAnneeAcademique(inscription.getAnnee_academique().getAnnee_academique() + 1).get(0);
+					if (index <= listeSemestre.size()) {
+						Etudiant etudiant = inscription.getEtudiant();
+						Semestre semestreAdelib = listeSemestre.get(index - 1);
+						for (Modulee module : semestreAdelib.getModules()) {
+							for (Element element : module.getElements()) {
+								ComposedInscriptionPedagogique id_inscription_pedagogique = new ComposedInscriptionPedagogique(
+										etudiant, element);
+								InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(
+										id_inscription_pedagogique, anneeSuivant, false, TypeInscription.SEMESTRE);
+								inscriptionPedagogiqueRepository.save(inscription_pedagogique);
+								NoteElement note = new NoteElement(id_inscription_pedagogique, 0d, anneeSuivant);
+								noteElementRepository.save(note);
+							}
+						}
+					}
+
+				}
 			}
 			deliberationRepository.save(deliberation);
 

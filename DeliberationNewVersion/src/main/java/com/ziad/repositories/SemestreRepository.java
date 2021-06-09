@@ -30,4 +30,7 @@ public interface SemestreRepository extends JpaRepository<Semestre, Long> {
 	 * Semestre getSemestreByFiliereAndLibelle(@Param("x")Filiere
 	 * filiere,@Param("y")String libelle_semestre);
 	 */
+	
+	@Query("select s from Semestre s where s.etape.filiere = :filiere")
+	List<Semestre> getSemestreOrdreFiliere(@Param("filiere") Filiere filiere);	
 }
