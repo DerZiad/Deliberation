@@ -1,4 +1,4 @@
-package com.ziad.utilities.adaptater;
+package com.ziad.utilities;
 
 import java.lang.reflect.Type;
 
@@ -14,6 +14,7 @@ public class ElementAdaptater implements JsonSerializer<Element> {
 	public JsonElement serialize(Element src, Type typeOfSrc, JsonSerializationContext context) {
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty("id_element", src.getId_element());
+		jsonObject.addProperty("id_module", src.getModule().getId_module());
 		jsonObject.addProperty("libelle_element", src.getLibelle_element());
 		jsonObject.addProperty("validation", src.getValidation());
 		jsonObject.addProperty("coefficient", src.getCoeficient());

@@ -18,7 +18,6 @@ import com.ziad.models.NoteModule;
 import com.ziad.models.NoteSemestre;
 import com.ziad.models.Semestre;
 import com.ziad.utilities.adaptater.AnneeAcademiqueAdaptater;
-import com.ziad.utilities.adaptater.ElementAdaptater;
 import com.ziad.utilities.adaptater.EtapeAdaptater;
 import com.ziad.utilities.adaptater.FiliereAdaptater;
 import com.ziad.utilities.adaptater.InscriptionEnLigneAdaptater;

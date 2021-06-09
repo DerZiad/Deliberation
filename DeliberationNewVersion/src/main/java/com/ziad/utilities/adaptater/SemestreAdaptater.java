@@ -16,6 +16,7 @@ public class SemestreAdaptater implements JsonSerializer<Semestre>{
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty("id_filiere", src.getEtape().getFiliere().getId_filiere());
         jsonObject.addProperty("id_semestre", src.getId_semestre());
+        jsonObject.addProperty("id_etape", src.getEtape().getId_etape());
         jsonObject.addProperty("libelle_semestre", src.getLibelle_semestre());
         jsonObject.addProperty("validation", src.getValidation());
         jsonObject.addProperty("ordre", src.getOrdre());

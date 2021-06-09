@@ -25,7 +25,6 @@ public class Confirmator implements Serializable {
 
 	private String email;
 
-	private String target;
 
 	@OneToOne(cascade = { CascadeType.DETACH, CascadeType.PERSIST })
 	private User user;
@@ -34,17 +33,16 @@ public class Confirmator implements Serializable {
 
 	}
 
-	public Confirmator(Long idConfirmator, String code, String email, String target, User user) {
-		this(code, email, target, user);
+	public Confirmator(Long idConfirmator, String code, String email, User user) {
+		this(code, email, user);
 		this.idConfirmator = idConfirmator;
 	}
 
-	public Confirmator(String code, String email, String target, User user) {
+	public Confirmator(String code, String email, User user) {
 		super();
 		this.code = code;
 		this.email = email;
 		this.user = user;
-		this.target = target;
 	}
 
 	public Long getIdConfirmator() {
@@ -77,14 +75,6 @@ public class Confirmator implements Serializable {
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-	public String getTarget() {
-		return target;
-	}
-
-	public void setTarget(String target) {
-		this.target = target;
 	}
 
 	public static String generateRandomCode() {
