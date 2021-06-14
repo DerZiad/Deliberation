@@ -95,7 +95,7 @@ public class ContinueMessage extends HtmlMessage {
 	@Override
 	public String generateMessage() {
 		super.generateMessage();
-		super.html.replace("{{link}}", link);
+		html = super.html.replace("{{link}}", link);
 		return html;
 	}
 

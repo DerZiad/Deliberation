@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ziad.models.Etudiant;
 import com.ziad.models.Modulee;
+import com.ziad.models.User;
 
 @Repository
 public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
@@ -18,5 +19,8 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
 
 	@Query("select e from Etudiant e,InscriptionPedagogique i where i.id_inscription_pedagogique.etudiant = e and i.id_inscription_pedagogique.element.module=:module ")
 	List<Etudiant> listerEtudiantParModule(@Param("module") Modulee module);
+	
+	@Query("select e from Etudiant e where e.user = :user")
+	Etudiant getEtudiantByUser(@Param("user")User user);
 
 }

@@ -106,7 +106,7 @@ var semestres = JSON.parse('${semestresjson}');
 
 jQuery(document).ready(function(){
 	$('select[name=filiere]').change(function(){
-		filiterSemestre();
+		filterSemestre();
 	});
 
 	$('select[name=semestre]').change(function(){
@@ -121,12 +121,13 @@ jQuery(document).ready(function(){
 			$('div[id=noterattrapage]').show();
 	});
 	
-	filterModule();
+	filterSemestre();
 });
 function filterModule(){
 	
 	var semestre = $('select[name=semestre]').val();
-
+	
+	
 	<c:if test="${utilisateur.isResponsableModule()}">
 		var chmodule = "";
 		for(let i = 0;i<modules.length;i++){
@@ -147,16 +148,17 @@ function filterModule(){
 	$('select[name=element]').html(chmodule);
 }
 
-function filiterSemestre(){
+function filterSemestre(){
 	var filiere = $('select[name=filiere]').val();
 
 	var chsemestre = "";
 	for(let i = 0;i<semestres.length;i++){
-		if(semestres[i].id_filiere == filiere){
+			if(semestres[i].id_filiere == filiere){
 			chsemestre = chsemestre + '<option value="' + semestres[i].id_semestre +'">' + semestres[i].libelle_semestre + '</option>';
 		}
 	}
 	$('select[name=semestre]').html(chsemestre);
+	filterModule();
 }
 
 

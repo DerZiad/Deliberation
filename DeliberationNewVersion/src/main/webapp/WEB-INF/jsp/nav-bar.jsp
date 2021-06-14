@@ -140,7 +140,7 @@
 						</a></li>
 
 					</ul></li>
-				<li><a href="/admin/historique/liste" class=""> <i
+				<li><a href="/admin/historique" class=""> <i
 						class="metismenu-icon pe-7s-graph3"></i> Historique
 				</a></li>
 				<li><a href="/logout" class=""> <i

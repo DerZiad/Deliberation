@@ -32,14 +32,12 @@ public class SendEmailService {
 		MimeMessage message = mailer.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
 
-		htmlmessage.generateMessage();
 		
 		helper.setFrom(FROM_EMAIL);
 		helper.setTo(htmlmessage.getTo());
 		helper.setSubject(htmlmessage.getTopic());
-		helper.setText(htmlmessage.getBody(), true);
+		helper.setText(htmlmessage.generateMessage(), true);
 		
-		System.out.println(htmlmessage.getBody());
 		mailer.send(message);
 
 	}

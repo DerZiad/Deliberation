@@ -108,6 +108,17 @@ public class HomeController {
 		model.addObject("message", "HELLO WORLD");
 		return model;
 	}
+	
+	@GetMapping("/etudiant")
+	public ModelAndView getEtudiantHomePage(HttpServletRequest req) throws AnonymousException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication instanceof AnonymousAuthenticationToken)
+			throw new AnonymousException("Acces Denied");
+		saveSession(req);
+
+		ModelAndView model = new ModelAndView("redirect:/etudiant/consulter");
+		return model;
+	}
 
 	public void saveSession(HttpServletRequest req) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
