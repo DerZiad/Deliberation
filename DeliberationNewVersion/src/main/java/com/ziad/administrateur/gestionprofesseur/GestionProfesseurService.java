@@ -40,7 +40,7 @@ public class GestionProfesseurService implements GestionProfesseurInterface {
 	public void createProfesseur(String first_name, String last_name, String email) {
 		User user = new User();
 		user.setActive(1);
-		user.setUsername(last_name.toLowerCase());
+		user.setUsername(email);
 		user.setPassword(passwordEncoder.encode(last_name.toLowerCase()));
 		Professeur professeur = new Professeur(first_name, last_name, email, user);
 		user.addRole(MonRole.ROLEPROFESSEUR);

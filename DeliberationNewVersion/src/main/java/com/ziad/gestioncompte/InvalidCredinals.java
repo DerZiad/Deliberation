@@ -1,14 +1,15 @@
 package com.ziad.gestioncompte;
 
-import java.util.HashMap;
 
 public class InvalidCredinals extends Exception {
 	
-	private HashMap<String, String> erreurs;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
-	public InvalidCredinals(String msg,HashMap<String, String> erreurs) {
+	public InvalidCredinals(String msg) {
 		super(msg);
-		this.erreurs = erreurs;
 	}
 	
 	public InvalidCredinals() {

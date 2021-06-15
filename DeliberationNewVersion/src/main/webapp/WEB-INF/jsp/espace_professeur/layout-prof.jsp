@@ -22,7 +22,7 @@
 		
 		
 		<!-- header / search-bar -->
-		<jsp:include page="search-bar.jsp"></jsp:include>
+		<jsp:include page="../search-bar.jsp"></jsp:include>
 		
 		
 		<div class="app-main">
