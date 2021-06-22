@@ -135,6 +135,10 @@
 							class="${importdelib}"> <i
 								class="metismenu-icon pe-7s-graph3"></i> Deliberation de etape
 						</a></li>
+						
+						<li><a href="/gestionnote" class="${importdelib}">
+								<i class="metismenu-icon pe-7s-graph3"></i> Modification des notes 
+						</a></li>
 						<li><a href="/delib/listerDelib" class="${importdelib}">
 								<i class="metismenu-icon pe-7s-graph3"></i> Listes des deliberations
 						</a></li>

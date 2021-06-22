@@ -35,7 +35,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.csrf().disable().exceptionHandling().authenticationEntryPoint(new Http403ForbiddenEntryPoint() {
 		}).and().authenticationProvider(authenticationProvider()).authorizeRequests().antMatchers("/").permitAll()
 				.antMatchers("/login").permitAll().antMatchers("/signup").permitAll().antMatchers("/logout")
-				.authenticated().antMatchers("/gestioncompte").authenticated() // Doît être authentifier pour se deconnecter
+				.authenticated().antMatchers("/gestioncompte").authenticated() // Doît être authentifier pour se
+																				// deconnecter
 
 				// Gestion des espaces du système
 				.antMatchers(MonRole.ROLEADMIN.getEspace()).hasRole(MonRole.ROLEADMIN.getRole())
@@ -53,8 +54,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.hasAnyRole(MonRole.ROLEADMIN.getRole(), MonRole.ROLERESPONSABLEFILIERE.getRole())
 				.antMatchers("/delib/deliberationetape")
 				.hasAnyRole(MonRole.ROLEADMIN.getRole(), MonRole.ROLERESPONSABLEFILIERE.getRole())
-
-				.anyRequest().permitAll().and().formLogin().loginProcessingUrl("/login").permitAll()
+				.antMatchers("/gestionnote")
+				.hasAnyRole(MonRole.ROLEADMIN.getRole(), MonRole.ROLERESPONSABLEFILIERE.getRole()).anyRequest()
+				.permitAll().and().formLogin().loginProcessingUrl("/login").permitAll()
 
 				.loginPage("/login").permitAll().successHandler(mySimpleUrlAuthenticationHandler())
 				.failureUrl("/login?error=true").usernameParameter("username").passwordParameter("password").and()

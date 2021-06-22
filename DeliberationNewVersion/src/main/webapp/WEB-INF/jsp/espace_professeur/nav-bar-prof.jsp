@@ -62,7 +62,8 @@
 							Mes Filieres
 					</a></li>
 				</c:if>
-				<c:if test="${utilisateur.isResponsableFiliere() or utilisateur.isResponsableModule() }">
+				<c:if
+					test="${utilisateur.isResponsableFiliere() or utilisateur.isResponsableModule() }">
 					<li><a href="#" aria-expanded="false"> <i
 							class="metismenu-icon pe-7s-id"></i>Deliberation<i
 							class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
@@ -72,8 +73,7 @@
 								class="${importdelib}"> <i
 									class="metismenu-icon pe-7s-graph3"></i> Deliberation de module
 							</a></li>
-							<c:if
-								test="${ utilisateur.isResponsableFiliere()}">
+							<c:if test="${ utilisateur.isResponsableFiliere()}">
 								<li><a href="/delib/deliberationsemestre"
 									class="${importdelib}"> <i
 										class="metismenu-icon pe-7s-graph3"></i> Deliberation de
@@ -82,6 +82,10 @@
 								<li><a href="/delib/deliberationetape"
 									class="${importdelib}"> <i
 										class="metismenu-icon pe-7s-graph3"></i> Deliberation de etape
+								</a></li>
+								<li><a href="/gestionnote" class="${importdelib}"> <i
+										class="metismenu-icon pe-7s-graph3"></i> Modification des
+										notes
 								</a></li>
 							</c:if>
 							<li><a href="/delib/listerDelib" class="${importdelib}">
