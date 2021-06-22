@@ -1,6 +1,6 @@
 package com.ziad.utilities;
 
-public class Algorithme {
+public class Algorithms {
 
 	
 	public static String convertChaineMajiscule(String chaine) {

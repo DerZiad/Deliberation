@@ -16,7 +16,7 @@
 						<div class="col-md-6">
 							<div class="position-relative form-group">
 								<label for="last_name" class="">Nom: </label><input
-									name="first_name" id="last_name" placeholder="Nom du professeur"
+									name="last_name" id="last_name" placeholder="Nom du professeur"
 									type="text" class="form-control">
 							</div>
 						</div>
@@ -25,7 +25,7 @@
 						<div class="col-md-6">
 							<div class="position-relative form-group">
 								<label for="first_name" class="">Prénom: </label><input
-									name="last_name" id="first_name" placeholder="Prénom du professeur"
+									name="first_name" id="first_name" placeholder="Prénom du professeur"
 									type="text" class="form-control">
 							</div>
 						</div>

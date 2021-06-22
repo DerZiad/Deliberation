@@ -42,7 +42,7 @@ public class GestionProfesseurService implements GestionProfesseurInterface {
 		user.setActive(1);
 		user.setUsername(email);
 		user.setPassword(passwordEncoder.encode(last_name.toLowerCase()));
-		Professeur professeur = new Professeur(first_name, last_name, email, user);
+		Professeur professeur = new Professeur(last_name, first_name, email, user);
 		user.addRole(MonRole.ROLEPROFESSEUR);
 		professeurRepository.save(professeur);
 		historiqueRepository
@@ -50,7 +50,8 @@ public class GestionProfesseurService implements GestionProfesseurInterface {
 	}
 
 	@Override
-	public void modifierProfesseur(Long id_professeur, String last_name, String first_name, String email) throws EntityNotFoundException {
+	public void modifierProfesseur(Long id_professeur, String last_name, String first_name, String email)
+			throws EntityNotFoundException {
 		Professeur professeur = professeurRepository.getOne(id_professeur);
 		professeur.setPrenom_professeur(first_name);
 		professeur.setNom_professeur(last_name);
@@ -125,23 +126,24 @@ public class GestionProfesseurService implements GestionProfesseurInterface {
 		professeurRepository.save(professeur);
 		elementRepository.save(element);
 	}
-	
 
 	@Override
-	public HashMap<String,Object> listerFilieresElements() throws DataNotFoundExceptions{
+	public HashMap<String, Object> listerFilieresElements() throws DataNotFoundExceptions {
 		List<Filiere> filieres = filiereRepository.findAll();
 		List<Element> elements = elementRepository.findAll();
-		if(filieres.size() == 0) throw new DataNotFoundExceptions("La liste des filieres est vide");
-		if(elements.size() == 0) throw new DataNotFoundExceptions("La liste des elements est vide");
-		HashMap<String,Object> composantes = new HashMap<String,Object>();
-		composantes.put(ATTRIBUT_FILIERES,filieres);
+		if (filieres.size() == 0)
+			throw new DataNotFoundExceptions("La liste des filieres est vide");
+		if (elements.size() == 0)
+			throw new DataNotFoundExceptions("La liste des elements est vide");
+		HashMap<String, Object> composantes = new HashMap<String, Object>();
+		composantes.put(ATTRIBUT_FILIERES, filieres);
 		composantes.put(ATTRIBUT_ELEMENTS, elements);
 		return composantes;
 	}
 
 	@Override
 	public HashMap<String, Object> filterElement(Long id_filiere) {
-		
+
 		return null;
 	}
 

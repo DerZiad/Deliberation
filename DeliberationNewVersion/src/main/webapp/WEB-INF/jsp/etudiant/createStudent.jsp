@@ -15,15 +15,15 @@
 					<div class="form-row">
 						<div class="col-md-6">
 							<div class="position-relative form-group">
-								<label for="first_name_fr" class="">Nom en français</label><input
-									name="first_name_fr" id="last_name_fr" placeholder=""
+								<label for="last_name_fr" class="">Nom en français</label><input
+									name="last_name_fr" id="last_name_fr" placeholder=""
 									type="text" class="form-control">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="position-relative form-group">
-								<label for="first_name_ar" class="">Nom en arabe</label><input
-									name=first_name_ar id="last_name_ar" placeholder=""
+								<label for="last_name_ar" class="">Nom en arabe</label><input
+									name="last_name_ar" id="last_name_ar" placeholder=""
 									type="text" class="form-control">
 							</div>
 						</div>
@@ -31,15 +31,15 @@
 					<div class="form-row">
 						<div class="col-md-6">
 							<div class="position-relative form-group">
-								<label for="last_name_fr" class="">Prénom en français</label><input
-									name="last_name_fr" id="first_name_fr" placeholder=""
+								<label for="first_name_fr" class="">Prénom en français</label><input
+									name="first_name_fr" id="first_name_fr" placeholder=""
 									type="text" class="form-control">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="position-relative form-group">
-								<label for="last_name_ar" class="">Prénom en arabe</label><input
-									name="last_name_ar" id="first_name_ar" placeholder=""
+								<label for="first_name_ar" class="">Prénom en arabe</label><input
+									name="first_name_ar" id="first_name_ar" placeholder=""
 									type="text" class="form-control">
 							</div>
 						</div>

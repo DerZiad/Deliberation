@@ -13,6 +13,8 @@ public class DeliberationNewVersionApplication implements CommandLineRunner {
 	@Autowired
 	private ServerConfiguration server;
 	
+	public static String SERVER_LINK;
+	
 	@Autowired
 	private CountryInitialiser countryInitializer;
 	
@@ -26,9 +28,11 @@ public class DeliberationNewVersionApplication implements CommandLineRunner {
 			initializer.inistializeSchool();
 		}
 			
+		SERVER_LINK = server.getApiUrl();
+		
 		if(countryInitializer.isEmpty())
 			countryInitializer.remplirBaseDonnee();
-		System.out.println("Server Link =======+> " + server.getApiUrl());
+		System.out.println("Server Link =======+> " + SERVER_LINK);
 	}
 	
 

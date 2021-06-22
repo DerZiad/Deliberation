@@ -8,7 +8,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import com.ziad.ServerConfiguration;
+import com.ziad.DeliberationNewVersionApplication;
 import com.ziad.utilities.beans.HtmlMessage;
 
 @Service
@@ -18,20 +18,17 @@ public class SendEmailService {
 	
 	
 	private static final String FROM_EMAIL = "deliberation.sms@gmail.com";
-	
-	@Autowired
-	private ServerConfiguration configLink;
-	
-	public static String SERVERLINK = "";
+		
+	public static String SERVERLINK;
 
 	
 	
 	public void sendEmail(HtmlMessage htmlmessage) throws MessagingException {
-		if(SERVERLINK.length() == 0)
-			SERVERLINK = configLink.getApiUrl();
+		if(SERVERLINK== null)
+			SERVERLINK = DeliberationNewVersionApplication.SERVER_LINK;
 		MimeMessage message = mailer.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
-
+		
 		
 		helper.setFrom(FROM_EMAIL);
 		helper.setTo(htmlmessage.getTo());
