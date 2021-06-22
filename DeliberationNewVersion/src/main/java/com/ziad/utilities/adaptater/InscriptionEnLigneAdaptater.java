@@ -1,6 +1,7 @@
 package com.ziad.utilities.adaptater;
 
 import java.lang.reflect.Type;
+import java.util.Date;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -24,7 +25,8 @@ public class InscriptionEnLigneAdaptater implements JsonSerializer<InscriptionEn
 		json.addProperty("cne", src.getCne());
 		json.addProperty("nationality", src.getNationality().getValueCountry());
 		json.addProperty("gender", src.getGender().name());
-		json.addProperty("birth_date", src.getBirth_date().toLocaleString());
+		Date date = src.getBirth_date();
+		json.addProperty("birth_date", date.getYear() + "-" + date.getMonth() + "-" + date.getDate());
 		json.addProperty("birth_place", src.getBirth_place());
 		json.addProperty("city", src.getCity());
 		json.addProperty("province", src.getProvince());

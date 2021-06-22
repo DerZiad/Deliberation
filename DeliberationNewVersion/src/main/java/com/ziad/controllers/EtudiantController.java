@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ziad.models.InscriptionEnLigne;
 import com.ziad.repositories.InscriptionAdministrativeRepository;
 import com.ziad.repositories.InscriptionEnLigneRepository;
+import com.ziad.utilities.JSONConverter;
 
 @Controller
 public class EtudiantController {
@@ -19,11 +20,14 @@ public class EtudiantController {
 
 	@Autowired
 	private InscriptionEnLigneRepository inscriptionEnLigneRepository;
-
+	
+	@Autowired
+	private JSONConverter converter;
+	
 	@GetMapping("/admin/inscriptionenligne/list")
 	public ModelAndView listerInscriptionsEnLigne() {
-		ModelAndView model = new ModelAndView("Inscriptionenligne");
-		model.addObject("inscriptions", inscriptionEnLigneRepository.findAll());
+		ModelAndView model = new ModelAndView("InscriptionEnligne");
+		model.addObject("inscriptions",converter.convertInscriptionsEnLignes(inscriptionEnLigneRepository.findAll()));
 		return model;
 	}
 

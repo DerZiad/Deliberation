@@ -150,14 +150,13 @@ public class InscriptionEnLigne implements Serializable {
 
 	}
 
-	public InscriptionEnLigne(String email, Etudiant etudiant, String massar_edu, String first_name_fr,
+	public InscriptionEnLigne(String email, String massar_edu, String first_name_fr,
 			String first_name_ar, String last_name_fr, String last_name_ar, String cne, Country nationality,
 			Gender gender, Date birth_date, String birth_place, String city, String province, Integer bac_year,
 			String bac_type, String mention, String high_school, String bac_place, String academy,
 			Date registration_date, int accepted, int acceptedParAdmin, Etablissement etablissement) {
 		super();
 		this.email = email;
-		this.etudiant = etudiant;
 		this.massar_edu = massar_edu;
 		this.first_name_fr = first_name_fr;
 		this.first_name_ar = first_name_ar;
@@ -182,12 +181,12 @@ public class InscriptionEnLigne implements Serializable {
 		this.etablissement = etablissement;
 	}
 
-	public InscriptionEnLigne(Long id_inscription_en_ligne, String email, Etudiant etudiant, String massar_edu,
+	public InscriptionEnLigne(Long id_inscription_en_ligne, String email, String massar_edu,
 			String first_name_fr, String first_name_ar, String last_name_fr, String last_name_ar, String cne,
 			Country nationality, Gender gender, Date birth_date, String birth_place, String city, String province,
 			Integer bac_year, String bac_type, String mention, String high_school, String bac_place, String academy,
 			Date registration_date, int accepted, int acceptedParAdmin, Etablissement etablissement) {
-		this(email, etudiant, massar_edu, first_name_fr, first_name_ar, last_name_fr, last_name_ar, cne, nationality,
+		this(email,massar_edu, first_name_fr, first_name_ar, last_name_fr, last_name_ar, cne, nationality,
 				gender, birth_date, birth_place, city, province, bac_year, bac_type, mention, high_school, bac_place,
 				academy, registration_date, accepted, acceptedParAdmin, etablissement);
 		this.id_inscription_en_ligne = id_inscription_en_ligne;

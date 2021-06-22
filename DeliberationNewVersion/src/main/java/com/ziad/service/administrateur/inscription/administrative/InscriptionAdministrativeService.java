@@ -151,11 +151,7 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 		user.setActive(1);
 		user.addRole(MonRole.ROLEETUDIANT);
 		etudiant.setUser(user);
-		etudiant.setInscription_en_ligne(inscriptionEnLigne);
-		inscriptionEnLigne.setEtudiant(etudiant);
-		etudiant.setInscription_en_ligne(inscriptionEnLigne);
 		etudiantRepository.save(etudiant);
-		inscriptionEnLigneRepository.save(inscriptionEnLigne);
 
 		// --------------------partie creation d inscrip
 		// administrative----------------------------//
@@ -163,10 +159,12 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 		AnneeAcademique annee_academique = annee_academique_repository.getOne(id_annee_academique);
 		inscription_administrative.setAnnee_academique(annee_academique);
 		inscription_administrative.setDate_pre_inscription(inscriptionEnLigne.getRegistration_date());
+		
 		LocalDate ld = LocalDate.now();
 		ZoneId defaultZoneId = ZoneId.systemDefault();
 		java.util.Date date = Date.from(ld.atStartOfDay(defaultZoneId).toInstant());
 		inscription_administrative.setDate_valid_inscription(date);
+		
 		if (!bac.isEmpty()) {
 			inscription_administrative.setBac(bac.getBytes());
 		}
@@ -182,6 +180,7 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 		if (!photo.isEmpty()) {
 			inscription_administrative.setPhoto(photo.getBytes());
 		}
+		
 		inscription_administrative.setComposite_association_id(id_compose);
 		inscription_administrative.encodeAll();
 
@@ -189,7 +188,7 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 
 		inscriptionEnLigneRepository.delete(inscriptionEnLigne);
 
-		String body = "Vous avez bien été inscrit administrativement, le compte de Déliberation \n Username :"
+		String body = "Vous avez été bien inscrit administrativement, le compte de Déliberation \n Username :"
 				+ inscription_administrative.getEtudiant().getUser().getUsername() + "\n Password :"
 				+ inscription_administrative.getEtudiant().getLast_name_fr().toLowerCase();
 
@@ -351,11 +350,9 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 				user.setActive(1);
 				user.addRole(MonRole.ROLEETUDIANT);
 				etudiant.setUser(user);
-				etudiant.setInscription_en_ligne(inscrptionEnLigneObject);
-				inscrptionEnLigneObject.setEtudiant(etudiant);
-				etudiant.setInscription_en_ligne(inscrptionEnLigneObject);
 				etudiantRepository.save(etudiant);
-				inscriptionEnLigneRepository.save(inscrptionEnLigneObject);
+				inscriptionEnLigneRepository.delete(inscrptionEnLigneObject);
+				
 
 				// --------------------partie creation d inscrip
 				// administrative----------------------------//
@@ -366,6 +363,7 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 				ZoneId defaultZoneId = ZoneId.systemDefault();
 				java.util.Date date = Date.from(ld.atStartOfDay(defaultZoneId).toInstant());
 				inscription_administrative.setDate_valid_inscription(date);
+				inscription_administrative.setBourse(bourse == 1);
 				inscription_administrative.setComposite_association_id(id_compose);
 				inscriptionAdministrative.save(inscription_administrative);
 

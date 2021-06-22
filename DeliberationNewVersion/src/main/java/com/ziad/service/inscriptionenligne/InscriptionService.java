@@ -55,7 +55,7 @@ public class InscriptionService implements InscriptionInterface {
 		inscription_en_ligne.setFirst_name_ar(first_name_ar);
 		inscription_en_ligne.setMassar_edu(massar_edu);
 		inscription_en_ligne.setCne(cne);
-
+		System.out.println(birth_date);
 		/**
 		 * Grabbing country
 		 */
@@ -95,7 +95,7 @@ public class InscriptionService implements InscriptionInterface {
 			String year = dateString.substring(0, 4);
 			String month = dateString.substring(5, 7);
 			String day = dateString.substring(8, 10);
-			date.setYear(Integer.parseInt(year));
+			date.setYear(Integer.parseInt(year)); 
 			date.setMonth(Integer.parseInt(month));
 			date.setDate(Integer.parseInt(day));
 			return date;

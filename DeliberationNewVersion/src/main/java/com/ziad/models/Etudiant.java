@@ -19,7 +19,7 @@ import com.ziad.enums.Gender;
 
 @Entity
 @Table(name = "Etudiant")
-public class Etudiant implements Serializable{
+public class Etudiant implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -61,7 +61,7 @@ public class Etudiant implements Serializable{
 	/**
 	 * Nationalité
 	 */
-	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.PERSIST})
+	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.PERSIST })
 	private Country nationality;
 
 	/**
@@ -127,12 +127,6 @@ public class Etudiant implements Serializable{
 
 	@Column(name = "email")
 	private String email;
-	
-	/**
-	 * Relation
-	 * */
-	@OneToOne(cascade = CascadeType.ALL)
-	private InscriptionEnLigne inscription_en_ligne;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private User user;
@@ -144,8 +138,7 @@ public class Etudiant implements Serializable{
 	public Etudiant(String massar_edu, String first_name_fr, String first_name_ar, String last_name_fr,
 			String last_name_ar, String cne, Country nationality, Gender gender, Date birth_date, String birth_place,
 			String city, String province, Integer bac_year, String bac_type, String mention, String high_school,
-			String bac_place, String academy, Date registration_date, String email,
-			InscriptionEnLigne inscription_en_ligne, User user) {
+			String bac_place, String academy, Date registration_date, String email, User user) {
 		super();
 		this.massar_edu = massar_edu;
 		this.first_name_fr = first_name_fr;
@@ -167,15 +160,13 @@ public class Etudiant implements Serializable{
 		this.academy = academy;
 		this.registration_date = registration_date;
 		this.email = email;
-		this.inscription_en_ligne = inscription_en_ligne;
 		this.user = user;
 	}
 
 	public Etudiant(Long id_etudiant, String massar_edu, String first_name_fr, String first_name_ar,
 			String last_name_fr, String last_name_ar, String cne, Country nationality, Gender gender, Date birth_date,
 			String birth_place, String city, String province, Integer bac_year, String bac_type, String mention,
-			String high_school, String bac_place, String academy, Date registration_date, String email,
-			InscriptionEnLigne inscription_en_ligne, User user) {
+			String high_school, String bac_place, String academy, Date registration_date, String email, User user) {
 		super();
 		this.id_etudiant = id_etudiant;
 		this.massar_edu = massar_edu;
@@ -198,7 +189,6 @@ public class Etudiant implements Serializable{
 		this.academy = academy;
 		this.registration_date = registration_date;
 		this.email = email;
-		this.inscription_en_ligne = inscription_en_ligne;
 		this.user = user;
 	}
 
@@ -370,13 +360,6 @@ public class Etudiant implements Serializable{
 		this.email = email;
 	}
 
-	public InscriptionEnLigne getInscription_en_ligne() {
-		return inscription_en_ligne;
-	}
-
-	public void setInscription_en_ligne(InscriptionEnLigne inscription_en_ligne) {
-		this.inscription_en_ligne = inscription_en_ligne;
-	}
 
 	public User getUser() {
 		return user;
@@ -394,18 +377,15 @@ public class Etudiant implements Serializable{
 				+ gender + ", birth_date=" + birth_date + ", birth_place=" + birth_place + ", city=" + city
 				+ ", province=" + province + ", bac_year=" + bac_year + ", bac_type=" + bac_type + ", mention="
 				+ mention + ", high_school=" + high_school + ", bac_place=" + bac_place + ", academy=" + academy
-				+ ", registration_date=" + registration_date + ", email=" + email + ", inscription_en_ligne="
-				+ inscription_en_ligne + ", user=" + user + "]";
+				+ ", registration_date=" + registration_date + ", email=" + email +  ", user=" + user + "]";
 	}
-	
+
 	public boolean isHomme() {
-		return gender.equals(Gender.HOMME);	
+		return gender.equals(Gender.HOMME);
 	}
-	
+
 	public boolean isFemme() {
 		return gender.equals(Gender.FEMME);
 	}
-	
-	
 
 }

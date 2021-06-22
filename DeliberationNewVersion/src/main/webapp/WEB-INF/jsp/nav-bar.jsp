@@ -115,6 +115,11 @@
 							class="${listAdministartive}"> <i
 								class="metismenu-icon pe-7s-menu"></i> Listes I. Administratives
 						</a></li>
+						<li><a href="/admin/inscription/uploadinscription"
+							class="${InscriptionAdministrativen}"> <i
+								class="metismenu-icon pe-7s-add-user"></i>Upload
+								I.Administrative
+						</a></li>
 					</ul></li>
 
 
@@ -129,18 +134,20 @@
 						</a></li>
 						<li><a href="/delib/deliberationsemestre"
 							class="${importdelib}"> <i
-								class="metismenu-icon pe-7s-graph3"></i> Deliberation de semestre
+								class="metismenu-icon pe-7s-graph3"></i> Deliberation de
+								semestre
 						</a></li>
-						<li><a href="/delib/deliberationetape"
-							class="${importdelib}"> <i
-								class="metismenu-icon pe-7s-graph3"></i> Deliberation de etape
+						<li><a href="/delib/deliberationetape" class="${importdelib}">
+								<i class="metismenu-icon pe-7s-graph3"></i> Deliberation de
+								etape
 						</a></li>
-						
-						<li><a href="/gestionnote" class="${importdelib}">
-								<i class="metismenu-icon pe-7s-graph3"></i> Modification des notes 
+
+						<li><a href="/gestionnote" class="${importdelib}"> <i
+								class="metismenu-icon pe-7s-graph3"></i> Modification des notes
 						</a></li>
 						<li><a href="/delib/listerDelib" class="${importdelib}">
-								<i class="metismenu-icon pe-7s-graph3"></i> Listes des deliberations
+								<i class="metismenu-icon pe-7s-graph3"></i> Listes des
+								deliberations
 						</a></li>
 
 					</ul></li>
