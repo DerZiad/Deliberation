@@ -131,6 +131,7 @@ public class Etudiant implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL)
 	private User user;
 
+	
 	public Etudiant() {
 
 	}

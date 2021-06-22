@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import com.ziad.models.Etudiant;
@@ -15,9 +16,11 @@ public class ComposedInscriptionAdministrative implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@OneToOne(cascade = CascadeType.DETACH)
+	@JoinColumn(nullable = true)
 	private Etudiant etudiant;
 
 	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(nullable = true)
 	private Filiere filiere;
 
 	public ComposedInscriptionAdministrative() {

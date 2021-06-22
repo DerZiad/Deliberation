@@ -351,8 +351,7 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 				user.addRole(MonRole.ROLEETUDIANT);
 				etudiant.setUser(user);
 				etudiantRepository.save(etudiant);
-				inscriptionEnLigneRepository.delete(inscrptionEnLigneObject);
-				
+				inscriptionEnLigneRepository.save(inscrptionEnLigneObject);
 
 				// --------------------partie creation d inscrip
 				// administrative----------------------------//
