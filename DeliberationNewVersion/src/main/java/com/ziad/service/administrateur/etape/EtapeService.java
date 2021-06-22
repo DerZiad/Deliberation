@@ -1,4 +1,4 @@
-package com.ziad.service.administration.etape;
+package com.ziad.service.administrateur.etape;
 
 import javax.persistence.EntityNotFoundException;
 

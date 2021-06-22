@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Filiere;
-import com.ziad.service.administration.etape.EtapeInterface;
+import com.ziad.service.administrateur.etape.EtapeInterface;
 
 @Controller
 @RequestMapping("/admin//filiere/profile/{id_filiere}/etapes")
