@@ -26,10 +26,23 @@ public class AnneeAcademique implements Serializable {
 	@Column(name = "annee_academique")
 	private int annee_academique;
 	
+	
+	
 	/**
 	 * Relations
 	 * 
 	 */
+	@OneToMany(cascade = {CascadeType.ALL},mappedBy="annee_academique")
+	private List<NoteElement> notesElement = new ArrayList<NoteElement>();
+	
+	@OneToMany(cascade = {CascadeType.ALL},mappedBy="anneeAcademique")
+	private List<NoteModule> notesModule = new ArrayList<NoteModule>();
+	
+	@OneToMany(cascade = {CascadeType.ALL},mappedBy="anneeAcademique")
+	private List<NoteSemestre> notesSemestre = new ArrayList<NoteSemestre>();
+	
+	@OneToMany(cascade = {CascadeType.ALL},mappedBy="anneeAcademique")
+	private List<NoteEtape> notesEtape = new ArrayList<NoteEtape>();
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "annee_academique")
 	private List<InscriptionAdministrative> liste_inscription_administrative = new ArrayList<InscriptionAdministrative>();
@@ -83,5 +96,38 @@ public class AnneeAcademique implements Serializable {
 	public void setListe_inscription_pedagogique(List<InscriptionPedagogique> liste_inscription_pedagogique) {
 		this.liste_inscription_pedagogique = liste_inscription_pedagogique;
 	}
+
+	public List<NoteElement> getNotesElement() {
+		return notesElement;
+	}
+
+	public void setNotesElement(List<NoteElement> notesElement) {
+		this.notesElement = notesElement;
+	}
+
+	public List<NoteModule> getNotesModule() {
+		return notesModule;
+	}
+
+	public void setNotesModule(List<NoteModule> notesModule) {
+		this.notesModule = notesModule;
+	}
+
+	public List<NoteSemestre> getNotesSemestre() {
+		return notesSemestre;
+	}
+
+	public void setNotesSemestre(List<NoteSemestre> notesSemestre) {
+		this.notesSemestre = notesSemestre;
+	}
+
+	public List<NoteEtape> getNotesEtape() {
+		return notesEtape;
+	}
+
+	public void setNotesEtape(List<NoteEtape> notesEtape) {
+		this.notesEtape = notesEtape;
+	}	
+	
 	
 }

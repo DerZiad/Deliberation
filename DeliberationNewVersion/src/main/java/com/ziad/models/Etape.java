@@ -16,7 +16,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Etape")
-public class Etape implements Serializable{
+public class Etape implements Serializable,ElementNorm{
 
 	private static final long serialVersionUID = 1L;
 
@@ -114,6 +114,26 @@ public class Etape implements Serializable{
 	
 	public void addSemestre(Semestre semestre) {
 		semestres.add(semestre);
+	}
+
+	@Override
+	public ElementNorm getElement() {
+		return this;
+	}
+
+	@Override
+	public String getType() {
+		return ElementType.ETAPE.name();
+	}
+
+	@Override
+	public String getName() {
+		return libelle_etape;
+	}
+
+	@Override
+	public Long getId() {
+		return id_etape;
 	}
 
 }

@@ -14,17 +14,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ziad.exceptions.DataNotFoundExceptions;
-import com.ziad.models.NoteElement;
+import com.ziad.models.NoteNorm;
 import com.ziad.service.administrateur.editnote.EditNoteInterface;
 
 @Controller
 @RequestMapping("/gestionnote")
 public class EditNoteController {
 
-	private final static String PAGE_NOTE_LIST = "gestionnote/gestionnote";
+	private final static String PAGE_NOTE_LIST_GESTION = "gestionnote/gestionnote";
+	
+	private final static String PAGE_NOTE_LIST = "gestionnote/ListeNote";
 
 	private final static String PAGE_NOTE_EDIT = "gestionnote/EditNote";
-
+		
 	private final static String ATTRIBUT_ELEMENTS_JSON = "elementsjson";
 	private final static String ATTRIBUT_MODULES_JSON = "modulesjson";
 	private final static String ATTRIBUT_SEMESTRES_JSON = "semestresjson";
@@ -39,7 +41,7 @@ public class EditNoteController {
 
 	@GetMapping("")
 	public ModelAndView getPageModification() throws DataNotFoundExceptions {
-		ModelAndView model = new ModelAndView(PAGE_NOTE_LIST);
+		ModelAndView model = new ModelAndView(PAGE_NOTE_LIST_GESTION);
 
 		ArrayList<Object> besoins = editNoteMetier.grabBesoins();
 		model.addObject(ATTRIBUT_FILIERES, besoins.get(0));
@@ -55,13 +57,13 @@ public class EditNoteController {
 
 	@PostMapping("")
 	public ModelAndView getPageModificationWithFiler(@RequestParam("id_annee_academique") Long idAnneeAcademique,
-			@RequestParam("id_filiere") Long idFiliere, @RequestParam("id_etape") Long idEtape,
-			@RequestParam("id_semestre") Long idSemestre, @RequestParam("id_module") Long idModule,
-			@RequestParam("id_element") Long idElement) throws DataNotFoundExceptions, EntityNotFoundException {
+			@RequestParam(name = "id_etape",required = false) Long idEtape, @RequestParam(name = "id_semestre",required = false) Long idSemestre,
+			@RequestParam(name = "id_module",required = false) Long idModule, @RequestParam(name = "id_element",required = false) Long idElement
+			) throws DataNotFoundExceptions, EntityNotFoundException {
 
 		ModelAndView model = new ModelAndView(PAGE_NOTE_LIST);
-		ArrayList<Object> besoins = editNoteMetier.grabBesoinsByFilter(idAnneeAcademique, idEtape, idFiliere, idModule,
-				idElement, idSemestre);
+		ArrayList<Object> besoins = editNoteMetier.grabBesoinsByFilter(idAnneeAcademique, idEtape, idModule, idElement,
+				idSemestre);
 		model.addObject(ATTRIBUT_NOTES, besoins.get(0));
 		return model;
 
@@ -69,9 +71,10 @@ public class EditNoteController {
 
 	@GetMapping("/edit/{idEtudiant}/{idElement}")
 	public ModelAndView getPageEditNote(@PathVariable("idEtudiant") Long idEtudiant,
-			@PathVariable("idElement") Long idElement) throws EntityNotFoundException {
+			@PathVariable("idElement") Long idElement, @RequestParam("type") String type)
+			throws EntityNotFoundException {
 		ModelAndView model = new ModelAndView(PAGE_NOTE_EDIT);
-		NoteElement note = editNoteMetier.getNoteElement(idEtudiant, idElement);
+		NoteNorm note = editNoteMetier.getNoteElement(idEtudiant, idElement, type);
 		model.addObject(ATTRIBUT_NOTE, note);
 		return model;
 
@@ -79,11 +82,11 @@ public class EditNoteController {
 
 	@PostMapping("/edit/{idEtudiant}/{idElement}")
 	public ModelAndView getPageModificationWithFiler(@PathVariable("idEtudiant") Long idEtudiant,
-			@PathVariable("idElement") Long idElement, @RequestParam("etat") String etat,
+			@PathVariable("idElement") Long idElement, @RequestParam("type") String type,
 			@RequestParam("note") Double note) throws DataNotFoundExceptions, EntityNotFoundException {
 
 		ModelAndView model = new ModelAndView(PAGE_NOTE_EDIT);
-		NoteElement noteElement = editNoteMetier.editNote(idEtudiant, idElement, note, etat);
+		NoteNorm noteElement = editNoteMetier.editNote(idEtudiant, idElement, note, type);
 		model.addObject(ATTRIBUT_NOTE, noteElement);
 		return model;
 

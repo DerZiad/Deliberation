@@ -13,7 +13,7 @@ import com.ziad.models.compositeid.ComposedNoteSemestre;
 
 @Entity
 @Table(name = "notessemestre")
-public class NoteSemestre implements Comparable<NoteSemestre> {
+public class NoteSemestre implements Comparable<NoteSemestre>,NoteNorm {
 	@EmbeddedId
 	private ComposedNoteSemestre idCompose;
 
@@ -22,6 +22,9 @@ public class NoteSemestre implements Comparable<NoteSemestre> {
 
 	private String etat = "";// Compensation ou elimine
 
+	@ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.DETACH})
+	private AnneeAcademique anneeAcademique;
+	
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
 	private Deliberation deliberation;
 
@@ -29,16 +32,17 @@ public class NoteSemestre implements Comparable<NoteSemestre> {
 
 	}
 
-	public NoteSemestre(ComposedNoteSemestre idCompose, Double note, Deliberation deliberation) {
-		this(note, deliberation);
+	public NoteSemestre(ComposedNoteSemestre idCompose, Double note, Deliberation deliberation,AnneeAcademique annee) {
+		this(note, deliberation,annee);
 		this.idCompose = idCompose;
 
 	}
 
-	public NoteSemestre(Double note, Deliberation deliberation) {
+	public NoteSemestre(Double note, Deliberation deliberation,AnneeAcademique annee) {
 		super();
 		this.note = arrondir(note);
 		this.deliberation = deliberation;
+		this.anneeAcademique = annee;
 	}
 
 	public ComposedNoteSemestre getIdCompose() {
@@ -89,7 +93,8 @@ public class NoteSemestre implements Comparable<NoteSemestre> {
 
 		if (note >= idCompose.getSemestre().getValidation()) {
 			isValid = true && moduleValides;
-			etat = isValid ? Etat.VALIDE.name() : Etat.ELIMINIE.name();
+			if(isValid)
+				etat = Etat.VALIDE.name();
 		}
 		boolean validByCompensation = true;
 		for (NoteModule noteModule : notesModule) {
@@ -97,7 +102,22 @@ public class NoteSemestre implements Comparable<NoteSemestre> {
 					&& noteModule.getNote() > noteModule.getIdComposed().getModule().getEliminatoire()
 					&& noteModule.getNote() <= noteModule.getIdComposed().getModule().getValidation();
 		}
-		etat = validByCompensation ? Etat.COMPONSE.name() : Etat.VALIDE.name();
+		if(validByCompensation) {
+			Etat.COMPONSE.name();
+			isValid = true;
+		}
+			
+		
+		if(!isValid)
+			etat = Etat.ELIMINIE.name();
+	}
+	
+	public AnneeAcademique getAnneeAcademique() {
+		return anneeAcademique;
+	}
+
+	public void setAnneeAcademique(AnneeAcademique anneeAcademique) {
+		this.anneeAcademique = anneeAcademique;
 	}
 
 	@Override
@@ -119,4 +139,30 @@ public class NoteSemestre implements Comparable<NoteSemestre> {
 	public double arrondir(Double note) {
 		return Math.round(note * 100.0)/100.0;
 	}
+
+	@Override
+	public void calculState() {
+		if (note >= idCompose.getSemestre().getValidation()) {
+			etat = Etat.VALIDE.name();
+		}else{
+			etat = Etat.ELIMINIE.name();
+		}
+		
+	}
+
+	@Override
+	public ElementNorm getElement() {
+		return idCompose.getSemestre();
+	}
+
+	@Override
+	public Etudiant getEtudiant() {
+		return idCompose.getEtudiant();
+	}
+
+	@Override
+	public Long getIdStudent() {
+		return idCompose.getEtudiant().getId_etudiant();
+	}
+
 }

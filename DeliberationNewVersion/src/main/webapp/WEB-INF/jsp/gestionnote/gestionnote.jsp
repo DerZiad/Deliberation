@@ -11,7 +11,7 @@
 			<div class="card-body">
 				<h5 class="card-title">Liste des inscriptions administratives
 					des etudiants</h5>
-				<form action="/admin/gestionnote" method="POST">
+				<form action="/gestionnote" method="POST">
 					<div class="col-md-6">
 						<div class="position-relative form-group">
 							<label for="Filiere" class="">Année universitaire</label> <select
@@ -25,7 +25,10 @@
 						</div>
 					</div>
 					<div class="col-md-6">
+						<label>Filiere</label><input type="checkbox" name="chfiliere"
+							class="" checked/>
 						<div class="position-relative form-group">
+
 							<label for="Filiere" class="">Filiere</label> <select
 								id="listfiliere" name="id_filiere" class="form-control">
 								<c:forEach var="filiere" items="${filieres}">
@@ -37,9 +40,10 @@
 					</div>
 
 					<div class="col-md-6">
+						<label>Etape</label><input type="checkbox" name="chetape" checked/>
 						<div class="position-relative form-group">
 							<label for="semestre" class="">Etape</label> <select
-								id="listsemestre" name="id_etape" id="myInput"
+								id="listetape" name="id_etape" id="myInput"
 								class="form-control">
 
 							</select>
@@ -48,6 +52,7 @@
 					</div>
 
 					<div class="col-md-6">
+						<label>Semestre</label><input type="checkbox" name="chsemestre" checked/>
 						<div class="position-relative form-group">
 							<label for="semestre" class="">Semestre</label> <select
 								id="listsemestre" name="id_semestre" id="myInput"
@@ -58,6 +63,7 @@
 
 					</div>
 					<div class="col-md-6">
+						<label>Module</label><input type="checkbox" name="chmodule" checked />
 						<div class="position-relative form-group">
 							<label for="module" class="">Module</label> <select
 								id="listmodule" name="id_module" id="myInput"
@@ -68,9 +74,10 @@
 
 					</div>
 					<div class="col-md-6">
+						<label>Element</label><input type="checkbox" name="chelement" checked/>
 						<div class="position-relative form-group">
 							<label for="semestre" class="">Element</label> <select
-								id="listsemestre" name="id_element" id="myInput"
+								id="listelement" name="id_element" id="myInput"
 								class="form-control">
 
 							</select>
@@ -85,33 +92,6 @@
 					</div>
 				</form>
 
-				<table class="mb-0 table table-hover" id="myTable">
-					<thead>
-						<tr>
-							<th class="th-sm">Nom Etudiant</th>
-							<th class="th-sm">Element</th>
-							<th class="th-sm">Note</th>
-							<th class="th-sm">Etat</th>
-							<th class="th-sm">Action</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach var="note" items="${notes}">
-							<tr>
-								<td><a style="color: black">
-										${note.idCompose.etudiant.first_name_fr}
-										${note.idCompose.etudiant.last_name_fr}</a></td>
-								<td><a style="color: black">
-										${note.idCompose.element.libelle_element}</a></td>
-								<td><a style="color: black"> ${note.note_element}</a></td>
-								<td><a style="color: black"> ${note.etat}</a></td>
-								<td><a style="color: black"> ${note.etat}</a></td>
-								<td><a class="btn btn-primary"
-									href="/admin/gestionnote/edit/${note.idCompose.etudiant.id_etudiant }/${note.idCompose.element.id_element}"> Edit</a></td>
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
 			</div>
 		</div>
 		<script>
@@ -121,6 +101,23 @@ var semestres = JSON.parse('${semestresjson}');
 var etapes = JSON.parse('${etapesjson}');
 
 jQuery(document).ready(function(){
+
+			$('input[name=chetape]').click(function(){
+				enable_cb($('input[name=chetape]'),enableEtape,disableEtape);
+			});
+		
+			$('input[name=chsemestre]').click(function(){
+				enable_cb($('input[name=chsemestre]'),enableSemestre,disableSemestre);
+			});
+			$('input[name=chmodule]').click(function(){
+				enable_cb($('input[name=chmodule]'),enableModule,disableModule);
+			});
+
+			$('input[name=chelement]').click(function(){
+				enable_cb($('input[name=chelement]'),enableElement,disableElement);
+			});
+
+
 			$('select[name=id_filiere]').change(function(){
 				filterEtape();
 			});
@@ -188,6 +185,61 @@ function filterElement(){
 			}
 			$('select[name=id_element]').html(chelement);
 }
+
+function enable_cb(checkboxobject,enableFunction,disableFunction) {
+	if (checkboxobject.is(':checked')) {
+		enableFunction();
+	} else {
+		disableFunction();
+	}
+}
+
+
+function enableElement(select){
+	$('select[id=listelement]').attr("name","id_element");
+	$('select[id=listelement]').removeAttr("disabled");
+	enableModule();
+}
+function enableModule(){
+	$('select[id=listmodule]').attr("name","id_module");
+	$('select[id=listmodule]').removeAttr("disabled");
+	enableSemestre();
+}
+function enableSemestre(){
+	$('select[id=listsemestre]').attr("name","id_semestre");
+	$('select[id=listsemestre]').removeAttr("disabled");
+	enableEtape();
+}
+function enableEtape(){
+	$('select[id=listetape]').attr("name","id_etape");
+	$('select[id=listetape]').removeAttr("disabled");
+}
+
+
+function disableEtape(){
+	$('select[id=listetape]').attr("disabled", true);
+	$('select[id=listetape]').attr("name","auto");
+	disableSemestre();
+}
+
+function disableSemestre(){
+	$('select[id=listsemestre]').attr("disabled", true);
+	$('select[id=listsemestre]').attr("name","auto");
+	disableModule();
+}
+
+function disableModule(){
+	$('select[id=listmodule]').attr("disabled", true);
+	$('select[id=listmodule]').attr("name","auto");
+	disableElement();
+}
+
+function disableElement(){
+	$('select[id=listelement]').attr("disabled", true);
+	$('select[id=listelement]').attr("name","auto");
+}
+
+
 		</script>
 	</layout:put>
 </layout:extends>

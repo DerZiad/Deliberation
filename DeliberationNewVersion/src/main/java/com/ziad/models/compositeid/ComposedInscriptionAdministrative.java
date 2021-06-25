@@ -19,7 +19,7 @@ public class ComposedInscriptionAdministrative implements Serializable {
 	@JoinColumn(nullable = true)
 	private Etudiant etudiant;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.REFRESH)
 	@JoinColumn(nullable = true)
 	private Filiere filiere;
 

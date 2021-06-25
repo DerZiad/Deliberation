@@ -13,20 +13,17 @@
 				<div class="main-card mb-3 card">
 					<div class="card-body">
 						<h5 class="card-title">Modification d'une note</h5>
+						<c:url var="url" value="/gestionnote/edit/${note.getEtudiant().id_etudiant }/${note.getElement().getId()}">
+							<c:param name="type">${note.getElement().getType()}</c:param>
+						</c:url>
 						<form
-							action="/admin/gestionnote/edit/${note.idCompose.etudiant.id_etudiant }/${note.idCompose.element.id_element}"
+							action="${url}"
 							method="POST">
 							<div class="col-md-6">
 								<div class="position-relative form-group">
 									<label for="name" class="">Note </label> <input name="note"
-										value="${note.note_element }" id="exampleSelect"
+										value="${note.getNote() }" id="exampleSelect"
 										class="form-control">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="position-relative form-group">
-									<label for="name" class="">Etat</label> <input name="etat"
-										value="${note.etat}" id="exampleSelect" class="form-control">
 								</div>
 							</div>
 							<div class="col-md-3"></div>

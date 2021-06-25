@@ -8,8 +8,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.ziad.models.AnneeAcademique;
+import com.ziad.models.Etape;
+import com.ziad.models.Filiere;
 import com.ziad.models.Modulee;
 import com.ziad.models.NoteModule;
+import com.ziad.models.Semestre;
 import com.ziad.models.compositeid.ComposedNoteModule;
 @Repository
 public interface NotesModuleRepository extends JpaRepository<NoteModule, ComposedNoteModule> {
@@ -19,4 +22,8 @@ public interface NotesModuleRepository extends JpaRepository<NoteModule, Compose
 	
 	@Query("select n from NoteModule n where n.idComposed.module=:module and n.etat='ORDINAIRE' and n.deliberation.anneeAcademique =:annee")
 	public List<NoteModule> listerNotesModuleByAnneeRattrapage(@Param("module")Modulee module,@Param("annee")AnneeAcademique annee);
-}
+
+	@Query("select n from NoteModule n where n.idComposed.module = :module and  n.anneeAcademique = :annee")
+	List<NoteModule> getNoteModuleAnnee(@Param("module") Modulee module,@Param("annee") AnneeAcademique annee);
+	
+	}

@@ -89,7 +89,7 @@ public class TestAnneeAcademique {
 		for (Modulee modulee : modules) {
 			Deliberation deliberation = new Deliberation(DeliberationType.ORDINAIRE.name(), null, null, null, null);
 			for (Etudiant etudiant : etudiants) {
-				NoteModule note = new NoteModule(new ComposedNoteModule(modulee, etudiant), 18d, deliberation);
+				NoteModule note = new NoteModule(new ComposedNoteModule(modulee, etudiant), 18d, deliberation,annee);
 				deliberation.addNoteModule(note);
 			}
 			deliberationRepository.save(deliberation);

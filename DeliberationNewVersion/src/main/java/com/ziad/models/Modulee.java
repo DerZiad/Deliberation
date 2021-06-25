@@ -18,7 +18,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Module")
-public class Modulee implements Serializable {
+public class Modulee implements Serializable,ElementNorm {
 
 	private static final long serialVersionUID = 1L;
 
@@ -165,6 +165,26 @@ public class Modulee implements Serializable {
 	}
 	public void addElement(Element element) {
 		elements.add(element);
+	}
+
+	@Override
+	public ElementNorm getElement() {
+		return this;
+	}
+
+	@Override
+	public String getType() {
+		return ElementType.MODULE.name();
+	}
+
+	@Override
+	public String getName() {
+		return libelle_module;
+	}
+
+	@Override
+	public Long getId() {
+		return id_module;
 	}
 
 }

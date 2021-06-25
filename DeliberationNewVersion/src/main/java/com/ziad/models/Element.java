@@ -17,7 +17,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Element")
-public class Element implements Serializable{
+public class Element implements Serializable,ElementNorm{
 	/**
 	 * 
 	 */
@@ -124,6 +124,26 @@ public class Element implements Serializable{
 		return "Element [id_element=" + id_element + ", libelle_element=" + libelle_element + ", coeficient="
 				+ coeficient + ", validation=" + validation + ", module=" + module + ", professeurs=" + professeurs
 				+ "]";
+	}
+
+	@Override
+	public ElementNorm getElement() {
+		return this;
+	}
+
+	@Override
+	public String getType() {
+		return ElementType.ELEMENT.name();
+	}
+
+	@Override
+	public String getName() {
+		return libelle_element;
+	}
+
+	@Override
+	public Long getId() {
+		return id_element;
 	}
 	
 	

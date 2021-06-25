@@ -22,7 +22,7 @@ import com.ziad.enums.TypeSemestre;
 
 @Entity
 @Table(name = "Semestre")
-public class Semestre implements Serializable,Comparable<Semestre> {
+public class Semestre implements Serializable,Comparable<Semestre>,ElementNorm {
 	/**
 	 * 
 	 */
@@ -139,6 +139,26 @@ public class Semestre implements Serializable,Comparable<Semestre> {
 	@Override
 	public int compareTo(Semestre o) {
 		return ordre - o.getOrdre();
+	}
+
+	@Override
+	public ElementNorm getElement() {
+		return this;
+	}
+
+	@Override
+	public String getType() {
+		return ElementType.SEMESTRE.name();
+	}
+
+	@Override
+	public String getName() {
+		return libelle_semestre;
+	}
+
+	@Override
+	public Long getId() {
+		return id_semestre;
 	}
 
 }

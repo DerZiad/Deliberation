@@ -13,7 +13,7 @@ import com.ziad.models.compositeid.ComposedNoteEtape;
 
 @Entity
 @Table(name = "notesetape")
-public class NoteEtape implements Serializable {
+public class NoteEtape implements Serializable, NoteNorm {
 	/**
 	 * 
 	 */
@@ -29,20 +29,24 @@ public class NoteEtape implements Serializable {
 	private boolean isValid = false;
 
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	private AnneeAcademique anneeAcademique;
+
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
 	private Deliberation deliberation;
 
 	public NoteEtape() {
 
 	}
 
-	public NoteEtape(Double note, Deliberation deliberation) {
+	public NoteEtape(Double note, Deliberation deliberation, AnneeAcademique annee) {
 		super();
 		this.note = arrondir(note);
 		this.deliberation = deliberation;
+		this.anneeAcademique = annee;
 	}
 
-	public NoteEtape(ComposedNoteEtape idCompose, Double note, Deliberation deliberation) {
-		this(note, deliberation);
+	public NoteEtape(ComposedNoteEtape idCompose, Double note, Deliberation deliberation, AnneeAcademique annee) {
+		this(note, deliberation, annee);
 		this.idCompose = idCompose;
 	}
 
@@ -90,12 +94,45 @@ public class NoteEtape implements Serializable {
 		if (note >= idCompose.getEtape().getValidation()) {
 			etat = Etat.VALIDE.name();
 			isValid = true;
-		}else
+		} else
 			etat = Etat.ELIMINIE.name();
 	}
-	
+
 	public double arrondir(Double note) {
-		return Math.round(note * 100.0)/100.0;
+		return Math.round(note * 100.0) / 100.0;
 	}
-	
+
+	@Override
+	public void calculState() {
+		if (note >= idCompose.getEtape().getValidation()) {
+			etat = Etat.VALIDE.name();
+			isValid = true;
+		} else
+			etat = Etat.ELIMINIE.name();
+
+	}
+
+	@Override
+	public ElementNorm getElement() {
+		return idCompose.getEtape();
+	}
+
+	public AnneeAcademique getAnneeAcademique() {
+		return anneeAcademique;
+	}
+
+	public void setAnneeAcademique(AnneeAcademique anneeAcademique) {
+		this.anneeAcademique = anneeAcademique;
+	}
+
+	@Override
+	public Etudiant getEtudiant() {
+		return idCompose.getEtudiant();
+	}
+
+	@Override
+	public Long getIdStudent() {
+		return idCompose.getEtudiant().getId_etudiant();
+	}
+
 }

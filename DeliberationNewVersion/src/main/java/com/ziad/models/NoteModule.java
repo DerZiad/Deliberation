@@ -12,7 +12,7 @@ import com.ziad.models.compositeid.ComposedNoteModule;
 
 @Entity
 @Table(name = "notesmodule")
-public class NoteModule {
+public class NoteModule implements NoteNorm {
 
 	@EmbeddedId
 	private ComposedNoteModule idComposed;
@@ -23,6 +23,9 @@ public class NoteModule {
 
 	private String etat = "";// Compensé ou eliminé
 
+	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.PERSIST })
+	private AnneeAcademique anneeAcademique;
+
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
 	private Deliberation deliberation;
 
@@ -30,17 +33,16 @@ public class NoteModule {
 
 	}
 
-	public NoteModule(ComposedNoteModule idComposed, Double note, Deliberation deliberation) {
-		super();
+	public NoteModule(ComposedNoteModule idComposed, Double note, Deliberation deliberation, AnneeAcademique annee) {
+		this(note, deliberation, annee);
 		this.idComposed = idComposed;
-		this.note = arrondir(note);
-		this.deliberation = deliberation;
 	}
 
-	public NoteModule(Double note, Deliberation deliberation) {
+	public NoteModule(Double note, Deliberation deliberation, AnneeAcademique annee) {
 		super();
 		this.note = arrondir(note);
 		this.deliberation = deliberation;
+		this.anneeAcademique = annee;
 	}
 
 	public ComposedNoteModule getIdComposed() {
@@ -99,14 +101,52 @@ public class NoteModule {
 		}
 	}
 
+	public AnneeAcademique getAnneeAcademique() {
+		return anneeAcademique;
+	}
+
+	public void setAnneeAcademique(AnneeAcademique anneeAcademique) {
+		this.anneeAcademique = anneeAcademique;
+	}
+
 	@Override
 	public String toString() {
 		return "NoteModule [idComposed=" + idComposed + ", note=" + note + ", isValid=" + isValid + ", etat=" + etat
 				+ ", deliberation=" + deliberation + "]";
 	}
-	
+
 	public double arrondir(Double note) {
-		return Math.round(note * 100.0)/100.0;
+		return Math.round(note * 100.0) / 100.0;
+	}
+
+	@Override
+	public void calculState() {
+		if (note >= idComposed.getModule().getValidation()) {
+			isValid = true;
+			etat = Etat.VALIDE.name();
+		} else {
+			if (note >= idComposed.getModule().getEliminatoire()) {
+				etat = Etat.COMPONSE.name();
+			} else {
+				etat = Etat.ELIMINIE.name();
+			}
+		}
+
+	}
+
+	@Override
+	public ElementNorm getElement() {
+		return idComposed.getModule();
+	}
+
+	@Override
+	public Etudiant getEtudiant() {
+		return idComposed.getEtudiant();
+	}
+
+	@Override
+	public Long getIdStudent() {
+		return idComposed.getEtudiant().getId_etudiant();
 	}
 
 }

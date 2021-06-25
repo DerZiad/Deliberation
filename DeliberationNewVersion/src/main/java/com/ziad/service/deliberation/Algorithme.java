@@ -128,7 +128,7 @@ public class Algorithme {
 					noteParModule.setNote(noteDouble);
 				} else {
 					noteParModule = new NoteModule(new ComposedNoteModule(module, inscription.getEtudiant()),
-							noteDouble, deliberation);
+							noteDouble, deliberation,annee);
 				}
 				noteParModule.delibererModule(typeDelib);
 				deliberation.addNoteModule(noteParModule);
@@ -167,7 +167,7 @@ public class Algorithme {
 				}
 				noteSemestre = noteSemestre / coefficient;
 				NoteSemestre noteSemestreO = new NoteSemestre(
-						new ComposedNoteSemestre(semestre, inscription.getEtudiant()), noteSemestre, deliberation);
+						new ComposedNoteSemestre(semestre, inscription.getEtudiant()), noteSemestre, deliberation,annee);
 				noteSemestreO.delibererSemestre(notess);
 				deliberation.addNoteSemestre(noteSemestreO);
 
@@ -247,7 +247,7 @@ public class Algorithme {
 				System.out.println("Notee ");
 				noteParEtapeD = noteParEtapeD / 2;
 				NoteEtape noteEtape = new NoteEtape(new ComposedNoteEtape(etape, inscription.getEtudiant()),
-						noteParEtapeD, deliberation);
+						noteParEtapeD, deliberation,annee);
 				noteEtape.delibererEtape();
 				deliberation.addNoteEtape(noteEtape);
 				deliberationRepository.save(deliberation);

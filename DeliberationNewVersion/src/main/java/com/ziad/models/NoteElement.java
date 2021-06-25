@@ -10,17 +10,19 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.ziad.enums.DeliberationType;
+import com.ziad.enums.Etat;
 import com.ziad.enums.TypeNote;
 import com.ziad.models.compositeid.ComposedInscriptionPedagogique;
 
 @Entity
 @Table(name = "note_element")
-public class NoteElement implements Serializable {
+public class NoteElement implements Serializable,NoteNorm {
 
 	private static final long serialVersionUID = 1L;
 
@@ -43,7 +45,7 @@ public class NoteElement implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "noteelement")
 	private List<Note> notes = new ArrayList<Note>();
 
-	@OneToOne(cascade = CascadeType.DETACH)
+	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.PERSIST})
 	private AnneeAcademique annee_academique;
 	
 	public NoteElement() {
@@ -186,7 +188,9 @@ public class NoteElement implements Serializable {
 		}
 		note_element = max(ordinaireNote, rattrapageNote);
 	}
-
+	
+	
+	
 	@Override
 	public String toString() {
 		return "NoteElement [idCompose=" + idCompose + ", note_element=" + note_element + ", isValid=" + isValid
@@ -196,5 +200,35 @@ public class NoteElement implements Serializable {
 	public double arrondir(Double note) {
 		return Math.round(note * 100.0)/100.0;
 	}
+
+	@Override
+	public Double getNote() {
+		return getNote_element();
+	}
+
+	@Override
+	public void setNote(Double note) {
+		setNote_element(note);
+		
+	}
+
+	@Override
+	public void calculState() {
+		Element element = idCompose.getElement();
+		if(note_element>=element.getValidation()) {
+			etat = Etat.VALIDE.name();
+		}else {
+			etat = Etat.COMPONSE.name();
+		}
+		
+	}
+
+	@Override
+	public Long getIdStudent() {
+		return idCompose.getEtudiant().getId_etudiant();
+	}
+
+
+
 	
 }
