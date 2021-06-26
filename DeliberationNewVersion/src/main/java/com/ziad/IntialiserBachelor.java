@@ -85,15 +85,15 @@ public class IntialiserBachelor {
 
 	public void inistializeSchool() {
 		try {
-			List<User> users = createStructureScolaire();
+			//List<User> users = createStructureScolaire();
 			User admin = createAdministrator();
 			System.out.println("===========>Le mot de passe principale des utilisateurs de tests est test123");
 			System.out.println("============> Administrateur");
 			System.out.println(admin);
 			System.out.println("============> Professeurs ");
-			users.stream().forEach(user -> System.out.println(user));
+			//users.stream().forEach(user -> System.out.println(user));
 			createAnneeAcademique();
-			createStudents();
+			//createStudents();
 		} catch (Exception e) {
 			System.err.println("[ - ] - Error \n" + e.getMessage());
 			e.printStackTrace();

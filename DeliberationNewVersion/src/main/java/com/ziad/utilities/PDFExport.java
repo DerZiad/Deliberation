@@ -17,19 +17,15 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.ziad.models.Deliberation;
-import com.ziad.models.Element;
 import com.ziad.models.Etape;
 import com.ziad.models.Etudiant;
 import com.ziad.models.Modulee;
-import com.ziad.models.Note;
 import com.ziad.models.NoteEtape;
 import com.ziad.models.NoteModule;
 import com.ziad.models.NoteSemestre;
 import com.ziad.models.Professeur;
 import com.ziad.models.Semestre;
 import com.ziad.models.compositeid.ComposedNoteModule;
-import com.ziad.repositories.NoteElementRepository;
-import com.ziad.repositories.NoteRepository;
 import com.ziad.repositories.NotesModuleRepository;
 
 public class PDFExport {
@@ -573,10 +569,9 @@ public class PDFExport {
 
 	}
 
-	public void generateEtudiantReleve(Semestre semestre, Etudiant etudiant, NotesModuleRepository noteModuleRepository,
-			NoteElementRepository noteElementRepository, NoteRepository noteRepository) throws DocumentException {
-		
-		
+	public void generateEtudiantReleve(Semestre semestre, Etudiant etudiant, NotesModuleRepository noteModuleRepository)
+			throws DocumentException {
+
 		document.addTitle("Releve de note");
 
 		Font textDeValeur = new Font(Font.COURIER, 18, Font.BOLD);
@@ -589,15 +584,14 @@ public class PDFExport {
 		titre.setFont(textDeValeur);
 		paragTitre.add(titre);
 		document.add(paragTitre);
-		
-		
+
 		/**
 		 * 
 		 * Setting up table
 		 * 
 		 **/
 
-		PdfPTable table = new PdfPTable(5);
+		PdfPTable table = new PdfPTable(4);
 		table.setWidthPercentage(100);
 		table.setSpacingBefore(20);
 
@@ -612,24 +606,6 @@ public class PDFExport {
 		massarCell.setPadding(5);
 
 		table.addCell(massarCell);
-
-		PdfPCell nomCell = new PdfPCell();
-		Phrase nomPhrase = new Phrase("Element");
-		nomPhrase.setFont(simpleText);
-		nomCell.setPhrase(nomPhrase);
-		nomCell.setBackgroundColor(Color.YELLOW);
-		nomCell.setPadding(5);
-
-		table.addCell(nomCell);
-
-		PdfPCell prenomCell = new PdfPCell();
-		Phrase prenomPhrase = new Phrase("Type Note");
-		prenomPhrase.setFont(simpleText);
-		prenomCell.setPhrase(prenomPhrase);
-		prenomCell.setBackgroundColor(Color.YELLOW);
-		prenomCell.setPadding(5);
-
-		table.addCell(prenomCell);
 
 		PdfPCell noteCell = new PdfPCell();
 		Phrase notePhrase = new Phrase("Note");
@@ -648,17 +624,109 @@ public class PDFExport {
 		etatCell.setPadding(5);
 
 		table.addCell(etatCell);
-		
-		
-		for(Modulee module:semestre.getModules()) {
-			
-			
-			
-			
-			for(Element element:module.getElements()) {
-				
+
+		PdfPCell nomCell = new PdfPCell();
+		Phrase nomPhrase = new Phrase("Professeur");
+		nomPhrase.setFont(simpleText);
+		nomCell.setPhrase(nomPhrase);
+		nomCell.setBackgroundColor(Color.YELLOW);
+		nomCell.setPadding(5);
+
+		table.addCell(nomCell);
+
+		for (Modulee module : semestre.getModules()) {
+
+			try {
+				NoteModule note = noteModuleRepository.getOne(new ComposedNoteModule(module, etudiant));
+				PdfPCell etudiantModuleCell = new PdfPCell();
+				Phrase etudiantModulePhrase = new Phrase(module.getLibelle_module());
+				etudiantModulePhrase.setFont(simpleText);
+				etudiantModuleCell.setPhrase(massarPhrase);
+				etudiantModuleCell.setBackgroundColor(Color.YELLOW);
+				etudiantModuleCell.setPadding(5);
+
+				table.addCell(massarCell);
+
+				PdfPCell noteEtudiantCell = new PdfPCell();
+				Phrase noteEtudiantPhrase = new Phrase(note.getNote() + "");
+				noteEtudiantPhrase.setFont(simpleText);
+				noteEtudiantCell.setPhrase(notePhrase);
+				noteEtudiantCell.setBackgroundColor(Color.YELLOW);
+				noteEtudiantCell.setPadding(5);
+
+				table.addCell(noteCell);
+
+				PdfPCell etatEtudiantCell = new PdfPCell();
+				Phrase etatEtudiantPhrase = new Phrase(note.getEtat());
+				etatEtudiantPhrase.setFont(simpleText);
+				etatEtudiantCell.setPhrase(etatPhrase);
+				etatEtudiantCell.setBackgroundColor(Color.YELLOW);
+				etatEtudiantCell.setPadding(5);
+
+				table.addCell(etatCell);
+
+				PdfPCell nomProfesseurCell = new PdfPCell();
+				Phrase nomProfesseurPhrase = new Phrase(module.getResponsable_module().getNom_professeur() + " "
+						+ module.getResponsable_module().getPrenom_professeur());
+				nomProfesseurPhrase.setFont(simpleText);
+				nomProfesseurCell.setPhrase(nomPhrase);
+				nomProfesseurCell.setBackgroundColor(Color.YELLOW);
+				nomProfesseurCell.setPadding(5);
+
+				table.addCell(nomCell);
+			} catch (Exception e) {
+				System.out.println("Exception");
+				e.printStackTrace();
+				break;
 			}
 		}
+	}
+
+	public void generateScolarCertificat(Semestre semestre, Etudiant etudiant) throws DocumentException {
+		document.addTitle("Certificat scolarité");
+
+		Font textDeValeur = new Font(Font.COURIER, 18, Font.BOLD);
+		textDeValeur.setColor(Color.RED);
+
+		Font simpleText = new Font(Font.COURIER, 18, Font.BOLDITALIC);
+
+		Paragraph paragTitre = new Paragraph();
+		Phrase titre = new Phrase("Bachelor / Université moulay ismail");
+		titre.setFont(textDeValeur);
+		paragTitre.add(titre);
+		document.add(paragTitre);
+
+		Paragraph paragCertificat = new Paragraph();
+		Phrase certificat = new Phrase("Certificat scolarité");
+		certificat.setFont(textDeValeur);
+		paragCertificat.add(certificat);
+		document.add(paragCertificat);
+
+		Paragraph paragModule = new Paragraph();
+
+		Phrase phrase1 = new Phrase("Semestre :");
+		phrase1.setFont(textDeValeur);
+
+		Phrase phrase2 = new Phrase(semestre.getLibelle_semestre());
+		phrase2.setFont(simpleText);
+
+		paragModule.add(phrase1);
+		paragModule.add(phrase2);
+		document.add(paragModule);
+
+		Paragraph parag = new Paragraph();
+		Professeur resp = semestre.getEtape().getFiliere().getResponsable_filiere();
+		Phrase phrase1S = new Phrase("Je suis Mr " + resp.getNom_professeur() + " " + resp.getPrenom_professeur()
+				+ ". L'etudiant " + etudiant.getFirst_name_fr() + " " + etudiant.getLast_name_fr()
+				+ " est dans l'université Bachelor entrain d'etudier au " + semestre.getLibelle_semestre());
+		phrase1S.setFont(textDeValeur);
+
+		Phrase phrase2S = new Phrase(semestre.getLibelle_semestre());
+		phrase2S.setFont(simpleText);
+
+		parag.add(phrase1S);
+		parag.add(phrase2S);
+		document.add(parag);
 	}
 
 	public void closeDocument() {

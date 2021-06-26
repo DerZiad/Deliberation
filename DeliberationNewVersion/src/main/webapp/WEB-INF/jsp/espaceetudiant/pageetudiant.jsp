@@ -30,6 +30,12 @@
 						</div>
 
 					</div>
+					<div class="col-md-9">
+						<div class="position-relative form-group">
+							<a id="download" href="" class="btn btn-success">Download Releve note</a>
+						</div>
+
+					</div>
 				</form>
 
 				<table class="mb-0 table table-hover" id="myTable">
@@ -67,5 +73,13 @@
 				</table>
 			</div>
 		</div>
+		
+jQuery(document).ready(function(){
+	$('select[name=id_semestre]').click(){
+		var idSemestre = $('select[name=id_semestre]').val();
+		url = "/consulter/download?id_semestre=" + idSemestre;
+		$('a[id=download]').attr("href",url);
+	}
+});
 	</layout:put>
 </layout:extends>

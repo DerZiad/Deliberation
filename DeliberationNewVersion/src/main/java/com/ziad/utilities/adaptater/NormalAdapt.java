@@ -8,7 +8,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.ziad.models.NoteNorm;
 
-public class NormalNoteAdaptater implements JsonSerializer<NoteNorm> {
+public class NormalAdapt implements JsonSerializer<NoteNorm> {
 
 	@Override
 	public JsonElement serialize(NoteNorm src, Type typeOfSrc, JsonSerializationContext context) {

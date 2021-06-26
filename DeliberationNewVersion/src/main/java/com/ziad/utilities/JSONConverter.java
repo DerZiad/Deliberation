@@ -24,7 +24,7 @@ import com.ziad.utilities.adaptater.FiliereAdaptater;
 import com.ziad.utilities.adaptater.InscriptionEnLigneAdaptater;
 import com.ziad.utilities.adaptater.InscriptionPedagogiqueAdaptater;
 import com.ziad.utilities.adaptater.ModuleAdaptater;
-import com.ziad.utilities.adaptater.NormalNoteAdaptater;
+import com.ziad.utilities.adaptater.NormalAdapt;
 import com.ziad.utilities.adaptater.NotesEtapeAdaptater;
 import com.ziad.utilities.adaptater.NotesModuleAdaptater;
 import com.ziad.utilities.adaptater.NotesSemestreAdaptater;
@@ -124,12 +124,13 @@ public class JSONConverter{
 	}
 	
 	public String convertNotesNormal(NoteNorm note) {
-		Gson gson = gsonBuilder.registerTypeAdapter(NormalNoteAdaptater.class,new NormalNoteAdaptater()).create();
+		Gson gson = gsonBuilder.registerTypeAdapter(NormalAdapt.class,new NormalAdapt()).create();
 		return gson.toJson(note);
 	}
 	
 	public String convertNotesNormal(List<NoteNorm> notes) {
-		Gson gson = gsonBuilder.registerTypeAdapter(NormalNoteAdaptater.class,new NormalNoteAdaptater()).create();
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		Gson gson = gsonBuilder.registerTypeAdapter(NormalAdapt.class,new NormalAdapt()).create();
 		return gson.toJson(notes);
 	}
 }

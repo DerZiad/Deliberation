@@ -41,6 +41,9 @@
 				<li><a href="/etudiant/consulter" class=""> <i
 						class="metismenu-icon pe-7s-rocket"></i> Consulter
 				</a></li>
+				<li><a href="/etudiant/certificatscolarite" class=""> <i
+						class="metismenu-icon pe-7s-rocket"></i> Certificat Scolarite
+				</a></li>
 				<li><a href="/logout" class=""> <i
 						class="metismenu-icon pe-7s-graph3"></i> Se déconnecter
 				</a></li>
