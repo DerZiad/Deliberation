@@ -9,8 +9,7 @@
 	<layout:put block="content" type="REPLACE">
 		<div class="main-card mb-3 card">
 			<div class="card-body">
-				<h5 class="card-title">Liste des inscriptions administratives
-					des etudiants</h5>
+				<h5 class="card-title">Gestion des notes</h5>
 				<form action="/gestionnote" method="POST">
 					<div class="col-md-6">
 						<div class="position-relative form-group">

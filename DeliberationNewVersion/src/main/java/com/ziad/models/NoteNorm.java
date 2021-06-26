@@ -21,5 +21,7 @@ public interface NoteNorm {
 	public Etudiant getEtudiant();
 	
 	public ElementNorm getElement();
+	
+	public Double getValidation();
 
 }

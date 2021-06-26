@@ -8,11 +8,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.ziad.models.AnneeAcademique;
-import com.ziad.models.Etape;
-import com.ziad.models.Filiere;
 import com.ziad.models.Modulee;
 import com.ziad.models.NoteModule;
-import com.ziad.models.Semestre;
 import com.ziad.models.compositeid.ComposedNoteModule;
 @Repository
 public interface NotesModuleRepository extends JpaRepository<NoteModule, ComposedNoteModule> {

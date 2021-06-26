@@ -15,6 +15,7 @@ import com.ziad.models.InscriptionPedagogique;
 import com.ziad.models.Modulee;
 import com.ziad.models.NoteEtape;
 import com.ziad.models.NoteModule;
+import com.ziad.models.NoteNorm;
 import com.ziad.models.NoteSemestre;
 import com.ziad.models.Semestre;
 import com.ziad.utilities.adaptater.AnneeAcademiqueAdaptater;
@@ -23,6 +24,7 @@ import com.ziad.utilities.adaptater.FiliereAdaptater;
 import com.ziad.utilities.adaptater.InscriptionEnLigneAdaptater;
 import com.ziad.utilities.adaptater.InscriptionPedagogiqueAdaptater;
 import com.ziad.utilities.adaptater.ModuleAdaptater;
+import com.ziad.utilities.adaptater.NormalNoteAdaptater;
 import com.ziad.utilities.adaptater.NotesEtapeAdaptater;
 import com.ziad.utilities.adaptater.NotesModuleAdaptater;
 import com.ziad.utilities.adaptater.NotesSemestreAdaptater;
@@ -118,6 +120,16 @@ public class JSONConverter{
 	
 	public String convertNotesSemestre(List<NoteSemestre> notes) {
 		Gson gson = gsonBuilder.registerTypeAdapter(NoteSemestre.class,new NotesSemestreAdaptater()).create();
+		return gson.toJson(notes);
+	}
+	
+	public String convertNotesNormal(NoteNorm note) {
+		Gson gson = gsonBuilder.registerTypeAdapter(NormalNoteAdaptater.class,new NormalNoteAdaptater()).create();
+		return gson.toJson(note);
+	}
+	
+	public String convertNotesNormal(List<NoteNorm> notes) {
+		Gson gson = gsonBuilder.registerTypeAdapter(NormalNoteAdaptater.class,new NormalNoteAdaptater()).create();
 		return gson.toJson(notes);
 	}
 }

@@ -39,7 +39,15 @@ public class EtudiantController {
 		inscriptionEnLigneRepository.save(inscription);
 		return new ModelAndView("redirect:/admin/inscriptionenligne/list");
 	}
-
+	
+	@GetMapping("/admin/inscriptionenligne/delete/{idInscriptionEnLigne}")
+	public ModelAndView deleteInscriptionEnLigne(@PathVariable("idInscriptionEnLigne") Long idInscriptionEnligne)
+			throws EntityNotFoundException {
+		InscriptionEnLigne inscription = inscriptionEnLigneRepository.getOne(idInscriptionEnligne);
+		inscription.setAcceptedParAdmin(1);
+		inscriptionEnLigneRepository.deleteById(idInscriptionEnligne);
+		return new ModelAndView("redirect:/admin/inscriptionenligne/list");
+	}
 	@GetMapping("/admin/student/list")
 	public ModelAndView listerEtudiant() {
 		ModelAndView model = new ModelAndView("listStudent");

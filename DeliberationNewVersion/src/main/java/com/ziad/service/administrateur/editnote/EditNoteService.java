@@ -103,14 +103,14 @@ public class EditNoteService implements EditNoteInterface {
 		} else {
 			Etape etape = etapeRepository.getOne(idEtape);
 			List<NoteEtape> notes = noteEtapeRepository.getNoteEtapeAnnee(etape,annee);
-			System.out.println("Notes " + notes.size());
 			notesElement.addAll(notes);		
 		}
 		if (notesElement.size() == 0)
 			throw new DataNotFoundExceptions();
 
 		ArrayList<Object> besoins = new ArrayList<Object>();
-		besoins.add(notesElement);
+		JSONConverter cnv = new JSONConverter();
+		besoins.add(cnv.convertNotesNormal(notesElement.get(0)));
 		return besoins;
 	}
 

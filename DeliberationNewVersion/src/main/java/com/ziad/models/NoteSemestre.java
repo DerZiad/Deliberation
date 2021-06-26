@@ -165,4 +165,9 @@ public class NoteSemestre implements Comparable<NoteSemestre>,NoteNorm {
 		return idCompose.getEtudiant().getId_etudiant();
 	}
 
+	@Override
+	public Double getValidation() {
+		return idCompose.getSemestre().getValidation();
+	}
+
 }

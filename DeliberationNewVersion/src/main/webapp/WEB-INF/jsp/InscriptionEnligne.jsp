@@ -90,7 +90,9 @@ function filter(){
 				}
 				chaine = chaine + '<td><a href="/admin/inscription/InscriptionAdministrative/' + inscriptionsJson[i].id_inscription_en_ligne + '" style="font-size: 20px;"><i class="fas fa-plus-square" aria-hidden="true" title="edit"></i></a></td>';
 				if(inscriptionsJson[i].acceptedParAdmin == 0){
-					chaine = chaine + '<td><a href="/admin/inscriptionenligne/accept/' + inscriptionsJson[i].id_inscription_en_ligne + '">Accepter</a></td>';
+					chaine = chaine + '<td><a href="/admin/inscriptionenligne/accept/' + inscriptionsJson[i].id_inscription_en_ligne + '"><i class="far fa-check-circle"></i></a></td>';
+					chaine = chaine + '<td><a href="/admin/inscriptionenligne/delete/' + inscriptionsJson[i].id_inscription_en_ligne + '"><i class="fas fa-backspace"></i></a></td>';
+		
 				}
 		}
 	}

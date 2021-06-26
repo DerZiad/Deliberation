@@ -34,6 +34,7 @@ public class EditNoteController {
 	private final static String ATTRIBUT_FILIERES = "filieres";
 	private final static String ATTRIBUT_ANNEES_ACADEMIQUE = "anneesAcademiques";
 	private final static String ATTRIBUT_NOTES = "notes";
+	private final static String ATTRIBUT_NOTES_JSON = "notesjson";
 	private final static String ATTRIBUT_NOTE = "note";
 
 	@Autowired
@@ -65,6 +66,7 @@ public class EditNoteController {
 		ArrayList<Object> besoins = editNoteMetier.grabBesoinsByFilter(idAnneeAcademique, idEtape, idModule, idElement,
 				idSemestre);
 		model.addObject(ATTRIBUT_NOTES, besoins.get(0));
+		model.addObject(ATTRIBUT_NOTES_JSON,besoins.get(1));
 		return model;
 
 	}

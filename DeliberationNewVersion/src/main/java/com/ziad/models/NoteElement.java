@@ -12,7 +12,6 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.ziad.enums.DeliberationType;
@@ -200,7 +199,7 @@ public class NoteElement implements Serializable,NoteNorm {
 	public double arrondir(Double note) {
 		return Math.round(note * 100.0)/100.0;
 	}
-
+	
 	@Override
 	public Double getNote() {
 		return getNote_element();
@@ -226,6 +225,11 @@ public class NoteElement implements Serializable,NoteNorm {
 	@Override
 	public Long getIdStudent() {
 		return idCompose.getEtudiant().getId_etudiant();
+	}
+
+	@Override
+	public Double getValidation() {
+		return idCompose.getElement().getValidation();
 	}
 
 

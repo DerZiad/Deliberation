@@ -149,4 +149,9 @@ public class NoteModule implements NoteNorm {
 		return idComposed.getEtudiant().getId_etudiant();
 	}
 
+	@Override
+	public Double getValidation() {
+		return idComposed.getModule().getValidation();
+	}
+
 }

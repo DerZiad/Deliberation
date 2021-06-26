@@ -17,15 +17,19 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.ziad.models.Deliberation;
+import com.ziad.models.Element;
 import com.ziad.models.Etape;
 import com.ziad.models.Etudiant;
 import com.ziad.models.Modulee;
+import com.ziad.models.Note;
 import com.ziad.models.NoteEtape;
 import com.ziad.models.NoteModule;
 import com.ziad.models.NoteSemestre;
 import com.ziad.models.Professeur;
 import com.ziad.models.Semestre;
 import com.ziad.models.compositeid.ComposedNoteModule;
+import com.ziad.repositories.NoteElementRepository;
+import com.ziad.repositories.NoteRepository;
 import com.ziad.repositories.NotesModuleRepository;
 
 public class PDFExport {
@@ -46,52 +50,48 @@ public class PDFExport {
 		document.open();
 
 	}
-	public void generatePvEtape(List<NoteEtape> listes, Etape etape) throws DocumentException, MalformedURLException, IOException {
 
-		document.addTitle("Deliberation pour " + etape.getLibelle_etape());	
-		
-		
-		
-		
+	public void generatePvEtape(List<NoteEtape> listes, Etape etape)
+			throws DocumentException, MalformedURLException, IOException {
+
+		document.addTitle("Deliberation pour " + etape.getLibelle_etape());
+
 		Font textDeValeur = new Font(Font.COURIER, 18, Font.BOLD);
 		textDeValeur.setColor(Color.RED);
 
 		Font simpleText = new Font(Font.COURIER, 18, Font.BOLDITALIC);
-		
-		
+
 		Paragraph paragTitre = new Paragraph();
 		Phrase titre = new Phrase("Déliberation pour Bachelor / Université moulay ismail");
-		titre.setFont(textDeValeur);		
+		titre.setFont(textDeValeur);
 		paragTitre.add(titre);
 		document.add(paragTitre);
 
 		Paragraph paragModule = new Paragraph();
-		
+
 		Phrase phrase1 = new Phrase("Etape :");
 		phrase1.setFont(textDeValeur);
-		
+
 		Phrase phrase2 = new Phrase(etape.getLibelle_etape());
 		phrase2.setFont(simpleText);
-		
+
 		paragModule.add(phrase1);
 		paragModule.add(phrase2);
-
 
 		Paragraph paragReponsable = new Paragraph();
 		paragReponsable.setSpacingBefore(14);
 		Phrase phrase11 = new Phrase("Responsable de filiere :");
 		phrase11.setFont(textDeValeur);
-		
+
 		Phrase phrase22 = new Phrase(etape.getFiliere().getResponsable_filiere().getNom_professeur() + " "
 				+ etape.getFiliere().getResponsable_filiere().getPrenom_professeur());
 		phrase22.setFont(simpleText);
-		
+
 		paragReponsable.add(phrase11);
 		paragReponsable.add(phrase22);
 
 		document.add(paragModule);
 		document.add(paragReponsable);
-
 
 		/**
 		 * 
@@ -189,7 +189,7 @@ public class PDFExport {
 				c = Color.RED;
 
 			PdfPCell noteCell1 = new PdfPCell();
-			Phrase notePhrase1 = new Phrase(note.getNote()+"");
+			Phrase notePhrase1 = new Phrase(note.getNote() + "");
 			notePhrase1.setFont(simpleText);
 			noteCell1.setPhrase(notePhrase1);
 			noteCell1.setBackgroundColor(c);
@@ -209,55 +209,48 @@ public class PDFExport {
 		document.add(table);
 
 	}
-	
-	
-	
-	public void generatePvModule(List<NoteModule> listes, Modulee module) throws DocumentException, MalformedURLException, IOException {
 
-		document.addTitle("Deliberation pour " + module.getLibelle_module());	
-		
-		
-		
-		
+	public void generatePvModule(List<NoteModule> listes, Modulee module)
+			throws DocumentException, MalformedURLException, IOException {
+
+		document.addTitle("Deliberation pour " + module.getLibelle_module());
+
 		Font textDeValeur = new Font(Font.COURIER, 18, Font.BOLD);
 		textDeValeur.setColor(Color.RED);
 
 		Font simpleText = new Font(Font.COURIER, 18, Font.BOLDITALIC);
-		
-		
+
 		Paragraph paragTitre = new Paragraph();
 		Phrase titre = new Phrase("Déliberation pour Bachelor / Université moulay ismail");
-		titre.setFont(textDeValeur);		
+		titre.setFont(textDeValeur);
 		paragTitre.add(titre);
 		document.add(paragTitre);
 
 		Paragraph paragModule = new Paragraph();
-		
+
 		Phrase phrase1 = new Phrase("Module :");
 		phrase1.setFont(textDeValeur);
-		
+
 		Phrase phrase2 = new Phrase(module.getLibelle_module());
 		phrase2.setFont(simpleText);
-		
+
 		paragModule.add(phrase1);
 		paragModule.add(phrase2);
-
 
 		Paragraph paragReponsable = new Paragraph();
 		paragReponsable.setSpacingBefore(14);
 		Phrase phrase11 = new Phrase("Responsable de module :");
 		phrase11.setFont(textDeValeur);
-		
+
 		Phrase phrase22 = new Phrase(module.getResponsable_module().getNom_professeur() + " "
 				+ module.getResponsable_module().getPrenom_professeur());
 		phrase22.setFont(simpleText);
-		
+
 		paragReponsable.add(phrase11);
 		paragReponsable.add(phrase22);
 
 		document.add(paragModule);
 		document.add(paragReponsable);
-
 
 		/**
 		 * 
@@ -320,7 +313,6 @@ public class PDFExport {
 		/***
 		 * Remplir tableau
 		 */
-		System.out.println(listes.size());
 		for (NoteModule note : listes) {
 			PdfPCell massarCell1 = new PdfPCell();
 			Phrase massarPhrase1 = new Phrase(note.getIdComposed().getEtudiant().getMassar_edu());
@@ -356,7 +348,7 @@ public class PDFExport {
 				c = Color.RED;
 
 			PdfPCell noteCell1 = new PdfPCell();
-			Phrase notePhrase1 = new Phrase(note.getNote()+"");
+			Phrase notePhrase1 = new Phrase(note.getNote() + "");
 			notePhrase1.setFont(simpleText);
 			noteCell1.setPhrase(notePhrase1);
 			noteCell1.setBackgroundColor(c);
@@ -376,48 +368,47 @@ public class PDFExport {
 		document.add(table);
 
 	}
-	
-	public void generateUltimatePv(Semestre semestre,NotesModuleRepository noteModuleRepository,Deliberation deliberation) throws MalformedURLException, IOException, DocumentException {
-		document.addTitle("Deliberation pour " + semestre.getLibelle_semestre());			
+
+	public void generateUltimatePv(Semestre semestre, NotesModuleRepository noteModuleRepository,
+			Deliberation deliberation) throws MalformedURLException, IOException, DocumentException {
+		document.addTitle("Deliberation pour " + semestre.getLibelle_semestre());
 		Font textDeValeur = new Font(Font.COURIER, 18, Font.BOLD);
 		textDeValeur.setColor(Color.RED);
 
 		Font simpleText = new Font(Font.COURIER, 18, Font.BOLDITALIC);
-		
-		
+
 		Paragraph paragTitre = new Paragraph();
 		Phrase titre = new Phrase("Déliberation pour Bachelor / Université moulay ismail");
-		titre.setFont(textDeValeur);		
+		titre.setFont(textDeValeur);
 		paragTitre.add(titre);
 		document.add(paragTitre);
-		
+
 		Paragraph paragEntete = new Paragraph();
-		
+
 		Phrase phrase1 = new Phrase("Entête");
 		phrase1.setFont(textDeValeur);
-		
-		Phrase phrase2 = new Phrase("Etablissement :" + semestre.getEtape().getFiliere().getEtablissement().getNom_etablissement() + " Filière :" + semestre.getEtape().getFiliere().getNom_filiere());
+
+		Phrase phrase2 = new Phrase(
+				"Etablissement :" + semestre.getEtape().getFiliere().getEtablissement().getNom_etablissement()
+						+ " Filière :" + semestre.getEtape().getFiliere().getNom_filiere());
 		phrase2.setFont(simpleText);
-		
+
 		paragEntete.add(phrase1);
 		paragEntete.add(phrase2);
-		
-		
+
 		Paragraph parag = new Paragraph("Semestre :" + semestre.getLibelle_semestre());
 		parag.setSpacingBefore(15);
 		document.add(parag);
-		
-		
+
 		Paragraph paragFiliere = new Paragraph();
-		
+
 		Phrase phrase11 = new Phrase("Reponsable de filiere");
 		phrase1.setFont(textDeValeur);
-		
+
 		Professeur prof = semestre.getEtape().getFiliere().getResponsable_filiere();
-		Phrase phrase22 = new Phrase("     " + prof.getNom_professeur() + " "
-				+ prof.getPrenom_professeur());
+		Phrase phrase22 = new Phrase("     " + prof.getNom_professeur() + " " + prof.getPrenom_professeur());
 		phrase2.setFont(simpleText);
-		
+
 		paragFiliere.add(phrase11);
 		paragFiliere.add(phrase22);
 		paragFiliere.setSpacingBefore(15);
@@ -462,17 +453,16 @@ public class PDFExport {
 
 		table.addCell(prenomCell);
 
-
 		PdfPCell etatCell = new PdfPCell();
 		Phrase etatPhrase = new Phrase("Etat");
 		etatPhrase.setFont(simpleText);
 		etatCell.setPhrase(etatPhrase);
 		etatCell.setBackgroundColor(Color.YELLOW);
 		etatCell.setPadding(5);
-		
+
 		table.addCell(etatCell);
-		
-		for (Modulee module : semestre.getModules()) {		
+
+		for (Modulee module : semestre.getModules()) {
 			PdfPCell moduleCell = new PdfPCell();
 			Phrase modulePhrase = new Phrase(module.getLibelle_module());
 			modulePhrase.setFont(simpleText);
@@ -481,7 +471,7 @@ public class PDFExport {
 
 			table.addCell(moduleCell);
 		}
-		
+
 		PdfPCell semestreCell = new PdfPCell();
 		Phrase semestrePhrase = new Phrase("Note semestre");
 		semestrePhrase.setFont(simpleText);
@@ -489,9 +479,7 @@ public class PDFExport {
 		semestreCell.setPadding(5);
 
 		table.addCell(semestreCell);
-		
-		
-		
+
 		for (NoteSemestre note : deliberation.getNotesSemestre()) {
 			Etudiant etudiant = note.getIdCompose().getEtudiant();
 			PdfPCell massarCell1 = new PdfPCell();
@@ -520,7 +508,7 @@ public class PDFExport {
 			prenomCell1.setPadding(5);
 
 			table.addCell(prenomCell1);
-			
+
 			PdfPCell etatCell1 = new PdfPCell();
 			Phrase etatPhrase1 = new Phrase(etudiant.getLast_name_fr());
 			etatPhrase1.setFont(simpleText);
@@ -529,7 +517,7 @@ public class PDFExport {
 			etatCell1.setPadding(5);
 
 			table.addCell(prenomCell1);
-			
+
 			for (Modulee module : semestre.getModules()) {
 				NoteModule noteModule = noteModuleRepository.getOne(new ComposedNoteModule(module, etudiant));
 				Color c = null;
@@ -539,7 +527,7 @@ public class PDFExport {
 					c = Color.RED;
 
 				PdfPCell noteCell1 = new PdfPCell();
-				Phrase notePhrase1 = new Phrase(noteModule.getNote()+"");
+				Phrase notePhrase1 = new Phrase(noteModule.getNote() + "");
 				notePhrase1.setFont(simpleText);
 				noteCell1.setPhrase(notePhrase1);
 				noteCell1.setBackgroundColor(c);
@@ -555,7 +543,7 @@ public class PDFExport {
 				c = Color.RED;
 
 			PdfPCell noteCell1 = new PdfPCell();
-			Phrase notePhrase1 = new Phrase(note.getNote()+"");
+			Phrase notePhrase1 = new Phrase(note.getNote() + "");
 			notePhrase1.setFont(simpleText);
 			noteCell1.setPhrase(notePhrase1);
 			noteCell1.setBackgroundColor(c);
@@ -565,25 +553,112 @@ public class PDFExport {
 		}
 		table.setSpacingAfter(15);
 		document.add(table);
-		
-		for(Modulee module:semestre.getModules()) {
-			
+
+		for (Modulee module : semestre.getModules()) {
+
 			Professeur professeur = module.getResponsable_module();
 
 			Paragraph paragReponsableModule = new Paragraph();
-			
+
 			Phrase ph = new Phrase("Reponsable de module - " + module.getLibelle_module());
 			ph.setFont(textDeValeur);
-			
-			Phrase ph1 = new Phrase("     " + professeur.getNom_professeur() + " "
-					+ professeur.getPrenom_professeur());
-			
+
+			Phrase ph1 = new Phrase("     " + professeur.getNom_professeur() + " " + professeur.getPrenom_professeur());
+
 			paragReponsableModule.add(ph);
 			paragReponsableModule.add(ph1);
 			paragReponsableModule.setSpacingBefore(14);
 			document.add(paragReponsableModule);
 		}
 
+	}
+
+	public void generateEtudiantReleve(Semestre semestre, Etudiant etudiant, NotesModuleRepository noteModuleRepository,
+			NoteElementRepository noteElementRepository, NoteRepository noteRepository) throws DocumentException {
+		
+		
+		document.addTitle("Releve de note");
+
+		Font textDeValeur = new Font(Font.COURIER, 18, Font.BOLD);
+		textDeValeur.setColor(Color.RED);
+
+		Font simpleText = new Font(Font.COURIER, 18, Font.BOLDITALIC);
+
+		Paragraph paragTitre = new Paragraph();
+		Phrase titre = new Phrase("Bachelor / Université moulay ismail");
+		titre.setFont(textDeValeur);
+		paragTitre.add(titre);
+		document.add(paragTitre);
+		
+		
+		/**
+		 * 
+		 * Setting up table
+		 * 
+		 **/
+
+		PdfPTable table = new PdfPTable(5);
+		table.setWidthPercentage(100);
+		table.setSpacingBefore(20);
+
+		/**
+		 * Making headers
+		 */
+		PdfPCell massarCell = new PdfPCell();
+		Phrase massarPhrase = new Phrase("Module");
+		massarPhrase.setFont(simpleText);
+		massarCell.setPhrase(massarPhrase);
+		massarCell.setBackgroundColor(Color.YELLOW);
+		massarCell.setPadding(5);
+
+		table.addCell(massarCell);
+
+		PdfPCell nomCell = new PdfPCell();
+		Phrase nomPhrase = new Phrase("Element");
+		nomPhrase.setFont(simpleText);
+		nomCell.setPhrase(nomPhrase);
+		nomCell.setBackgroundColor(Color.YELLOW);
+		nomCell.setPadding(5);
+
+		table.addCell(nomCell);
+
+		PdfPCell prenomCell = new PdfPCell();
+		Phrase prenomPhrase = new Phrase("Type Note");
+		prenomPhrase.setFont(simpleText);
+		prenomCell.setPhrase(prenomPhrase);
+		prenomCell.setBackgroundColor(Color.YELLOW);
+		prenomCell.setPadding(5);
+
+		table.addCell(prenomCell);
+
+		PdfPCell noteCell = new PdfPCell();
+		Phrase notePhrase = new Phrase("Note");
+		notePhrase.setFont(simpleText);
+		noteCell.setPhrase(notePhrase);
+		noteCell.setBackgroundColor(Color.YELLOW);
+		noteCell.setPadding(5);
+
+		table.addCell(noteCell);
+
+		PdfPCell etatCell = new PdfPCell();
+		Phrase etatPhrase = new Phrase("Etat");
+		etatPhrase.setFont(simpleText);
+		etatCell.setPhrase(etatPhrase);
+		etatCell.setBackgroundColor(Color.YELLOW);
+		etatCell.setPadding(5);
+
+		table.addCell(etatCell);
+		
+		
+		for(Modulee module:semestre.getModules()) {
+			
+			
+			
+			
+			for(Element element:module.getElements()) {
+				
+			}
+		}
 	}
 
 	public void closeDocument() {

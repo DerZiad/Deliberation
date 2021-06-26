@@ -135,4 +135,9 @@ public class NoteEtape implements Serializable, NoteNorm {
 		return idCompose.getEtudiant().getId_etudiant();
 	}
 
+	@Override
+	public Double getValidation() {
+		return idCompose.getEtape().getValidation();
+	}
+
 }
