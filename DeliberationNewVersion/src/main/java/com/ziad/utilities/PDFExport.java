@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Font;
+import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
@@ -31,7 +32,9 @@ import com.ziad.repositories.NotesModuleRepository;
 public class PDFExport {
 
 	private Document document;
-
+	
+	
+	private final static String BACHELOR_LINK_LOGO = "logo.png";
 	public PDFExport(HttpServletResponse response, String filename) throws DocumentException, IOException {
 		response.setContentType("application/pdf");
 		String headerKey = "Content-Disposition";
@@ -51,7 +54,8 @@ public class PDFExport {
 			throws DocumentException, MalformedURLException, IOException {
 
 		document.addTitle("Deliberation pour " + etape.getLibelle_etape());
-
+		Image img=Image.getInstance(BACHELOR_LINK_LOGO);
+		document.add(img);
 		Font textDeValeur = new Font(Font.COURIER, 18, Font.BOLD);
 		textDeValeur.setColor(Color.RED);
 
@@ -208,9 +212,10 @@ public class PDFExport {
 
 	public void generatePvModule(List<NoteModule> listes, Modulee module)
 			throws DocumentException, MalformedURLException, IOException {
-
+		
 		document.addTitle("Deliberation pour " + module.getLibelle_module());
-
+		Image img=Image.getInstance(BACHELOR_LINK_LOGO);
+		document.add(img);
 		Font textDeValeur = new Font(Font.COURIER, 18, Font.BOLD);
 		textDeValeur.setColor(Color.RED);
 
@@ -368,6 +373,8 @@ public class PDFExport {
 	public void generateUltimatePv(Semestre semestre, NotesModuleRepository noteModuleRepository,
 			Deliberation deliberation) throws MalformedURLException, IOException, DocumentException {
 		document.addTitle("Deliberation pour " + semestre.getLibelle_semestre());
+		Image img=Image.getInstance(BACHELOR_LINK_LOGO);
+		document.add(img);
 		Font textDeValeur = new Font(Font.COURIER, 18, Font.BOLD);
 		textDeValeur.setColor(Color.RED);
 
@@ -570,10 +577,11 @@ public class PDFExport {
 	}
 
 	public void generateEtudiantReleve(Semestre semestre, Etudiant etudiant, NotesModuleRepository noteModuleRepository)
-			throws DocumentException {
+			throws DocumentException, MalformedURLException, IOException {
 
 		document.addTitle("Releve de note");
-
+		Image img=Image.getInstance(BACHELOR_LINK_LOGO);
+		document.add(img);
 		Font textDeValeur = new Font(Font.COURIER, 18, Font.BOLD);
 		textDeValeur.setColor(Color.RED);
 
@@ -682,9 +690,10 @@ public class PDFExport {
 		}
 	}
 
-	public void generateScolarCertificat(Semestre semestre, Etudiant etudiant) throws DocumentException {
+	public void generateScolarCertificat(Semestre semestre, Etudiant etudiant) throws DocumentException, MalformedURLException, IOException {
 		document.addTitle("Certificat scolarité");
-
+		Image img=Image.getInstance(BACHELOR_LINK_LOGO);
+		document.add(img);
 		Font textDeValeur = new Font(Font.COURIER, 18, Font.BOLD);
 		textDeValeur.setColor(Color.RED);
 
