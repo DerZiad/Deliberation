@@ -59,6 +59,7 @@ public class EspaceEtudiantController {
 		List<Object> besoins = etudiantMetier.getNotes(id_semestre);
 		model.addObject(ATTRIBUT_NOTES_MODULE, besoins.get(1));
 		model.addObject(ATTRIBUT_NOTE_SEMESTRE, besoins.get(0));
+		model.addObject("url","/etudiant/consulter/download?id_semestre="+id_semestre);;
 		return model;
 	}
 

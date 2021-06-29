@@ -13,7 +13,7 @@ import com.ziad.models.compositeid.ComposedNoteSemestre;
 
 @Entity
 @Table(name = "notessemestre")
-public class NoteSemestre implements Comparable<NoteSemestre>,NoteNorm {
+public class NoteSemestre implements Comparable<NoteSemestre>, NoteNorm {
 	@EmbeddedId
 	private ComposedNoteSemestre idCompose;
 
@@ -22,9 +22,9 @@ public class NoteSemestre implements Comparable<NoteSemestre>,NoteNorm {
 
 	private String etat = "";// Compensation ou elimine
 
-	@ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.DETACH})
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
 	private AnneeAcademique anneeAcademique;
-	
+
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
 	private Deliberation deliberation;
 
@@ -32,13 +32,13 @@ public class NoteSemestre implements Comparable<NoteSemestre>,NoteNorm {
 
 	}
 
-	public NoteSemestre(ComposedNoteSemestre idCompose, Double note, Deliberation deliberation,AnneeAcademique annee) {
-		this(note, deliberation,annee);
+	public NoteSemestre(ComposedNoteSemestre idCompose, Double note, Deliberation deliberation, AnneeAcademique annee) {
+		this(note, deliberation, annee);
 		this.idCompose = idCompose;
 
 	}
 
-	public NoteSemestre(Double note, Deliberation deliberation,AnneeAcademique annee) {
+	public NoteSemestre(Double note, Deliberation deliberation, AnneeAcademique annee) {
 		super();
 		this.note = arrondir(note);
 		this.deliberation = deliberation;
@@ -91,27 +91,24 @@ public class NoteSemestre implements Comparable<NoteSemestre>,NoteNorm {
 			moduleValides = moduleValides && note.isValid();
 		}
 
-		if (note >= idCompose.getSemestre().getValidation()) {
-			isValid = true && moduleValides;
-			if(isValid)
-				etat = Etat.VALIDE.name();
+		if (note >= idCompose.getSemestre().getValidation() && moduleValides) {
+			etat = Etat.VALIDE.name();
+		} else {
+			boolean validByCompensation = true;
+			for (NoteModule noteModule : notesModule) {
+				Modulee module = noteModule.getIdComposed().getModule();
+				validByCompensation = validByCompensation && noteModule.getNote() > module.getEliminatoire();
+			}
+			if (validByCompensation) {
+				etat = Etat.COMPONSE.name();
+				isValid = true;
+			} else {
+				etat = Etat.ELIMINIE.name();
+			}
 		}
-		boolean validByCompensation = true;
-		for (NoteModule noteModule : notesModule) {
-			validByCompensation = validByCompensation
-					&& noteModule.getNote() > noteModule.getIdComposed().getModule().getEliminatoire()
-					&& noteModule.getNote() <= noteModule.getIdComposed().getModule().getValidation();
-		}
-		if(validByCompensation) {
-			Etat.COMPONSE.name();
-			isValid = true;
-		}
-			
-		
-		if(!isValid)
-			etat = Etat.ELIMINIE.name();
+
 	}
-	
+
 	public AnneeAcademique getAnneeAcademique() {
 		return anneeAcademique;
 	}
@@ -135,19 +132,19 @@ public class NoteSemestre implements Comparable<NoteSemestre>,NoteNorm {
 		else
 			return 0;
 	}
-	
+
 	public double arrondir(Double note) {
-		return Math.round(note * 100.0)/100.0;
+		return Math.round(note * 100.0) / 100.0;
 	}
 
 	@Override
 	public void calculState() {
 		if (note >= idCompose.getSemestre().getValidation()) {
 			etat = Etat.VALIDE.name();
-		}else{
+		} else {
 			etat = Etat.ELIMINIE.name();
 		}
-		
+
 	}
 
 	@Override

@@ -127,11 +127,12 @@ public class Modulee implements Serializable,ElementNorm {
 		return composee;
 	}
 
-	public void setComposee(boolean composee) {
+	public void setComposee(boolean composee,Professeur professeur) {
 		this.composee = composee;
 		if (!isComposed()) {
 			elements = new ArrayList<Element>();
 			Element element = new Element(libelle_module, coeficient, validation, this);
+			element.getProfesseurs().add(professeur);
 			elements.add(element);
 		}
 	}

@@ -49,50 +49,6 @@
 				</table>
 			</div>
 		</div>
-		<script>
-			var notes = JSON.parse('${notesjson}');
 
-jQuery(document).ready(function(){
-	$('input[name=discuss]').click(function(){
-		if (checkboxobject.is(':checked')) {
-			remplirNotesByFilter();
-		} else {
-			remplirNotes();
-		}
-	});
-});
-
-function remplirNotes(){
-	var chnote = "";
-
-	for(let i = 0;i<notes.length;i++){
-		chnote = chnote + '<td><a style="color: black">' + notes[i].first_name_fr + ' ' + notes[i].last_name_fr + '</a></td>' +"\n";
-		chnote = chnote + '<td><a style="color: black">' + notes[i].libelle_element + '</a></td>'
-		chnote = chnote + '<td><a style="color: black">' + notes[i].type_element + '</a></td>';
-		chnote = chnote + '<td><a style="color: black">' + notes[i].note  +'</a></td>';
-		chnote = chnote + '<td><a style="color: black">' + notes[i].etat  + '</a></td>'				
-		chnote = chnote + '<td><a class="btn btn-primary" href="/gestionnote/edit/' + notes[i].idStudent + '/' + notes[i].idElement+ '?type=' + notes[i].type_element + '">Edit</a></td>';
-	}
-
-	$('tr[id=notes]').html(chnote);
-}
-
-function remplirNotesByFilter(){
-	var chnote = "";
-	for(let i = 0;i<notes.length;i++){
-
-		if(notes[i].validation - 1 <notes[i].note < notes[i].validation){
-			chnote = chnote + '<td><a style="color: black">' + notes[i].first_name_fr + ' ' + notes[i].last_name_fr + '</a></td>' +"\n";
-			chnote = chnote + '<td><a style="color: black">' + notes[i].libelle_element + '</a></td>'
-			chnote = chnote + '<td><a style="color: black">' + notes[i].type_element + '</a></td>';
-			chnote = chnote + '<td><a style="color: black">' + notes[i].note  +'</a></td>';
-			chnote = chnote + '<td><a style="color: black">' + notes[i].etat  + '</a></td>'				
-			chnote = chnote + '<td><a class="btn btn-primary" href="/gestionnote/edit/' + notes[i].idStudent + '/' + notes[i].idElement+ '?type=' + notes[i].type_element + '">Edit</a></td>';
-		}
-	}
-
-	$('tr[id=notes]').html(chnote);
-}
-		</script>
 	</layout:put>
 </layout:extends>

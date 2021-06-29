@@ -45,7 +45,9 @@ public class ProfesseurController {
 	public ModelAndView listerElements() throws DataNotFoundExceptions {
 		ModelAndView model = new ModelAndView(PAGE_ELEMENTS);
 		model.addObject(ATTRIBUT_NAVBAR_MES_ELEMENTS,ACTIVE);
-		model.addObject(ATTRIBUTS_ELEMENTS, professeur_metier.listerElements());
+		List<Element> elements = professeur_metier.listerElements();
+		System.out.println(elements.size());
+		model.addObject(ATTRIBUTS_ELEMENTS, elements);
 		return model;
 	}
 

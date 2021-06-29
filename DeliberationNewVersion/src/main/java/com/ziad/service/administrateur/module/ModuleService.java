@@ -48,6 +48,7 @@ public class ModuleService implements ModuleInterface {
 	public void creerModule(Long semestre_id, Long professeur_id, String name,Integer compose_seul_element)
 			throws EntityNotFoundException {
 		Modulee module = new Modulee();
+		module.setLibelle_module(name);
 		if(semestre_id != null) {
 			Semestre semestre = semestreRepository.getOne(semestre_id);
 			module.setSemestre(semestre);
@@ -57,24 +58,18 @@ public class ModuleService implements ModuleInterface {
 			professeur.getUser().addRole(MonRole.ROLERESPONSABLEMODULE);
 			professeurRepository.save(professeur);
 			module.setResponsable_module(professeur);
+			try {
+				module.setComposee(compose_seul_element != 1,professeur);
+			}catch (Exception e) {
+				/**
+				 * 
+				 * Exception en cas ou le module ne se compose pas d'un seul element
+				 * 
+				 **/
+			}
 		}
-		module.setLibelle_module(name);
-		try {
-			module.setComposee(compose_seul_element != 1);
-		}catch (Exception e) {
-			/**
-			 * 
-			 * Exception en cas ou le module ne se compose pas d'un seul element
-			 * 
-			 **/
-		}
-		moduleRepository.save(module);
 
-		/**
-		 * 
-		 * Save Historique
-		 * 
-		 **/
+		moduleRepository.save(module);
 		historiqueRepository.save(new Historique("Module " + name + " créé", new java.util.Date()));
 	}
 

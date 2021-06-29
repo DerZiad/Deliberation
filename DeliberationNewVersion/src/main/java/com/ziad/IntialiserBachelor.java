@@ -220,14 +220,15 @@ public class IntialiserBachelor {
 
 	public boolean isEmpty() {
 		System.out.println("[ ! ] - Checking data base");
-		boolean test = etablissementRepository.findAll().size() > 0;
+		/*boolean test = etablissementRepository.findAll().size() > 0;
 		test = test && filiereRepository.findAll().size() > 0;
 		test = test && etapeRepository.findAll().size() > 0;
 		test = test && semestreRepository.findAll().size() > 0;
 		test = test && moduleRepository.findAll().size() > 0;
 		test = test && elementRepository.findAll().size() > 0;
 		test = test && professeurRepository.findAll().size() >= 3;
-		test = test && userRepository.findAll().size() >= 4;
+		test = test && userRepository.findAll().size() >= 4;*/
+		boolean test = annee_academique.findAll().size()>0;
 		if (test)
 			System.out.println("[ ! ] - Data base not empty");
 		return !test;

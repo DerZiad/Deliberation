@@ -27,6 +27,7 @@ public class ElementController {
 	@GetMapping("/module/profile/{id}/element/create")
 	public ModelAndView createModule(@PathVariable("id") Long id) throws EntityNotFoundException {
 		ModelAndView model = new ModelAndView(PATH_ELEMENTCREATE);
+		model.addObject("id_module");
 		metier.createElementsModule(id, model);
 		return model;
 	}
@@ -47,7 +48,7 @@ public class ElementController {
 
 	@PostMapping("/module/profile/{id}/element/modify")
 	public ModelAndView modifyElement(@PathVariable("id") Long id,@RequestParam("idelement") Long idelement,
-			@RequestParam(name = "id_professeur",required = false) Long idprofesseur, @RequestParam("coefficient") Double coefficient,
+			@RequestParam(name = "professeur_id",required = false) Long idprofesseur, @RequestParam("coefficient") Double coefficient,
 			@RequestParam("validation") Double validation, @RequestParam("name") String nom) throws EntityNotFoundException {
 		ModelAndView model = new ModelAndView("redirect:/admin/module/profile/"+id+"/element/create");
 		metier.modifyElementsModule(idelement, idprofesseur,id, nom,coefficient, validation);

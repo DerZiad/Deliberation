@@ -66,7 +66,6 @@ public class EditNoteController {
 		ArrayList<Object> besoins = editNoteMetier.grabBesoinsByFilter(idAnneeAcademique, idEtape, idModule, idElement,
 				idSemestre);
 		model.addObject(ATTRIBUT_NOTES, besoins.get(0));
-		model.addObject(ATTRIBUT_NOTES_JSON,besoins.get(1));
 		return model;
 
 	}

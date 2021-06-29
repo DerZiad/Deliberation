@@ -58,8 +58,9 @@ function filter(){
 		inscriptionAccepted = 0;
 	}
 	console.log(inscriptionAccepted);
-	chaine = chaine + "<tr>\n";
+	
 	for (var i = 0; i < inscriptionsJson.length; i++) {
+		chaine = chaine + "<tr>\n";
 		if(inscriptionAccepted == 1){
 			if(inscriptionsJson[i].acceptedParAdmin == 1){
 				chaine = chaine + '<td><a style="color: black" href="#">' + inscriptionsJson[i].cne + '</a></td>';
@@ -90,11 +91,12 @@ function filter(){
 				}
 				chaine = chaine + '<td><a href="/admin/inscription/InscriptionAdministrative/' + inscriptionsJson[i].id_inscription_en_ligne + '" style="font-size: 20px;"><i class="fas fa-plus-square" aria-hidden="true" title="edit"></i></a></td>';
 				if(inscriptionsJson[i].acceptedParAdmin == 0){
-					chaine = chaine + '<td><a href="/admin/inscriptionenligne/accept/' + inscriptionsJson[i].id_inscription_en_ligne + '"><i class="far fa-check-circle"></i></a></td>';
+					chaine = chaine + '<td><a href="/admin/inscriptionenligne/accept/' + inscriptionsJson[i].id_inscription_en_ligne + '"><i class="fas fa-check-square"></i></a></td>';
 					chaine = chaine + '<td><a href="/admin/inscriptionenligne/delete/' + inscriptionsJson[i].id_inscription_en_ligne + '"><i class="fas fa-backspace"></i></a></td>';
 		
 				}
 		}
+		chaine = chaine + "</tr>\n";
 	}
 	chaine = chaine + "</tr>\n";
 	$('tbody[id=inscriptions]').html(chaine);

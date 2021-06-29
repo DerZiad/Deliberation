@@ -10,7 +10,9 @@
 
 		<div class="main-card mb-3 card">
 			<div class="card-body">
-				<h5 class="card-title">Création d'un element</h5>
+				<form class="from-group" action="/admin/module/profile/${id_module}/element/create" method="POST">
+					<h5 class="card-title">Création d'un element</h5>
+
 					<div class="form-row">
 						<div class="col-md-6">
 							<div class="position-relative form-group">
@@ -50,6 +52,7 @@
 						</div>
 					</div>
 					<button class="mt-2 btn btn-primary col-md-6" type="submit">Enregistrer</button>
+				</form>
 			</div>
 			<div class="main-card mb-3">
 				<div class="card-body">

@@ -109,8 +109,7 @@ public class EditNoteService implements EditNoteInterface {
 			throw new DataNotFoundExceptions();
 
 		ArrayList<Object> besoins = new ArrayList<Object>();
-		JSONConverter cnv = new JSONConverter();
-		besoins.add(cnv.convertNotesNormal(notesElement.get(0)));
+		besoins.add(notesElement);
 		return besoins;
 	}
 

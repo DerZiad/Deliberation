@@ -31,17 +31,14 @@ public class ElementMetier implements ElementInterface {
 			Double coeficient, Double validation) throws EntityNotFoundException {
 		Element element = elementRepository.findById(idelement).get();
 		Modulee module = moduleRepository.findById(idmodule).get();
-		if(idprofesseur != null) {
-			Professeur professeur = professeurRepository.findById(idprofesseur).get();
-			if(!element.getProfesseurs().contains(professeur)) {
-				element.addProfesseur(professeur);
-			}
-		}
+		Professeur professeur = professeurRepository.getOne(idprofesseur);
+		element.addProfesseur(professeur);
 		element.setModule(module);
 		element.setCoeficient(coeficient);
 		element.setLibelle_element(libelle_element);
 		element.setValidation(validation);
 		elementRepository.save(element);
+		professeurRepository.save(professeur);
 	}
 
 	@Override

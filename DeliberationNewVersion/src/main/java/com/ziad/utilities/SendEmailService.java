@@ -19,13 +19,12 @@ public class SendEmailService {
 	
 	private static final String FROM_EMAIL = "deliberation.sms@gmail.com";
 		
-	public static String SERVERLINK;
+	public static String SERVERLINK = "http://localhost:8080";
 
 	
 	
 	public void sendEmail(HtmlMessage htmlmessage) throws MessagingException {
-		if(SERVERLINK== null)
-			SERVERLINK = DeliberationNewVersionApplication.SERVER_LINK;
+
 		MimeMessage message = mailer.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
 		

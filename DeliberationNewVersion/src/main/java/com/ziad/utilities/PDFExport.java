@@ -602,7 +602,6 @@ public class PDFExport {
 		PdfPTable table = new PdfPTable(4);
 		table.setWidthPercentage(100);
 		table.setSpacingBefore(20);
-
 		/**
 		 * Making headers
 		 */
@@ -649,45 +648,47 @@ public class PDFExport {
 				PdfPCell etudiantModuleCell = new PdfPCell();
 				Phrase etudiantModulePhrase = new Phrase(module.getLibelle_module());
 				etudiantModulePhrase.setFont(simpleText);
-				etudiantModuleCell.setPhrase(massarPhrase);
-				etudiantModuleCell.setBackgroundColor(Color.YELLOW);
+				etudiantModuleCell.setPhrase(etudiantModulePhrase);
 				etudiantModuleCell.setPadding(5);
 
-				table.addCell(massarCell);
+				table.addCell(etudiantModuleCell);
+				
+				Color c = note.isValid() ? Color.GREEN:Color.RED;
+
 
 				PdfPCell noteEtudiantCell = new PdfPCell();
 				Phrase noteEtudiantPhrase = new Phrase(note.getNote() + "");
 				noteEtudiantPhrase.setFont(simpleText);
-				noteEtudiantCell.setPhrase(notePhrase);
-				noteEtudiantCell.setBackgroundColor(Color.YELLOW);
+				noteEtudiantCell.setPhrase(noteEtudiantPhrase);
+				noteEtudiantCell.setBackgroundColor(c);
 				noteEtudiantCell.setPadding(5);
 
-				table.addCell(noteCell);
-
+				table.addCell(noteEtudiantCell);
+				
 				PdfPCell etatEtudiantCell = new PdfPCell();
 				Phrase etatEtudiantPhrase = new Phrase(note.getEtat());
 				etatEtudiantPhrase.setFont(simpleText);
-				etatEtudiantCell.setPhrase(etatPhrase);
-				etatEtudiantCell.setBackgroundColor(Color.YELLOW);
+				etatEtudiantCell.setPhrase(etatEtudiantPhrase);
+				etatEtudiantCell.setBackgroundColor(c);
 				etatEtudiantCell.setPadding(5);
 
-				table.addCell(etatCell);
+				table.addCell(etatEtudiantCell);
 
 				PdfPCell nomProfesseurCell = new PdfPCell();
 				Phrase nomProfesseurPhrase = new Phrase(module.getResponsable_module().getNom_professeur() + " "
 						+ module.getResponsable_module().getPrenom_professeur());
 				nomProfesseurPhrase.setFont(simpleText);
-				nomProfesseurCell.setPhrase(nomPhrase);
-				nomProfesseurCell.setBackgroundColor(Color.YELLOW);
+				nomProfesseurCell.setPhrase(nomProfesseurPhrase);
 				nomProfesseurCell.setPadding(5);
 
-				table.addCell(nomCell);
+				table.addCell(nomProfesseurCell);
 			} catch (Exception e) {
 				System.out.println("Exception");
 				e.printStackTrace();
 				break;
 			}
 		}
+		document.add(table);
 	}
 
 	public void generateScolarCertificat(Semestre semestre, Etudiant etudiant) throws DocumentException, MalformedURLException, IOException {
