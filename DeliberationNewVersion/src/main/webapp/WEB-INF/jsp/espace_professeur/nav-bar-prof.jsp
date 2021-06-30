@@ -73,24 +73,29 @@
 								class="${importdelib}"> <i
 									class="metismenu-icon pe-7s-graph3"></i> Deliberation de module
 							</a></li>
-							<c:if test="${ utilisateur.isResponsableFiliere()}">
-								<li><a href="/delib/deliberationsemestre"
-									class="${importdelib}"> <i
-										class="metismenu-icon pe-7s-graph3"></i> Deliberation de
-										semestre
-								</a></li>
-								<li><a href="/delib/deliberationetape"
-									class="${importdelib}"> <i
-										class="metismenu-icon pe-7s-graph3"></i> Deliberation de etape
-								</a></li>
-								<li><a href="/gestionnote" class="${importdelib}"> <i
-										class="metismenu-icon pe-7s-graph3"></i> Modification des
-										notes
-								</a></li>
-							</c:if>
+							<li><a href="/delib/deliberationsemestre"
+								class="${importdelib}"> <i
+									class="metismenu-icon pe-7s-graph3"></i> Deliberation de
+									semestre
+							</a></li>
+							<li><a href="/delib/deliberationetape"
+								class="${importdelib}"> <i
+									class="metismenu-icon pe-7s-graph3"></i> Deliberation de etape
+							</a></li>
+
+							<li><a href="/gestionnote" class="${importdelib}"> <i
+									class="metismenu-icon pe-7s-graph3"></i> Modification des notes
+							</a></li>
 							<li><a href="/delib/listerDelib" class="${importdelib}">
 									<i class="metismenu-icon pe-7s-graph3"></i> Listes des
 									deliberations
+							</a></li>
+							<li><a href="/gestionnote/addnote" class="${importdelib}">
+									<i class="metismenu-icon pe-7s-graph3"></i> Liste Etudiant Par
+									Module
+							</a></li>
+							<li><a href="/gestionnote/ajouter" class="${importdelib}">
+									<i class="metismenu-icon pe-7s-graph3"></i> Ajouter Module
 							</a></li>
 
 						</ul></li>
