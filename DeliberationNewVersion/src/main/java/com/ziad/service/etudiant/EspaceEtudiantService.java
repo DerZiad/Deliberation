@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.lowagie.text.DocumentException;
 import com.ziad.exceptions.DataNotFoundExceptions;
+import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Deliberation;
 import com.ziad.models.Etudiant;
 import com.ziad.models.InscriptionPedagogique;
@@ -26,6 +27,7 @@ import com.ziad.models.Semestre;
 import com.ziad.models.User;
 import com.ziad.models.compositeid.ComposedNoteModule;
 import com.ziad.models.compositeid.ComposedNoteSemestre;
+import com.ziad.repositories.AnnneAcademiqueRepository;
 import com.ziad.repositories.EtudiantRepository;
 import com.ziad.repositories.InscriptionPedagogiqueRepository;
 import com.ziad.repositories.NotesModuleRepository;
@@ -50,6 +52,8 @@ public class EspaceEtudiantService implements EspaceEtudiantInterface {
 	private SemestreRepository semestreRepository;
 	@Autowired
 	private NotesModuleRepository notesModuleRepository;
+	@Autowired
+	private AnnneAcademiqueRepository anneeAcademiqueRepository;
 
 	@Override
 	public List<Semestre> listerSemestres() throws DataNotFoundExceptions {
@@ -68,10 +72,11 @@ public class EspaceEtudiantService implements EspaceEtudiantInterface {
 	}
 
 	@Override
-	public List<Object> getNotes(Long idSemestre) throws EntityNotFoundException {
+	public List<Object> getNotes(Long idSemestre,Long idAnneeAcademique) throws EntityNotFoundException {
 		Etudiant etudiant = getSessionEtudiant();
 		Semestre semestre = semestreRepository.getOne(idSemestre);
-		NoteSemestre note = noteSemestreRepository.getOne(new ComposedNoteSemestre(semestre, etudiant));
+		AnneeAcademique annee = anneeAcademiqueRepository.getOne(idAnneeAcademique);
+		NoteSemestre note = noteSemestreRepository.getOne(new ComposedNoteSemestre(semestre, etudiant,annee));
 
 		ArrayList<NoteModule> notesModule = new ArrayList<NoteModule>();
 
@@ -79,7 +84,7 @@ public class EspaceEtudiantService implements EspaceEtudiantInterface {
 			try {
 
 				Optional<NoteModule> noteModule = notesModuleRepository
-						.findById(new ComposedNoteModule(module, etudiant));
+						.findById(new ComposedNoteModule(module, etudiant,annee));
 				NoteModule noteModuleOpt = noteModule.get();
 				notesModule.add(noteModuleOpt);
 			} catch (NoSuchElementException e) {
@@ -128,11 +133,12 @@ public class EspaceEtudiantService implements EspaceEtudiantInterface {
 	}
 
 	@Override
-	public void generateReleveNote(Long idSemestre, HttpServletResponse response)
+	public void generateReleveNote(Long idSemestre,Long idAnneAcademique, HttpServletResponse response)
 			throws DocumentException, IOException {
+		AnneeAcademique annee = anneeAcademiqueRepository.getOne(idAnneAcademique);
 		Semestre semestre = semestreRepository.getOne(idSemestre);
 		PDFExport pdf = new PDFExport(response, "CertificatScolariteSemestre");
-		pdf.generateEtudiantReleve(semestre, getSessionEtudiant(), notesModuleRepository);
+		pdf.generateEtudiantReleve(semestre, getSessionEtudiant(), notesModuleRepository,annee);
 		pdf.closeDocument();
 	}
 

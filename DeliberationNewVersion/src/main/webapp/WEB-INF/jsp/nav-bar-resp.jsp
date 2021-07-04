@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+ <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <div class="app-sidebar sidebar-shadow">
@@ -18,7 +18,6 @@
 	<div class="app-header__mobile-menu">
 		<div>
 			<button type="button"
-				class="hamburger hamburger--elastic mobile-toggle-nav">
 				<span class="hamburger-box"> <span class="hamburger-inner"></span>
 				</span>
 			</button>

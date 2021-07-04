@@ -28,6 +28,7 @@
 							<th class="th-sm">Date de naissance</th>
 							<th class="th-sm">Type du Bac</th>
 							<th class="th-sm">Mention</th>
+							<th class="th-sm">Etablissement</th>
 							<th class="th-sm">Accepté</th>
 							<th class="th-sm">Inscription Administrative</th>
 							<th class="th-sm">Action</th>
@@ -67,10 +68,11 @@ function filter(){
 				chaine = chaine + '<td><a style="color: black" href="#">' + inscriptionsJson[i].last_name_fr + '</a></td>';
 				chaine = chaine + '<td><a style="color: black" href="#">' + inscriptionsJson[i].first_name_fr + '</a></td>';
 				chaine = chaine + '<td><a style="color: black" href="#">' + inscriptionsJson[i].gender+ '</a></td>';
-				chaine = chaine + '<td><a style="color: black" href="#">' + inscriptionsJson[i].nationality.valueCountry + '</a></td>';
+				chaine = chaine + '<td><a style="color: black" href="#">' + inscriptionsJson[i].nationality + '</a></td>';
 				chaine = chaine + '<td><a style="color: black" href="#">' + inscriptionsJson[i].birth_date + '</a></td>';
 				chaine = chaine + '<td><a style="color: black" href="#">' + inscriptionsJson[i].bac_type + '</a></td>';
 				chaine = chaine + '<td><a style="color: black" href="#">' + inscriptionsJson[i].mention + '</a></td>';
+				chaine = chaine + '<td><a style="color: black" href="#">' + inscriptionsJson[i].etablissement + '</a></td>';
 				chaine = chaine + '<td style="color: black">Accepté</td>';
 				chaine = chaine + '<td><a href="/admin/inscription/InscriptionAdministrative/' + inscriptionsJson[i].id_inscription_en_ligne + '" style="font-size: 20px;"><i class="fas fa-plus-square" aria-hidden="true" title="edit"></i></a></td>';
 			}
@@ -79,10 +81,12 @@ function filter(){
 				chaine = chaine + '<td><a style="color: black" href="#">' + inscriptionsJson[i].last_name_fr + '</a></td>';
 				chaine = chaine + '<td><a style="color: black" href="#">' + inscriptionsJson[i].first_name_fr + '</a></td>';
 				chaine = chaine + '<td><a style="color: black" href="#">' + inscriptionsJson[i].gender+ '</a></td>';
-				chaine = chaine + '<td><a style="color: black" href="#">' + inscriptionsJson[i].nationality.valueCountry + '</a></td>';
+				chaine = chaine + '<td><a style="color: black" href="#">' + inscriptionsJson[i].nationality + '</a></td>';
 				chaine = chaine + '<td><a style="color: black" href="#">' + inscriptionsJson[i].birth_date + '</a></td>';
 				chaine = chaine + '<td><a style="color: black" href="#">' + inscriptionsJson[i].bac_type + '</a></td>';
 				chaine = chaine + '<td><a style="color: black" href="#">' + inscriptionsJson[i].mention + '</a></td>';
+				chaine = chaine + '<td><a style="color: black" href="#">' + inscriptionsJson[i].etablissement + '</a></td>';
+				
 				chaine = chaine + '<td style="color: black">';
 				if(inscriptionsJson[i].acceptedParAdmin == 1){
 					chaine = chaine + 'Accepté</td>';

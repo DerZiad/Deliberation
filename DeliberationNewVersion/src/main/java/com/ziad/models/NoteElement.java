@@ -21,7 +21,7 @@ import com.ziad.models.compositeid.ComposedInscriptionPedagogique;
 
 @Entity
 @Table(name = "note_element")
-public class NoteElement implements Serializable,NoteNorm {
+public class NoteElement implements Serializable, NoteNorm {
 
 	private static final long serialVersionUID = 1L;
 
@@ -30,39 +30,67 @@ public class NoteElement implements Serializable,NoteNorm {
 
 	@Column(name = "note_element")
 	private Double note_element = 0d;
-	
+
 	private Double ordinaireNote = 0d;
-	
+
 	private Double rattrapageNote = 0d;
-		
+
 	@Column(name = "etat")
 	private String etat = "";
-	
 
 	private boolean isValid = false;
+
+	private boolean isAbscent = false;
+
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH })
+	private Deliberation deliberation;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "noteelement")
 	private List<Note> notes = new ArrayList<Note>();
 
-	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.PERSIST})
+	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.PERSIST })
 	private AnneeAcademique annee_academique;
-	
+
 	public NoteElement() {
-		
-	}
-	
-	public NoteElement(Double note_element, AnneeAcademique annee_academique) {
-		super();
-		this.note_element = arrondir(note_element);
-		this.annee_academique = annee_academique;
+
 	}
 
 	public NoteElement(ComposedInscriptionPedagogique idCompose, Double note_element,
 			AnneeAcademique annee_academique) {
 		super();
+		this.note_element = note_element;
+		this.annee_academique = annee_academique;
 		this.idCompose = idCompose;
-		this.note_element = arrondir(note_element);
-		this.annee_academique = annee_academique;		
+	}
+
+	public NoteElement(Double note_element, Double ordinaireNote, Double rattrapageNote, String etat, boolean isValid,
+			boolean isAbscent, Deliberation deliberation, List<Note> notes, AnneeAcademique annee_academique) {
+		super();
+		this.note_element = note_element;
+		this.ordinaireNote = ordinaireNote;
+		this.rattrapageNote = rattrapageNote;
+		this.etat = etat;
+		this.isValid = isValid;
+		this.isAbscent = isAbscent;
+		this.deliberation = deliberation;
+		this.notes = notes;
+		this.annee_academique = annee_academique;
+	}
+
+	public NoteElement(ComposedInscriptionPedagogique idCompose, Double note_element, Double ordinaireNote,
+			Double rattrapageNote, String etat, boolean isValid, boolean isAbscent, Deliberation deliberation,
+			List<Note> notes, AnneeAcademique annee_academique) {
+		super();
+		this.idCompose = idCompose;
+		this.note_element = note_element;
+		this.ordinaireNote = ordinaireNote;
+		this.rattrapageNote = rattrapageNote;
+		this.etat = etat;
+		this.isValid = isValid;
+		this.isAbscent = isAbscent;
+		this.deliberation = deliberation;
+		this.notes = notes;
+		this.annee_academique = annee_academique;
 	}
 
 	public ComposedInscriptionPedagogique getIdCompose() {
@@ -116,30 +144,31 @@ public class NoteElement implements Serializable,NoteNorm {
 	public void setAnnee_academique(AnneeAcademique annee_academique) {
 		this.annee_academique = annee_academique;
 	}
-	
-	
 
 	public void delibererElementOrdinaire() {
-		ordinaireNote  = 0d;
-		double coefficient = 0;
-		etat = DeliberationType.ORDINAIRE.name();
-		for (Note noteElementA : notes) {
-			if (noteElementA.getType().equals(TypeNote.EXAM_RATTRAPAGE))
-				continue;
-			ordinaireNote = ordinaireNote + noteElementA.getCoeficient() * noteElementA.getNote();
-			coefficient = coefficient +  noteElementA.getCoeficient();
-		}
-		ordinaireNote = ordinaireNote / coefficient;
-		note_element = ordinaireNote;
-		
-		if (note_element >= getElement().getValidation()) {
-			isValid = true;
-		}else {
-			isValid = false;
+		if (!isAbscent) {
+			ordinaireNote = 0d;
+			double coefficient = 0;
+			for (Note noteElementA : notes) {
+				if (noteElementA.getType().equals(TypeNote.EXAM_RATTRAPAGE))
+					continue;
+				ordinaireNote = ordinaireNote + noteElementA.getCoeficient() * noteElementA.getNote();
+				coefficient = coefficient + noteElementA.getCoeficient();
+			}
+			ordinaireNote = ordinaireNote / coefficient;
+			note_element = ordinaireNote;
+
+			if (note_element >= getElement().getValidation()) {
+				isValid = true;
+				etat = Etat.VALIDE.name();
+			} else {
+				isValid = false;
+				etat = Etat.RATTRAPAGE.name();
+			}
+		} else {
+			etat = Etat.NONVALID.name();
 		}
 	}
-	
-	
 
 	public Double getOrdinaireNote() {
 		return ordinaireNote;
@@ -166,40 +195,56 @@ public class NoteElement implements Serializable,NoteNorm {
 	}
 
 	public void delibererElementRattrapage(Integer consideration) {
-		double coefficient = 0;
-		rattrapageNote = 0d;
-		etat = DeliberationType.RATTRAPAGE.name();
-		if (consideration == 1) {
-			for (Note noteElementA : notes) {
-				if (noteElementA.getType().equals(TypeNote.EXAM_ORDINAIRE))
-					continue;
-				rattrapageNote = rattrapageNote + noteElementA.getCoeficient() * noteElementA.getNote();
-				coefficient = coefficient + noteElementA.getCoeficient();
-			}
-			rattrapageNote = rattrapageNote / coefficient;
-		} else {
-			for (Note noteElementA : notes) {
-				if (noteElementA.getType().equals(TypeNote.EXAM_RATTRAPAGE)) {
-					rattrapageNote = noteElementA.getNote();
-					break;
+		if (!isAbscent) {
+			double coefficient = 0;
+			rattrapageNote = 0d;
+			if (consideration != null) {
+				for (Note noteElementA : notes) {
+					if (noteElementA.getType().equals(TypeNote.EXAM_ORDINAIRE))
+						continue;
+					rattrapageNote = rattrapageNote + noteElementA.getCoeficient() * noteElementA.getNote();
+					coefficient = coefficient + noteElementA.getCoeficient();
+				}
+				rattrapageNote = rattrapageNote / coefficient;
+			} else {
+				for (Note noteElementA : notes) {
+					if (noteElementA.getType().equals(TypeNote.EXAM_RATTRAPAGE)) {
+						rattrapageNote = noteElementA.getNote();
+						break;
+					}
 				}
 			}
+			note_element = max(ordinaireNote, rattrapageNote);
+			if (note_element >= getElement().getValidation()) {
+				isValid = true;
+				etat = Etat.VALIDE.name();
+			} else {
+				isValid = false;
+				etat = Etat.NONVALID.name();
+			}
+		} else {
+			etat = Etat.NONVALID.name();
 		}
-		note_element = max(ordinaireNote, rattrapageNote);
 	}
-	
-	
-	
+
+	public Deliberation getDeliberation() {
+		return deliberation;
+	}
+
+	public void setDeliberation(Deliberation deliberation) {
+		this.deliberation = deliberation;
+	}
+
 	@Override
 	public String toString() {
 		return "NoteElement [idCompose=" + idCompose + ", note_element=" + note_element + ", isValid=" + isValid
 				+ ", notes=" + notes + ", annee_academique=" + annee_academique + "]";
 	}
-	
+
 	public double arrondir(Double note) {
-		return Math.round(note * 100.0)/100.0;
+		return Math.round(note * 100.0) / 100.0;
 	}
-	
+
 	@Override
 	public Double getNote() {
 		return getNote_element();
@@ -208,18 +253,18 @@ public class NoteElement implements Serializable,NoteNorm {
 	@Override
 	public void setNote(Double note) {
 		setNote_element(note);
-		
+
 	}
 
 	@Override
 	public void calculState() {
 		Element element = idCompose.getElement();
-		if(note_element>=element.getValidation()) {
+		if (note_element >= element.getValidation()) {
 			etat = Etat.VALIDE.name();
-		}else {
+		} else {
 			etat = Etat.COMPONSE.name();
 		}
-		
+
 	}
 
 	@Override
@@ -232,7 +277,12 @@ public class NoteElement implements Serializable,NoteNorm {
 		return idCompose.getElement().getValidation();
 	}
 
+	public boolean isAbscent() {
+		return isAbscent;
+	}
 
+	public void setAbscent(boolean isAbscent) {
+		this.isAbscent = isAbscent;
+	}
 
-	
 }

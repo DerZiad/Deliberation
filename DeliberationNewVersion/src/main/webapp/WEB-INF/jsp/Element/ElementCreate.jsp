@@ -10,7 +10,7 @@
 
 		<div class="main-card mb-3 card">
 			<div class="card-body">
-				<form class="from-group" action="/admin/module/profile/${id_module}/element/create" method="POST">
+				<form class="from-group" action="/admin/module/profile/${module.id_module}/element/create" method="POST">
 					<h5 class="card-title">Création d'un element</h5>
 
 					<div class="form-row">

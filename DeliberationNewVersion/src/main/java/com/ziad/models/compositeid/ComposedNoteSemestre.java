@@ -7,29 +7,41 @@ import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 
+import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Etudiant;
 import com.ziad.models.Semestre;
 
 @Embeddable
-public class ComposedNoteSemestre implements Serializable{
+public class ComposedNoteSemestre implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Semestre semestre;
-	@OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Etudiant etudiant;
-	
+	@OneToOne(fetch = FetchType.EAGER, targetEntity = AnneeAcademique.class, cascade = CascadeType.PERSIST)
+	private AnneeAcademique anneeAcaqemique;
+
 	public ComposedNoteSemestre() {
-		
+
 	}
-	
-	public ComposedNoteSemestre(Semestre semestre, Etudiant etudiant) {
+
+	public ComposedNoteSemestre(Semestre semestre, Etudiant etudiant, AnneeAcademique anneeAcaqemique) {
 		super();
 		this.semestre = semestre;
 		this.etudiant = etudiant;
+		this.anneeAcaqemique = anneeAcaqemique;
+	}
+
+	public AnneeAcademique getAnneeAcaqemique() {
+		return anneeAcaqemique;
+	}
+
+	public void setAnneeAcaqemique(AnneeAcademique anneeAcaqemique) {
+		this.anneeAcaqemique = anneeAcaqemique;
 	}
 
 	public Semestre getSemestre() {
@@ -50,9 +62,8 @@ public class ComposedNoteSemestre implements Serializable{
 
 	@Override
 	public String toString() {
-		return "ComposedNoteSemestre [semestre=" + semestre.getId_semestre() + ", etudiant=" + etudiant.getId_etudiant() + "]";
+		return "ComposedNoteSemestre [semestre=" + semestre.getId_semestre() + ", etudiant=" + etudiant.getId_etudiant()
+				+ "]";
 	}
-	
-	
 
 }

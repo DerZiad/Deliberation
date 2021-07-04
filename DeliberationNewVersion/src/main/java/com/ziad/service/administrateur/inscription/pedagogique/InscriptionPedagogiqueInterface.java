@@ -14,7 +14,10 @@ public interface InscriptionPedagogiqueInterface {
 	 * Créer inscription pédagogique
 	 * **/
 	public ArrayList<Object> prepareInscriptionPedagogiquePage(Long id_inscription_filiere,Long id_inscription_etudiant) throws EntityNotFoundException;
-	public void enregistrerInformation(Long id_filiere,Long id_etudiant,HttpServletRequest request) throws DataNotFoundExceptions,EntityNotFoundException;
+	public void enregistrerInformation(Long id_etudiant,Long idAnneeAcademique, HttpServletRequest request)
+			throws DataNotFoundExceptions, EntityNotFoundException;
+	
+	public ArrayList<Object> listerInscriptionsPedagogique() throws DataNotFoundExceptions;
 	
 	/**
 	 * Lister inscription pédagogique
@@ -26,5 +29,4 @@ public interface InscriptionPedagogiqueInterface {
 	 * Suprimer Inscription pédagogique
 	 * */
 	
-	public void suprimerInscriptionPedagogique(Long id_etudiant,Long id_element) throws EntityNotFoundException;
 }

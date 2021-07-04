@@ -53,6 +53,7 @@ import com.ziad.repositories.InscriptionPedagogiqueRepository;
 import com.ziad.repositories.ModuleRepository;
 import com.ziad.repositories.NoteElementRepository;
 import com.ziad.repositories.SemestreRepository;
+import com.ziad.utilities.Algorithms;
 import com.ziad.utilities.ExcelReader;
 import com.ziad.utilities.JSONConverter;
 import com.ziad.utilities.SendEmailService;
@@ -97,12 +98,15 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 
 	@Autowired
 	private SendEmailService mailer;
+	
+	@Autowired
+	private Algorithms algorithmeRepo;
 
 	@Override
 	public ArrayList<Object> prepareInscriptionDatas() throws DataNotFoundExceptions {
 		List<InscriptionEnLigne> etudiants = inscriptionEnLigneRepository.getAllInscriptionsEnLigneAccepted();
 		List<Filiere> filieres = filiereRepository.findAll();
-		List<AnneeAcademique> annees_academiques = annee_academique_repository.findAll();
+		AnneeAcademique annees_academiques = algorithmeRepo.grabAnneeAcademiqueActuel();
 		ArrayList<Object> besoins = new ArrayList<Object>();
 		besoins.add(etudiants);
 		besoins.add(filieres);
@@ -206,7 +210,7 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 		for (Semestre semestre : firststep.getSemestres()) {
 			for (Modulee module : semestre.getModules()) {
 				for (Element element : module.getElements()) {
-					ComposedInscriptionPedagogique compsedId = new ComposedInscriptionPedagogique(etudiant, element);
+					ComposedInscriptionPedagogique compsedId = new ComposedInscriptionPedagogique(etudiant, element,annee_academique);
 					InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(compsedId,
 							annee_academique, false, TypeInscription.SEMESTRE);
 					this.inscriptionPedagogiqueRepository.save(inscription_pedagogique);
@@ -376,7 +380,7 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 					for (Modulee module : semestre.getModules()) {
 						for (Element element : module.getElements()) {
 							ComposedInscriptionPedagogique compsedId = new ComposedInscriptionPedagogique(etudiant,
-									element);
+									element,annee_academique);
 							InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(compsedId,
 									annee_academique, false, TypeInscription.SEMESTRE);
 							this.inscriptionPedagogiqueRepository.save(inscription_pedagogique);
@@ -416,6 +420,7 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 	public List<InscriptionAdministrative> listInscriptionAdministrativeByFilter(Long idFiliere, Long idAnneeAcademique,
 			Long idSemestre, Long idModule) throws DataNotFoundExceptions, EntityNotFoundException {
 		List<InscriptionAdministrative> listesInscription = new ArrayList<InscriptionAdministrative>();
+		
 		if (idModule != null) {
 			Modulee module = moduleRepository.getOne(idModule);
 			listesInscription = inscription_admistrative_repository.listerInscriptionsAdministrativesByModule(module);
@@ -431,7 +436,7 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 
 		if (idAnneeAcademique != null) {
 			listesInscription = listesInscription.stream()
-					.filter(inscri -> inscri.getAnnee_academique().getId_annee_academique() != idAnneeAcademique)
+					.filter(inscri -> inscri.getAnnee_academique().getId_annee_academique() == idAnneeAcademique)
 					.collect(Collectors.toList());
 		}
 
@@ -498,8 +503,8 @@ public class InscriptionAdministrativeService implements InscritpionAdministrati
 		inscription_administrative.getEtudiant().setMention(mention);
 		inscription_administrative.getEtudiant().setHigh_school(high_school);
 		inscription_administrative.getEtudiant().setBac_place(bac_place);
-		inscription_administrative.getEtudiant().setAcademy(academy);
-
+		inscription_administrative.getEtudiant().setAcademy(academy);		
+		
 		inscription_admistrative_repository.save(inscription_administrative);
 		historiqueRepository.save(new Historique(
 				"documents de l'étudiant " + inscription_administrative.getEtudiant().getFirst_name_fr() + " "

@@ -127,6 +127,11 @@ public class AnneeAcademique implements Serializable {
 
 	public void setNotesEtape(List<NoteEtape> notesEtape) {
 		this.notesEtape = notesEtape;
+	}
+
+	@Override
+	public String toString() {
+		return annee_academique + "/" + (annee_academique + 1);
 	}	
 	
 	

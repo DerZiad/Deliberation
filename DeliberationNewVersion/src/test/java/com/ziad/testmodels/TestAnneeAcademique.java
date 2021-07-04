@@ -71,7 +71,7 @@ public class TestAnneeAcademique {
 	public void testCff() {
 
 	}
-
+/*
 	@Test
 	public void test_annee_academique() throws Exception {
 		List<Etape> etapes = filiereRepository.findAll().get(0).getEtapes();
@@ -106,5 +106,5 @@ public class TestAnneeAcademique {
 		List<InscriptionAdministrative> listes = inscriptionAdministrativeRepo.findAll();
 		assertEquals(listes.size(), list.size() - 1);
 		
-	}
+	}*/
 }

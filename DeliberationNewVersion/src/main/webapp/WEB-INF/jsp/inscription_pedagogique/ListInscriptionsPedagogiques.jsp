@@ -9,10 +9,21 @@
 	<layout:put block="content" type="REPLACE">
 		<div class="main-card mb-3 card">
 			<div class="card-body">
-				<h5 class="card-title">Liste des inscriptions administratives
-					des etudiants</h5>
+				<h5 class="card-title">Liste des inscriptions pédagogiques</h5>
 				<form action="/admin/inscription/ListInscriptionAdministrative"
 					method="POST">
+					<div class="col-md-6">
+						<div class="position-relative form-group">
+							<input type="checkbox" class="form-class" name="checkfiliere"
+								checked /> <label for="Filiere" class="">Filiere</label> <select
+								id="listfiliere" name="id_filiere" class="form-control">
+								<c:forEach var="filiere" items="${filieres}">
+									<option value="${filiere.id_filiere }">${filiere.nom_filiere }</option>
+								</c:forEach>
+
+							</select>
+						</div>
+					</div>
 					<div class="col-md-6">
 						<div class="position-relative form-group">
 							<input type="checkbox" class="form-class" name="checkannee"
@@ -21,18 +32,6 @@
 								id="myInput" class="form-control">
 								<c:forEach var="annee" items="${annees_academiques}">
 									<option value="${annee.id_annee_academique }">${annee.annee_academique }</option>
-								</c:forEach>
-
-							</select>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="position-relative form-group">
-							<input type="checkbox" class="form-class" name="checkfiliere"
-								checked /> <label for="Filiere" class="">Filiere</label> <select
-								id="listfiliere" name="id_filiere" class="form-control">
-								<c:forEach var="filiere" items="${filieres}">
-									<option value="${filiere.id_filiere }">${filiere.nom_filiere }</option>
 								</c:forEach>
 
 							</select>
@@ -60,6 +59,41 @@
 						</div>
 
 					</div>
+					<div class="col-md-6">
+							<div class="position-relative form-group">
+								<label for="typedeliberation" class="">Type de
+									inscriptions</label>
+								<div class="row">
+									<div class="col-md-4">
+										<input type="radio" id="semestre" name="typeinscription"
+											value="semestre" checked>
+									</div>
+									<div class="col-md-4">
+										<label for="box">Inscription par semestre</label>
+									</div>
+
+								</div>
+								<div class="row">
+									<div class="col-md-4">
+										<input type="radio" id="module" name="typeinscription"
+											value="module">
+									</div>
+									<div class="col-md-4">
+										<label for="box">Inscription par module</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-4">
+										<input type="radio" id="element" name="typeinscription"
+											value="element" checked>
+									</div>
+									<div class="col-md-4">
+										<label for="box">Inscription par element</label>
+									</div>
+
+								</div>
+							</div>
+						</div>
 					<div class="col-md-9">
 						<div class="position-relative form-group">
 							<button class="btn btn-success">Valider</button>
@@ -68,61 +102,32 @@
 					</div>
 				</form>
 
-				<table class="mb-0 table table-hover" id="myTable">
+				<table class="mb-0 table table-striped">
 					<thead>
 						<tr>
-							<th class="th-sm">Massar</th>
-							<th class="th-sm">Nom Etudiant</th>
-							<th class="th-sm">Date de preinscription</th>
-							<th class="th-sm">Date Validation d'inscription</th>
-							<th class="th-sm">Année Académique</th>
-							<th class="th-sm">Filiere</th>
-							<th class="th-sm">Etablissement</th>
-							<th class="th-sm">Inscription administrative</th>
-							<th class="th-sm">Inscription pédagogique</th>
+							<th>Element</th>
+							<th>Année</th>
+							<th>Module</th>
+							<th>Semestre</th>
+							<th>Etape</th>
+							<th>Filiere</th>
+							<th>Etablissement</th>
+							<th>Type Inscription</th>
+							<th>Action</th>
+
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach var="inscription" items="${InscriptionAssociative}">
+						<c:forEach var="inscription" items="${inscriptions}">
 							<tr>
-								<td><a style="color: black">
-										${inscription.composite_association_id.etudiant.massar_edu}</a></td>
-								<td><a style="color: black">
-										${inscription.composite_association_id.etudiant.first_name_fr}
-										${inscription.composite_association_id.etudiant.last_name_fr}</a>
-								</td>
-
-								<td><a style="color: black">
-										${inscription.date_pre_inscription.toString().substring(0,10)}</a>
-								</td>
-								<td><a style="color: black">
-										${inscription.date_valid_inscription.toString().substring(0,10)}</a>
-								</td>
-								<td><a style="color: black">
-
-										${inscription.annee_academique}</a></td>
-								<td><a style="color: black">
-
-										${inscription.composite_association_id.filiere.nom_filiere}</a></td>
-								<td><a style="color: black">
-
-										${inscription.composite_association_id.filiere.etablissement.nom_etablissement}</a></td>
-								<td><i class="fa fa-fw" aria-hidden="true"
-									title="Copy to use pencil-square-o"><a
-										href="PageModifierInscriptionAdministrative/${inscription.composite_association_id.filiere.id_filiere}/${inscription.composite_association_id.etudiant.id_etudiant }"
-										style="font-size: 20px;"></a></i> <i class="fa fa-fw"
-									aria-hidden="true" title="Copy to use trash"> <!--  <a
-										href="SupprimerInscriptionAdministrative/${inscription.composite_association_id.filiere.id_filiere}/${inscription.composite_association_id.etudiant.id_etudiant }"
-										style="color: red; font-size: 20px;"></a>-->
-								</i></td>
-
-								<td><a
-									href="/admin/inscriptionpedagogique/creer/${ inscription.filiere.id_filiere}/${inscription.etudiant.id_etudiant}"
-									style="font-size: 20px;"><i class="fas fa-plus-square"
-										aria-hidden="true" title="edit"></i></a> <a
-									href="/admin/inscriptionpedagogique/listerinscriptions/${inscription.etudiant.id_etudiant}"
-									style="color: red; font-size: 20px;"><i class="fas fa-list"
-										aria-hidden="true" title="list"></i></a></td>
+								<td>${inscription.element.libelle_element}</td>
+								<td>${inscription.annee_academique }</td>
+								<td>${inscription.id_inscription_pedagogique.element.module.libelle_module}</td>
+								<td>${inscription.id_inscription_pedagogique.element.module.semestre.libelle_semestre }</td>
+								<td>${inscription.id_inscription_pedagogique.element.module.semestre.etape.libelle_etape }</td>
+								<td>${inscription.id_inscription_pedagogique.element.module.semestre.etape.filiere.nom_filiere }</td>
+								<td>${inscription.id_inscription_pedagogique.element.module.semestre.etape.filiere.etablissement.nom_etablissement }</td>
+								<td>${inscription.type_inscription }</td>
 							</tr>
 						</c:forEach>
 					</tbody>

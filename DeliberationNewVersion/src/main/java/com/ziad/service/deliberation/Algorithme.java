@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ziad.enums.DeliberationType;
 import com.ziad.enums.TypeInscription;
+import com.ziad.exceptions.DeliberationElementNotAllowed;
 import com.ziad.exceptions.DeliberationEtapeNotAllowed;
 import com.ziad.exceptions.DeliberationModuleNotAllowed;
 import com.ziad.exceptions.DeliberationSemestreNotAllowed;
+import com.ziad.exceptions.InvalidCredinals;
 import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Deliberation;
 import com.ziad.models.Element;
@@ -52,158 +55,186 @@ public class Algorithme {
 	@Autowired
 	private ElementRepository elementRepository;;
 
-	@Autowired
-	private SemestreRepository semestreRepository;
 
-	@Autowired
-	private AnnneAcademiqueRepository anneeAcademiqueRepository;
-
-	private DeliberationType typeDelib = DeliberationType.ORDINAIRE;
-	private Integer consideration = 0;// Consideration encas du rattrapage
-
-	public void enableDeliberationRattrapage() {
-		typeDelib = DeliberationType.RATTRAPAGE;
-	}
-
-	public void enableDeliberationOrdinaire() {
-		typeDelib = DeliberationType.ORDINAIRE;
-	}
-
-	public void enableConsideration(Boolean choix) {
-		consideration = choix ? 1 : 0;
-	}
-
-	public void delibererElement(Element element, AnneeAcademique annee) {
+	public Deliberation delibererElementOrdinaire(Element element, AnneeAcademique annee) throws InvalidCredinals {
+		isDeliberationElementAllowed(element, annee);
+		Deliberation deliberation = new Deliberation();
+		deliberation.setDelibered(false);
+		deliberation.setAnneeAcademique(annee);
+		deliberation.setElement(element);
 		List<NoteElement> notes = noteElementRepository.getNoteElementAnnee(element, annee);
 		for (NoteElement noteElement : notes) {
-			if (typeDelib.equals(DeliberationType.ORDINAIRE)) {
-				noteElement.delibererElementOrdinaire();
-			} else if (typeDelib.equals(DeliberationType.RATTRAPAGE)) {
-				if (!noteElement.isValid())
-					noteElement.delibererElementRattrapage(consideration);
-			}
+			noteElement.delibererElementOrdinaire();
+			noteElement.setDeliberation(deliberation);
 		}
+		deliberation.setNotesElement(notes);
+		deliberationRepository.save(deliberation);
+		return deliberation;
 	}
 
-	public Deliberation delibererModule(Modulee module, AnneeAcademique annee) throws DeliberationModuleNotAllowed {
-		/**
-		 * Etape1 -> Verifier si on a deja deliberer Avant de deliberer on doit
-		 * récuperer quel etat de deliberation on est RATT OR ORDINARY
-		 **/
-		List<Deliberation> delibs = null;
-		delibs = deliberationRepository.getDeliberationByModuleAnnneAcademique(module, annee);
-		Deliberation deliberation = null;
+	public Deliberation delibererElementRattrapage(Element element, AnneeAcademique annee, Integer consideration)
+			throws InvalidCredinals {
+		Deliberation deliberation = isDeliberationElementByRattrapageAllowed(element, annee);
+		List<NoteElement> notes = noteElementRepository.getNoteElementAnnee(element, annee);
+		for (NoteElement noteElement : notes) {
+			if (!noteElement.isValid())
+				noteElement.delibererElementRattrapage(consideration);
+		}
 
-		if (delibs.size() == 0) {
-			deliberation = new Deliberation(typeDelib.name(), annee, module, null, null);
-		} else {
-			deliberation = delibs.get(0);
-			boolean delibRatt = !deliberation.isDelibered() && typeDelib.equals(DeliberationType.RATTRAPAGE);
-			// On a
-			// pas
-			// encore
-			// deliberer
-			// rattrapage
-			deliberation.setDelibered(delibRatt);
+		deliberation.setNotesElement(notes);
+		deliberation.setDelibered(true);
+		deliberationRepository.save(deliberation);
+		return deliberation;
+	}
+
+	public void isDeliberationElementAllowed(Element element, AnneeAcademique annee) throws InvalidCredinals {
+		InvalidCredinals invalidCredinals = new InvalidCredinals();
+
+		List<Deliberation> deliberation = deliberationRepository.getDeliberationByElementAnnneAcademique(element,
+				annee);
+		if (deliberation.size() != 0) {
+			invalidCredinals.addErreur("Erreur ", "Vous avez déja effectué une déliberation");
 		}
-		for (Element element : elementRepository.getElementsByModule(module)) {
-			delibererElement(element, annee);
+
+		List<NoteElement> notes = noteElementRepository.getNoteElementAnnee(element, annee);
+		for (NoteElement noteElement : notes) {
+			if (noteElement.getNotes().size() < 3) {
+				Etudiant etudiant = noteElement.getEtudiant();
+				invalidCredinals.addErreur("Erreur ", "Les notes de l'etudiant " + etudiant.getLast_name_fr() + " "
+						+ etudiant.getFirst_name_fr() + "doît être totalement saisi");
+			}
 		}
+		if (!invalidCredinals.allow()) {
+			throw invalidCredinals;
+		}
+
+	}
+
+	public Deliberation isDeliberationElementByRattrapageAllowed(Element element, AnneeAcademique annee)
+			throws InvalidCredinals {
+		InvalidCredinals invalidCredinals = new InvalidCredinals();
+
+		List<Deliberation> deliberation = deliberationRepository.getDeliberationByElementAnnneAcademique(element,
+				annee);
+		if (deliberation.size() == 0) {
+			invalidCredinals.addErreur("Erreur ", "Vous avez pas encore fait une déliberation ordinaire");
+			throw invalidCredinals;
+		}
+
+		if (deliberation.get(0).isDelibered()) {
+			invalidCredinals.addErreur("Erreur ", "Vous avez déja effectué une déliberation en rattrapage");
+			throw invalidCredinals;
+		}
+
+		List<NoteElement> notes = noteElementRepository.getNoteElementAnnee(element, annee);
+		for (NoteElement noteElement : notes) {
+			if (!noteElement.isValid() && noteElement.getNotes().size() < 4) {
+				Etudiant etudiant = noteElement.getEtudiant();
+				invalidCredinals.addErreur("Erreur ", "Les notes de l'etudiant " + etudiant.getLast_name_fr() + " "
+						+ etudiant.getFirst_name_fr() + "doît être totalement saisi");
+			}
+		}
+		if (!invalidCredinals.allow()) {
+			throw invalidCredinals;
+		}
+
+		return deliberation.get(0);
+
+	}
+
+	public Deliberation delibererModule(Modulee module, AnneeAcademique annee) throws DeliberationModuleNotAllowed, DeliberationElementNotAllowed {
+		isDeliberationModuleAllowed(module, annee);
+
+		Deliberation deliberation = new Deliberation();
+		deliberation.setModule(module);
+		deliberation.setAnneeAcademique(annee);
+
 		List<InscriptionPedagogique> listeInscriptionsPedagogique = inscriptionPedagogiqueRepository
 				.getInscriptionPedagogiqueParModule(module, annee);
-		try {
-			for (InscriptionPedagogique inscription : listeInscriptionsPedagogique) {
-				Double coefficient = 0d;
-				Double noteDouble = 0d;
-				for (Element element : elementRepository.getElementsByModule(module)) {
-					NoteElement note = noteElementRepository.getOne(inscription.getId_inscription_pedagogique());
-					noteDouble = noteDouble + note.getNote_element() * element.getCoeficient();
-					coefficient = coefficient + element.getCoeficient();
-				}
-				noteDouble = noteDouble / coefficient;
-				NoteModule noteParModule = null;
-				if (typeDelib.equals(DeliberationType.RATTRAPAGE)) {
-					noteParModule = notesModuleRepository
-							.getOne(new ComposedNoteModule(module, inscription.getEtudiant()));
-					noteParModule.setNote(noteDouble);
-				} else {
-					noteParModule = new NoteModule(new ComposedNoteModule(module, inscription.getEtudiant()),
-							noteDouble, deliberation,annee);
-				}
-				noteParModule.delibererModule(typeDelib);
-				deliberation.addNoteModule(noteParModule);
+
+		for (InscriptionPedagogique inscription : listeInscriptionsPedagogique) {
+			Double coefficient = 0d;
+			Double noteDouble = 0d;
+			for (Element element : elementRepository.getElementsByModule(module)) {
+				NoteElement note = noteElementRepository.getOne(inscription.getId_inscription_pedagogique());
+				noteDouble = noteDouble + note.getNote_element() * element.getCoeficient();
+				coefficient = coefficient + element.getCoeficient();
 			}
-			deliberationRepository.save(deliberation);
-			return deliberation;
-		} catch (Exception e) {
-			System.out.println("Throwable");
-			throw new DeliberationModuleNotAllowed(module, "Les notes ne sont pas encore prêtes");
+			noteDouble = noteDouble / coefficient;
+			NoteModule noteParModule = new NoteModule(new ComposedNoteModule(module, inscription.getEtudiant(), annee),
+					noteDouble, deliberation, annee);
+			noteParModule.delibererModule();
+			deliberation.addNoteModule(noteParModule);
 		}
+		deliberation.setDelibered(true);
+		deliberationRepository.save(deliberation);
+		return deliberation;
 	}
 
 	public Deliberation delibererSemestre(Semestre semestre, AnneeAcademique annee)
 			throws DeliberationSemestreNotAllowed {
-		List<Deliberation> delibs = deliberationRepository.getDeliberationBySemestreAnnneAcademique(semestre, annee);
-		if (delibs.size() == 0) {
-			Deliberation deliberation = null;
-			isDeliberationSemestreAllowed(semestre, annee);
-			deliberation = new Deliberation(typeDelib.name(), annee, null, semestre, null);
-			List<InscriptionPedagogique> inscriptionsPedagogiques = inscriptionPedagogiqueRepository
-					.getInscriptionPedagogiqueParSemestre(semestre, annee);
-			inscriptionsPedagogiques = filterInscription(inscriptionsPedagogiques);
 
-			for (InscriptionPedagogique inscription : inscriptionsPedagogiques) {
-				boolean inscritpedagogique = true;
-				Double coefficient = 0d;
-				Double noteSemestre = 0d;
-				List<NoteModule> notess = new ArrayList<NoteModule>();
-				for (Modulee module : semestre.getModules()) {
-					NoteModule noteParModule = notesModuleRepository
-							.getOne(new ComposedNoteModule(module, inscription.getEtudiant()));
-					noteSemestre = noteSemestre + noteParModule.getNote() * module.getCoeficient();
-					coefficient = coefficient + module.getCoeficient();
-					notess.add(noteParModule);
-					inscritpedagogique = inscritpedagogique && noteParModule.isValid();
-				}
-				noteSemestre = noteSemestre / coefficient;
-				NoteSemestre noteSemestreO = new NoteSemestre(
-						new ComposedNoteSemestre(semestre, inscription.getEtudiant()), noteSemestre, deliberation,annee);
-				noteSemestreO.delibererSemestre(notess);
-				deliberation.addNoteSemestre(noteSemestreO);
+		isDeliberationSemestreAllowed(semestre, annee);
+		
+		Deliberation deliberation = new Deliberation();
+		deliberation.setSemestre(semestre);
+		deliberation.setAnneeAcademique(annee);
+		
+		List<InscriptionPedagogique> inscriptionsPedagogiques = inscriptionPedagogiqueRepository
+				.getInscriptionPedagogiqueParSemestre(semestre, annee);
+		inscriptionsPedagogiques = filterInscription(inscriptionsPedagogiques);
 
-				if (inscritpedagogique) {
-					/**
-					 * Grab semestre
-					 **/
-					List<Semestre> listeSemestre = semestreRepository.findAll();
-					Collections.sort(listeSemestre);
+		for (InscriptionPedagogique inscription : inscriptionsPedagogiques) {
+			boolean inscritpedagogique = true;
+			Double coefficient = 0d;
+			Double noteSemestre = 0d;
+			List<NoteModule> notess = new ArrayList<NoteModule>();
+			for (Modulee module : semestre.getModules()) {
+				NoteModule noteParModule = notesModuleRepository
+						.getOne(new ComposedNoteModule(module, inscription.getEtudiant(), annee));
+				noteSemestre = noteSemestre + noteParModule.getNote() * module.getCoeficient();
+				coefficient = coefficient + module.getCoeficient();
+				notess.add(noteParModule);
+				inscritpedagogique = inscritpedagogique && noteParModule.isValid();
+			}
+			noteSemestre = noteSemestre / coefficient;
+			NoteSemestre noteSemestreO = new NoteSemestre(
+					new ComposedNoteSemestre(semestre, inscription.getEtudiant(), annee), noteSemestre, deliberation,
+					annee);
+			noteSemestreO.delibererSemestre(notess);
+			deliberation.addNoteSemestre(noteSemestreO);
 
-					int index = semestre.getOrdre() + 2;
-					AnneeAcademique anneeSuivant = anneeAcademiqueRepository
-							.getAnneeAcademique(inscription.getAnnee_academique().getAnnee_academique() + 1).get(0);
-					if (index <= listeSemestre.size()) {
-						Etudiant etudiant = inscription.getEtudiant();
-						Semestre semestreAdelib = listeSemestre.get(index - 1);
-						for (Modulee module : semestreAdelib.getModules()) {
-							for (Element element : module.getElements()) {
-								ComposedInscriptionPedagogique id_inscription_pedagogique = new ComposedInscriptionPedagogique(
-										etudiant, element);
-								InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(
-										id_inscription_pedagogique, anneeSuivant, false, TypeInscription.SEMESTRE);
-								inscriptionPedagogiqueRepository.save(inscription_pedagogique);
-								NoteElement note = new NoteElement(id_inscription_pedagogique, 0d, anneeSuivant);
-								noteElementRepository.save(note);
-							}
+			/*if (inscritpedagogique) {
+
+				List<Semestre> listeSemestre = semestreRepository.findAll();
+				Collections.sort(listeSemestre);
+
+				int index = semestre.getOrdre() + 2;
+				AnneeAcademique anneeSuivant = anneeAcademiqueRepository
+						.getAnneeAcademique(inscription.getAnnee_academique().getAnnee_academique() + 1);
+				if (index <= listeSemestre.size()) {
+					Etudiant etudiant = inscription.getEtudiant();
+					Semestre semestreAdelib = listeSemestre.get(index - 1);
+					for (Modulee module : semestreAdelib.getModules()) {
+						for (Element element : module.getElements()) {
+							ComposedInscriptionPedagogique id_inscription_pedagogique = new ComposedInscriptionPedagogique(
+									etudiant, element, null);
+							InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(
+									id_inscription_pedagogique, anneeSuivant, false, TypeInscription.SEMESTRE);
+							inscriptionPedagogiqueRepository.save(inscription_pedagogique);
+							NoteElement note = new NoteElement(id_inscription_pedagogique, 0d, anneeSuivant);
+							noteElementRepository.save(note);
 						}
 					}
-
 				}
-			}
-			deliberationRepository.save(deliberation);
 
-			return deliberation;
+			}*/
 		}
-		return delibs.get(0);
+		deliberation.setDelibered(true);
+		deliberationRepository.save(deliberation);
+
+		return deliberation;
+
 	}
 
 	private void isDeliberationSemestreAllowed(Semestre semestre, AnneeAcademique annee)
@@ -222,49 +253,59 @@ public class Algorithme {
 	}
 
 	public Deliberation delibererEtape(Etape etape, AnneeAcademique annee) throws DeliberationEtapeNotAllowed {
-		List<Deliberation> delibs = deliberationRepository.getDeliberationByEtapeAnnneAcademique(etape, annee);
-		/**
-		 * Etape1 -> Verifier si on a deja deliberer
-		 * 
-		 **/
-		Deliberation deliberation = null;
-		if (delibs.size() == 0) {
-			System.out.println("Allowed");
-			isDeliberationEtapeAllowed(etape, annee);
-			deliberation = new Deliberation(typeDelib.name(), annee, null, null, etape);
-			System.out.println("Created");
-			List<InscriptionPedagogique> inscriptions = inscriptionPedagogiqueRepository
-					.getInscriptionPedagogiqueParEtape(etape, annee);
-			inscriptions = filterInscription(inscriptions);
-			for (InscriptionPedagogique inscription : inscriptions) {
-				System.out.println("Inside boocle");
-				Double noteParEtapeD = 0d;
-				for (Semestre semestre : etape.getSemestres()) {
-					NoteSemestre noteSemestre = notesSemestreRepository
-							.getOne(new ComposedNoteSemestre(semestre, inscription.getEtudiant()));
-					noteParEtapeD = noteParEtapeD + noteSemestre.getNote();
-				}
-				System.out.println("Notee ");
-				noteParEtapeD = noteParEtapeD / 2;
-				NoteEtape noteEtape = new NoteEtape(new ComposedNoteEtape(etape, inscription.getEtudiant()),
-						noteParEtapeD, deliberation,annee);
-				noteEtape.delibererEtape();
-				deliberation.addNoteEtape(noteEtape);
-				deliberationRepository.save(deliberation);
+
+		isDeliberationEtapeAllowed(etape, annee);
+
+		Deliberation deliberation = new Deliberation();
+		deliberation.setEtape(etape);
+		deliberation.setAnneeAcademique(annee);
+		List<InscriptionPedagogique> inscriptions = inscriptionPedagogiqueRepository
+				.getInscriptionPedagogiqueParEtape(etape, annee);
+		inscriptions = filterInscription(inscriptions);
+		for (InscriptionPedagogique inscription : inscriptions) {
+			Double noteParEtapeD = 0d;
+			for (Semestre semestre : etape.getSemestres()) {
+				NoteSemestre noteSemestre = notesSemestreRepository
+						.getOne(new ComposedNoteSemestre(semestre, inscription.getEtudiant(), annee));
+				noteParEtapeD = noteParEtapeD + noteSemestre.getNote();
 			}
-		} else {
-			deliberation = delibs.get(0);
+			noteParEtapeD = noteParEtapeD / 2;
+			NoteEtape noteEtape = new NoteEtape(new ComposedNoteEtape(etape, inscription.getEtudiant(), annee),
+					noteParEtapeD, deliberation, annee);
+			noteEtape.delibererEtape();
+			deliberation.addNoteEtape(noteEtape);
+			deliberationRepository.save(deliberation);
 		}
+
 		return deliberation;
-
 	}
-
+	
+	
+	
 	private void isDeliberationEtapeAllowed(Etape etape, AnneeAcademique annee) throws DeliberationEtapeNotAllowed {
 		for (Semestre semestre : etape.getSemestres()) {
 			List<Deliberation> delibs = deliberationRepository.getDeliberationBySemestreAnnneAcademique(semestre,
 					annee);
 			if (delibs.size() == 0) {
 				throw new DeliberationEtapeNotAllowed(semestre, "Le semestre n est pas deliberer");
+			}
+		}
+	}
+
+	private void isDeliberationModuleAllowed(Modulee module, AnneeAcademique annee)
+			throws DeliberationModuleNotAllowed,DeliberationElementNotAllowed {
+		List<Deliberation> dmodule = deliberationRepository.getDeliberationByModuleAnnneAcademique(module, annee);
+		if (dmodule.size() > 0)
+			throw new DeliberationModuleNotAllowed(null, "Le module est déja déliberer");
+		for (Element element : module.getElements()) {
+			List<Deliberation> delibs = deliberationRepository.getDeliberationByElementAnnneAcademique(element, annee);
+			if (delibs.size() == 0) {
+				throw new DeliberationElementNotAllowed(element, "Le element suivant n'est pas deliberer");
+			} else {
+				Deliberation del = delibs.get(0);
+				if (!del.isDelibered())
+					throw new DeliberationElementNotAllowed(element,
+							"Le element suivant n est pas deliberer en rattrapage");
 			}
 		}
 	}
@@ -285,5 +326,6 @@ public class Algorithme {
 		}
 		return inscriptionsPedagogiquesFiltrer;
 	}
-
+	
+	
 }

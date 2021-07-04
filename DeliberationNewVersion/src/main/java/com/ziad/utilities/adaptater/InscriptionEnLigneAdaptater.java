@@ -27,6 +27,7 @@ public class InscriptionEnLigneAdaptater implements JsonSerializer<InscriptionEn
 		json.addProperty("gender", src.getGender().name());
 		Date date = src.getBirth_date();
 		json.addProperty("birth_date", date.getYear() + "-" + date.getMonth() + "-" + date.getDate());
+		json.addProperty("etablissement", src.getEtablissement().getNom_etablissement());
 		json.addProperty("birth_place", src.getBirth_place());
 		json.addProperty("city", src.getCity());
 		json.addProperty("province", src.getProvince());

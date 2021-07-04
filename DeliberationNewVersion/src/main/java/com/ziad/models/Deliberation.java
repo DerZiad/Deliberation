@@ -20,8 +20,6 @@ public class Deliberation {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long idDeliberation;
 
-	private String typeDeliberation;
-
 	private boolean delibered = false;
 
 	@OneToOne(cascade = { CascadeType.DETACH })
@@ -36,6 +34,10 @@ public class Deliberation {
 	@JoinColumn(nullable = true)
 	private Etape etape = null;
 
+	@OneToOne(cascade = CascadeType.DETACH)
+	@JoinColumn(nullable = true)
+	private Element element = null;
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "deliberation")
 	private List<NoteSemestre> notesSemestre = new ArrayList<NoteSemestre>();
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "deliberation")
@@ -43,29 +45,44 @@ public class Deliberation {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "deliberation")
 	private List<NoteEtape> notesEtape = new ArrayList<NoteEtape>();
 
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "deliberation")
+	private List<NoteElement> notesElement = new ArrayList<NoteElement>();
+
 	public Deliberation() {
 
 	}
 
-	public Deliberation(Long idDeliberation, String typeDeliberation, AnneeAcademique anneeAcademique, Modulee module,
-			Semestre semestre, Etape etape) {
+	public Deliberation(boolean delibered, AnneeAcademique anneeAcademique, Modulee module, Semestre semestre,
+			Etape etape, Element element, List<NoteSemestre> notesSemestre, List<NoteModule> notesModule,
+			List<NoteEtape> notesEtape, List<NoteElement> notesElement) {
 		super();
-		this.idDeliberation = idDeliberation;
-		this.typeDeliberation = typeDeliberation;
+		this.delibered = delibered;
 		this.anneeAcademique = anneeAcademique;
 		this.module = module;
 		this.semestre = semestre;
 		this.etape = etape;
+		this.element = element;
+		this.notesSemestre = notesSemestre;
+		this.notesModule = notesModule;
+		this.notesEtape = notesEtape;
+		this.notesElement = notesElement;
 	}
 
-	public Deliberation(String typeDeliberation, AnneeAcademique anneeAcademique, Modulee module, Semestre semestre,
-			Etape etape) {
+	public Deliberation(Long idDeliberation, boolean delibered, AnneeAcademique anneeAcademique, Modulee module,
+			Semestre semestre, Etape etape, Element element, List<NoteSemestre> notesSemestre,
+			List<NoteModule> notesModule, List<NoteEtape> notesEtape, List<NoteElement> notesElement) {
 		super();
-		this.typeDeliberation = typeDeliberation;
+		this.idDeliberation = idDeliberation;
+		this.delibered = delibered;
 		this.anneeAcademique = anneeAcademique;
 		this.module = module;
 		this.semestre = semestre;
 		this.etape = etape;
+		this.element = element;
+		this.notesSemestre = notesSemestre;
+		this.notesModule = notesModule;
+		this.notesEtape = notesEtape;
+		this.notesElement = notesElement;
 	}
 
 	public Long getIdDeliberation() {
@@ -74,14 +91,6 @@ public class Deliberation {
 
 	public void setIdDeliberation(Long idDeliberation) {
 		this.idDeliberation = idDeliberation;
-	}
-
-	public String getTypeDeliberation() {
-		return typeDeliberation;
-	}
-
-	public void setTypeDeliberation(String typeDeliberation) {
-		this.typeDeliberation = typeDeliberation;
 	}
 
 	public AnneeAcademique getAnneeAcademique() {
@@ -172,6 +181,22 @@ public class Deliberation {
 		this.notesEtape = notesEtape;
 	}
 
+	public Element getElement() {
+		return element;
+	}
+
+	public void setElement(Element element) {
+		this.element = element;
+	}
+
+	public List<NoteElement> getNotesElement() {
+		return notesElement;
+	}
+
+	public void setNotesElement(List<NoteElement> notesElement) {
+		this.notesElement = notesElement;
+	}
+
 	@Override
 	public String toString() {
 		String ch = "";
@@ -179,9 +204,8 @@ public class Deliberation {
 			ch = ch + notemodule.getEtat() + " : " + notemodule.getNote();
 		}
 
-		return "Deliberation [idDeliberation=" + idDeliberation + ", typeDeliberation=" + typeDeliberation
-				+ ", anneeAcademique=" + anneeAcademique + ", module=" + module + ", semestre=" + semestre + ", etape="
-				+ etape + ch + "]";
+		return "Deliberation [idDeliberation=" + idDeliberation + ", anneeAcademique=" + anneeAcademique + ", module="
+				+ module + ", semestre=" + semestre + ", etape=" + etape + ch + "]";
 
 	}
 

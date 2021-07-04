@@ -7,6 +7,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 
+import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Element;
 import com.ziad.models.Etudiant;
 
@@ -21,14 +22,11 @@ public class ComposedInscriptionPedagogique implements Serializable {
 	private Etudiant etudiant;
 	@OneToOne(fetch = FetchType.EAGER,targetEntity = Element.class,cascade = CascadeType.PERSIST)
 	private Element element;
+	@OneToOne(fetch = FetchType.EAGER,targetEntity = AnneeAcademique.class,cascade = CascadeType.PERSIST)
+	private AnneeAcademique anneeAcaqemique;
 	
 	public ComposedInscriptionPedagogique() {
 		
-	}
-	public ComposedInscriptionPedagogique(Etudiant etudiant, Element element) {
-		super();
-		this.etudiant = etudiant;
-		this.element = element;
 	}
 
 	public Etudiant getEtudiant() {
@@ -46,9 +44,21 @@ public class ComposedInscriptionPedagogique implements Serializable {
 	public void setElement(Element element) {
 		this.element = element;
 	}
-	@Override
-	public String toString() {
-		return "ComposedInscriptionPedagogique [etudiant=" + etudiant + ", element=" + element + "]";
+
+	public AnneeAcademique getAnneeAcaqemique() {
+		return anneeAcaqemique;
 	}
+
+	public void setAnneeAcaqemique(AnneeAcademique anneeAcaqemique) {
+		this.anneeAcaqemique = anneeAcaqemique;
+	}
+
+	public ComposedInscriptionPedagogique(Etudiant etudiant, Element element, AnneeAcademique anneeAcaqemique) {
+		super();
+		this.etudiant = etudiant;
+		this.element = element;
+		this.anneeAcaqemique = anneeAcaqemique;
+	}
+	
 	
 }

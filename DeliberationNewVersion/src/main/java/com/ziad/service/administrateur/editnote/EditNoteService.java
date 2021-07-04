@@ -197,8 +197,8 @@ public class EditNoteService implements EditNoteInterface {
 		AnneeAcademique annee = anneeAcademiqueRepository.getOne(idAnneeAcademique);
 		List<Etudiant> etudiant = inscriptionPedagogiqueRepository.getEtudiantByElementAndAnneeAcademique(element,
 				annee);
-		ExcelExport excel = new ExcelExport(etudiant, element.getLibelle_element(), element.getId_element());
-		excel.export(resp);
+		ExcelExport excel = new ExcelExport(etudiant);
+		excel.export(resp,TypeNote.EXAM_ORDINAIRE);
 	}
 
 	@Override

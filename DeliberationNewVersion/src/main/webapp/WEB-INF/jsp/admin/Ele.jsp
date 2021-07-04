@@ -10,16 +10,14 @@
 		<div class="main-card mb-3 card">
 			<div class="card-body">
 				<h5 class="card-title">Déliberation de Module</h5>
-				<form class="" action="/delib/" method="POST">
+				<form class="" action="/delib/deliberationmodule" method="POST">
 					<input type="hidden" name="type" value="parmodule" />
 					<div class="form-row">
 						<div class="col-md-6">
 							<div class="position-relative form-group">
 								<label for="name" class="">Années académiques</label> <select
 									name="annee" id="exampleSelect" class="form-control">
-									<c:forEach var="annee" items="${annees}">
-										<option value="${annee.id_annee_academique }">${annee.annee_academique }</option>
-									</c:forEach>
+										<option value="${annee.id_annee_academique }">${annee }</option>
 								</select>
 							</div>
 						</div>
@@ -55,49 +53,19 @@
 								</select>
 							</div>
 						</div>
-						<div class="col-md-6">
-							<div class="position-relative form-group">
-								<label for="typedeliberation" class="">Type de
-									déliberation</label>
-								<div class="row">
-									<div class="col-md-4">
-										<input type="radio" id="ordinaire" name="typedeliberation"
-											value="ordinaire">
-									</div>
-									<div class="col-md-4">
-										<label for="box">Déliberation ordinaire</label>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-4">
-										<input type="radio" id="rattrapage" name="typedeliberation"
-											value="rattrapage" checked>
-									</div>
-									<div class="col-md-4">
-										<label for="box">Déliberation rattrapage</label>
-									</div>
-
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6" id="noterattrapage">
-							<div class="position-relative form-group">
-								<div class="row">
-									<div class="col-md-4">
-										<input type="checkbox" name="consideration" value="1">
-									</div>
-									<div class="col-md-4">
-										<label for="box">La note de rattrapage sera calculé en
-											prennant considération des autres notes</label>
-									</div>
-								</div>
-							</div>
-						</div>
-
 						<button class="mt-2 btn btn-primary col-md-12" type="submit">Valider</button>
 					</div>
 				</form>
-  					${error}
+				<c:if test="${error ne null }">
+					<br>
+					<br>
+					<div class="card alert alert-danger" role="alert">
+						<div class="card-body">
+							<h5 class="card-title">${error.title }</h5>
+							<p class="card-text">${error.getMessage() }</p>
+						</div>
+					</div>
+				</c:if>
 			</div>
 		</div>
 		<script>

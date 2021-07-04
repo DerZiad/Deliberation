@@ -15,8 +15,13 @@
 					<thead>
 						<tr>
 							<th>Element</th>
-							<th>Validé</th>
 							<th>Année</th>
+							<th>Module</th>
+							<th>Semestre</th>
+							<th>Etape</th>
+							<th>Filiere</th>
+							<th>Etablissement</th>
+							<th>Type Inscription</th>
 							<th>Action</th>
 
 						</tr>
@@ -25,16 +30,13 @@
 						<c:forEach var="inscription" items="${inscriptions}">
 							<tr>
 								<td>${inscription.element.libelle_element}</td>
-								<td>${inscription.isValid() }</td>
-								<td>${inscription.annee_academique.annee_academique }</td>
-								<td><i class="fa fa-fw" aria-hidden="true"
-									title="Copy to use pencil-square-o"><a
-										href="/admin/inscriptionpedagogique/modifier/${inscription.etudiant.id_etudiant}/${inscription.element.id_element }"
-										style="font-size: 20px;"></a></i> </td><td><i class="fa fa-fw"
-									aria-hidden="true" title="Copy to use trash"> <a
-										href="/admin/inscriptionpedagogique/suprimer/${inscription.etudiant.id_etudiant}/${inscription.element.id_element }"
-										style="color: red; font-size: 20px;"></a>
-								</i></td>
+								<td>${inscription.annee_academique }</td>
+								<td>${inscription.id_inscription_pedagogique.element.module.libelle_module}</td>
+								<td>${inscription.id_inscription_pedagogique.element.module.semestre.libelle_semestre }</td>
+								<td>${inscription.id_inscription_pedagogique.element.module.semestre.etape.libelle_etape }</td>
+								<td>${inscription.id_inscription_pedagogique.element.module.semestre.etape.filiere.nom_filiere }</td>
+								<td>${inscription.id_inscription_pedagogique.element.module.semestre.etape.filiere.etablissement.nom_etablissement }</td>
+								<td>${inscription.type_inscription }</td>
 							</tr>
 						</c:forEach>
 					</tbody>

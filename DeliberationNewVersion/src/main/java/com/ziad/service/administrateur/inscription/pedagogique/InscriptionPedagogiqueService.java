@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.ziad.enums.TypeInscription;
 import com.ziad.exceptions.DataNotFoundExceptions;
+import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Element;
 import com.ziad.models.Etape;
 import com.ziad.models.Etudiant;
@@ -25,6 +26,7 @@ import com.ziad.models.NoteElement;
 import com.ziad.models.Semestre;
 import com.ziad.models.compositeid.ComposedInscriptionAdministrative;
 import com.ziad.models.compositeid.ComposedInscriptionPedagogique;
+import com.ziad.repositories.AnnneAcademiqueRepository;
 import com.ziad.repositories.ElementRepository;
 import com.ziad.repositories.EtapeRepository;
 import com.ziad.repositories.EtudiantRepository;
@@ -34,6 +36,7 @@ import com.ziad.repositories.InscriptionPedagogiqueRepository;
 import com.ziad.repositories.ModuleRepository;
 import com.ziad.repositories.NoteElementRepository;
 import com.ziad.repositories.SemestreRepository;
+import com.ziad.utilities.Algorithms;
 import com.ziad.utilities.JSONConverter;
 
 @Service
@@ -57,6 +60,11 @@ public class InscriptionPedagogiqueService implements InscriptionPedagogiqueInte
 	private ElementRepository elementRepository;
 	@Autowired
 	private NoteElementRepository noteElementRepository;
+	@Autowired
+	private AnnneAcademiqueRepository anneeAcademiqueRepository;
+
+	@Autowired
+	private Algorithms algorithmeRepository;
 
 	@Autowired
 	private JSONConverter converter;
@@ -99,16 +107,16 @@ public class InscriptionPedagogiqueService implements InscriptionPedagogiqueInte
 		besoins.add(modules_string);
 		besoins.add(elements_string);
 		besoins.add(types);
+		besoins.add(algorithmeRepository.getNextFiveYear());
 		return besoins;
 	}
 
 	@Override
-	public void enregistrerInformation(Long id_filiere, Long id_etudiant, HttpServletRequest request)
-			throws DataNotFoundExceptions, EntityNotFoundException {
-		Filiere filiere = filiereRepository.getOne(id_filiere);
+	public void enregistrerInformation(Long id_etudiant, Long idAnneeAcademique,
+			HttpServletRequest request) throws DataNotFoundExceptions, EntityNotFoundException {
 		Etudiant etudiant = etudiantRepository.getOne(id_etudiant);
-		InscriptionAdministrative inscription_administrative = inscriptionAdministrative
-				.getOne(new ComposedInscriptionAdministrative(etudiant, filiere));
+		AnneeAcademique annee = anneeAcademiqueRepository.getOne(idAnneeAcademique);
+
 		try {
 			String type = request.getParameter(TYPE_ATTRIBUT);
 			String id_chaine = request.getParameter("lists");
@@ -118,13 +126,11 @@ public class InscriptionPedagogiqueService implements InscriptionPedagogiqueInte
 				for (Modulee module : semestre.getModules()) {
 					for (Element element : module.getElements()) {
 						ComposedInscriptionPedagogique id_inscription_pedagogique = new ComposedInscriptionPedagogique(
-								etudiant, element);
+								etudiant, element, annee);
 						InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(
-								id_inscription_pedagogique, inscription_administrative.getAnnee_academique(), false,
-								TypeInscription.SEMESTRE);
+								id_inscription_pedagogique, annee, false, TypeInscription.SEMESTRE);
 						inscriptionPedagogiqueRepository.save(inscription_pedagogique);
-						NoteElement note = new NoteElement(id_inscription_pedagogique, 0d,
-								inscription_administrative.getAnnee_academique());
+						NoteElement note = new NoteElement(id_inscription_pedagogique, 0d, annee);
 						noteElementRepository.save(note);
 					}
 				}
@@ -132,27 +138,25 @@ public class InscriptionPedagogiqueService implements InscriptionPedagogiqueInte
 				Modulee module = moduleRepository.getOne(id);
 				for (Element element : module.getElements()) {
 					ComposedInscriptionPedagogique id_inscription_pedagogique = new ComposedInscriptionPedagogique(
-							etudiant, element);
+							etudiant, element, annee);
 					InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(
-							id_inscription_pedagogique, inscription_administrative.getAnnee_academique(), false,
-							TypeInscription.MODULE);
+							id_inscription_pedagogique, annee, false, TypeInscription.MODULE);
 					inscriptionPedagogiqueRepository.save(inscription_pedagogique);
 
-					NoteElement note = new NoteElement(id_inscription_pedagogique, 0d,
-							inscription_administrative.getAnnee_academique());
+					NoteElement note = new NoteElement(id_inscription_pedagogique, 0d, annee);
 					noteElementRepository.save(note);
 				}
 			} else if (type.equals("element")) {
 				Element element = elementRepository.getOne(id);
 				ComposedInscriptionPedagogique id_inscription_pedagogique = new ComposedInscriptionPedagogique(etudiant,
-						element);
+						element, annee);
 				InscriptionPedagogique inscription_pedagogique = new InscriptionPedagogique(id_inscription_pedagogique,
-						inscription_administrative.getAnnee_academique(), false, TypeInscription.ELEMENT);
+						annee, false, TypeInscription.ELEMENT);
 				inscriptionPedagogiqueRepository.save(inscription_pedagogique);
-				NoteElement note = new NoteElement(id_inscription_pedagogique, 0d,
-						inscription_administrative.getAnnee_academique());
+				NoteElement note = new NoteElement(id_inscription_pedagogique, 0d, annee);
 				noteElementRepository.save(note);
 			} else {
+				System.out.println("sds");
 				throw new Exception();
 			}
 		} catch (Exception e) {
@@ -164,22 +168,24 @@ public class InscriptionPedagogiqueService implements InscriptionPedagogiqueInte
 	@Override
 	public List<InscriptionPedagogique> prepareInscriptionListpage(Long id_etudiant)
 			throws DataNotFoundExceptions, EntityNotFoundException {
-		List<InscriptionPedagogique> listes_inscriptions = inscriptionPedagogiqueRepository.findAll();
-		List<InscriptionPedagogique> listes_inscriptions_filtred = listes_inscriptions.stream()
-				.filter(inscription -> inscription.getEtudiant().getId_etudiant().equals(id_etudiant))
-				.collect(Collectors.toList());
-		if (listes_inscriptions_filtred.size() <= 0)
-			throw new DataNotFoundExceptions("La liste des inscription est vide");
-		return listes_inscriptions_filtred;
-
-	}
-
-	@Override
-	public void suprimerInscriptionPedagogique(Long id_etudiant, Long id_element) throws EntityNotFoundException {
 		Etudiant etudiant = etudiantRepository.getOne(id_etudiant);
-		Element element = elementRepository.getOne(id_element);
-		ComposedInscriptionPedagogique composed = new ComposedInscriptionPedagogique(etudiant, element);
-		inscriptionPedagogiqueRepository.deleteById(composed);
-	}
+		List<InscriptionPedagogique> listes_inscriptions = inscriptionPedagogiqueRepository.getInscriptionsPedagogiqueByEtudiant(etudiant);
+		if (listes_inscriptions.size() <= 0)
+			throw new DataNotFoundExceptions("La liste des inscription est vide");
+		return listes_inscriptions;
 
+	}
+	
+	@Override
+	public ArrayList<Object> listerInscriptionsPedagogique() throws DataNotFoundExceptions {
+		List<Filiere> filieres = filiereRepository.findAll();
+		ArrayList<Object> list = new ArrayList<Object>();
+		list.add(anneeAcademiqueRepository.findAll());
+		list.add(filieres);
+		list.add(converter.convertSemestre(semestreRepository.findAll()));
+		list.add(converter.convertModulee(moduleRepository.findAll()));
+		list.add(inscriptionPedagogiqueRepository.findAll());
+
+		return list;
+	}
 }

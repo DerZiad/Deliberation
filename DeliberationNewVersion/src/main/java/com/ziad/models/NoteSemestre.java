@@ -103,7 +103,7 @@ public class NoteSemestre implements Comparable<NoteSemestre>, NoteNorm {
 				etat = Etat.COMPONSE.name();
 				isValid = true;
 			} else {
-				etat = Etat.ELIMINIE.name();
+				etat = Etat.NONVALID.name();
 			}
 		}
 
@@ -142,7 +142,7 @@ public class NoteSemestre implements Comparable<NoteSemestre>, NoteNorm {
 		if (note >= idCompose.getSemestre().getValidation()) {
 			etat = Etat.VALIDE.name();
 		} else {
-			etat = Etat.ELIMINIE.name();
+			etat = Etat.NONVALID.name();
 		}
 
 	}

@@ -15,6 +15,7 @@ public class FiliereAdaptater implements JsonSerializer<Filiere>{
 		JsonObject json = new JsonObject();
 		json.addProperty("id_filiere", src.getId_filiere());
 		json.addProperty("libelle_filiere", src.getNom_filiere());
+		json.addProperty("id_etablissement", src.getEtablissement().getId_etablissement());
 		return json;
 	}
 

@@ -239,11 +239,9 @@
 							<div class="position-relative form-group">
 								<label for="annee_academique" class="">Année academique</label>
 								<select id="annee_academique" name="annee_academique"
-									class="form-control" required>
-									<c:forEach var="annee" items="${annees_academiques}">
-										<option value="${annee.id_annee_academique }">${annee.annee_academique}/${annee.annee_academique + 1}
-										</option>
-									</c:forEach>
+									class="form-control">
+									<option value="${ia.annee_academique }">${ia.annee_academique}
+									</option>
 								</select>
 							</div>
 						</div>
@@ -296,8 +294,7 @@
 								<div class="row">
 									<div class="col-md-6">
 										<img style='display: block; width: 100px; height: 100px;'
-											id='base64image'
-											src='data:image/jpeg;base64,${ia.encodedAn}' />
+											id='base64image' src='data:image/jpeg;base64,${ia.encodedAn}' />
 									</div>
 									<div class="col-md-6">
 										<div class="col-md-6">
@@ -317,8 +314,7 @@
 								<div class="row">
 									<div class="col-md-6">
 										<img style='display: block; width: 100px; height: 100px;'
-											id='base64image'
-											src='data:image/jpeg;base64,${ia.encodedRv}' />
+											id='base64image' src='data:image/jpeg;base64,${ia.encodedRv}' />
 									</div>
 									<div class="col-md-6">
 										<div class="col-md-6">

@@ -11,6 +11,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.ziad.enums.TypeNote;
 import com.ziad.models.Etudiant;
 
 public class ExcelExport {
@@ -18,74 +19,74 @@ public class ExcelExport {
 	private XSSFWorkbook workbook;
 	private XSSFSheet sheet;
 	private List<Etudiant> etudiants;
-	private String nom_element;
-	private Long id_element;
-	
-	public ExcelExport(List<Etudiant> etudiants,String nom_element,Long id_element) {
+
+	public ExcelExport(List<Etudiant> etudiants) {
 		super();
 		this.etudiants = etudiants;
 		workbook = new XSSFWorkbook();
 		sheet = workbook.createSheet("Etudiants");
-		this.nom_element = nom_element;
-		this.id_element = id_element;
 	}
 
-	public void export(HttpServletResponse response) throws IOException{
-		writeHeaderRow();
+	public void export(HttpServletResponse response, TypeNote note) throws IOException {
+		writeHeaderRow(note);
 		fillStudent();
 		ServletOutputStream outputStream = response.getOutputStream();
 		workbook.write(outputStream);
 		outputStream.close();
 	}
 
-	private void writeHeaderRow() {
-		
-		Row element = sheet.createRow(0);
-		
-		Cell celle1 = element.createCell(0);
-		celle1.setCellValue("Nom element");
-		
-		Cell celle2 = element.createCell(1);
-		celle2.setCellValue(nom_element);
-		
-		Cell celle3 = element.createCell(2);
-		celle3.setCellValue(id_element);
-		
-		
-		Row row = sheet.createRow(1);
-		
-		
+	private void writeHeaderRow(TypeNote note) {
+
+		Row row = sheet.createRow(0);
+
 		Cell cell = row.createCell(0);
 		cell.setCellValue("Massar");
-		
+
 		Cell cell1 = row.createCell(1);
 		cell1.setCellValue("Nom");
-		
+
 		Cell cell2 = row.createCell(2);
 		cell2.setCellValue("Prenom");
+
+		if (note.equals(TypeNote.EXAM_ORDINAIRE)) {
+			Cell cell3 = row.createCell(3);
+			cell3.setCellValue(TypeNote.CONTROL.name());
+
+			Cell cell4 = row.createCell(4);
+			cell4.setCellValue(TypeNote.TP.name());
+			Cell cell5 = row.createCell(5);
+			cell5.setCellValue(note.name());
+		}else {
+			Cell cell5 = row.createCell(3);
+			cell5.setCellValue(note.name());
+		}
+
 		
-		Cell cell3 = row.createCell(3);
-		cell3.setCellValue("Note ");
-		
+
 	}
-	
+
 	private void fillStudent() {
 		for (int i = 0; i < etudiants.size(); i++) {
-			Row row = sheet.createRow(i+2);
-			
+			Row row = sheet.createRow(i + 1);
+
 			Cell cell = row.createCell(0);
 			cell.setCellValue(etudiants.get(i).getMassar_edu());
-			
+
 			Cell cell1 = row.createCell(1);
 			cell1.setCellValue(etudiants.get(i).getFirst_name_fr());
-			
+
 			Cell cell2 = row.createCell(2);
 			cell2.setCellValue(etudiants.get(i).getLast_name_fr());
-			
+
 			Cell cell3 = row.createCell(3);
 			cell3.setCellValue("");
+
+			Cell cell4 = row.createCell(4);
+			cell4.setCellValue("");
+
+			Cell cell5 = row.createCell(5);
+			cell5.setCellValue("");
 		}
 	}
-	
-	
+
 }

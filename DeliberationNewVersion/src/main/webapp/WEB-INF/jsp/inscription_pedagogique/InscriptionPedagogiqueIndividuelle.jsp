@@ -16,6 +16,16 @@
 					<div class="form-row">
 						<div class="col-md-6">
 							<div class="position-relative form-group">
+								<label for="name" class="">Années Academiques</label> <select name="annee"
+									id="exampleSelect" class="form-control">
+									<c:forEach var="annee" items="${annees}">
+										<option value="${annee.id_annee_academique }">${annee }</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="position-relative form-group">
 								<label for="name" class="">Type inscription pedagogique</label><select
 									name="type-inscription" id="exampleSelect" class="form-control">
 									<!--  Noch nicht -->

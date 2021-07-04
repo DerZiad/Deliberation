@@ -24,7 +24,7 @@ public interface ProfesseurInterface {
 	 * Excel generater
 	 **/
 
-	public void generateExcel(Long id_element, Long id_annee, HttpServletResponse response)
+	public void generateExcel(Long id_element, Long id_annee, HttpServletResponse response,String typeNote)
 			throws EntityNotFoundException, IOException;
 	
 }

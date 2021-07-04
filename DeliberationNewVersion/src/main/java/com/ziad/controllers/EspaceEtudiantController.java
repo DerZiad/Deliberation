@@ -44,22 +44,25 @@ public class EspaceEtudiantController {
 	}
 
 	@GetMapping("/consulter/download")
-	public ModelAndView getPageEtudiant(@RequestParam("id_semestre") Long id_semestre, HttpServletResponse response)
+	public ModelAndView getPageEtudiant(@RequestParam("id_semestre") Long id_semestre,
+			@RequestParam("idAnneeAcademique") Long idAnneeAcademique, HttpServletResponse response)
 			throws EntityNotFoundException, DataNotFoundExceptions, DocumentException, IOException {
-		etudiantMetier.generateReleveNote(id_semestre, response);
+		etudiantMetier.generateReleveNote(id_semestre, idAnneeAcademique, response);
 		ModelAndView model = new ModelAndView(REDIRECT_CONSULT_CERTIFICAT);
 		return model;
 	}
 
 	@PostMapping("/consulter")
-	public ModelAndView filterSemestre(@RequestParam("id_semestre") Long id_semestre)
+	public ModelAndView filterSemestre(@RequestParam("id_semestre") Long id_semestre,
+			@RequestParam("idAnneeAcademique") Long idAnneeAcademique)
 			throws EntityNotFoundException, DataNotFoundExceptions {
 		ModelAndView model = new ModelAndView(PAGE_ETUDIANT);
 		model.addObject(ATTRIBUT_SEMESTRES, etudiantMetier.listerSemestres());
-		List<Object> besoins = etudiantMetier.getNotes(id_semestre);
+		List<Object> besoins = etudiantMetier.getNotes(id_semestre, idAnneeAcademique);
 		model.addObject(ATTRIBUT_NOTES_MODULE, besoins.get(1));
 		model.addObject(ATTRIBUT_NOTE_SEMESTRE, besoins.get(0));
-		model.addObject("url","/etudiant/consulter/download?id_semestre="+id_semestre);;
+		model.addObject("url", "/etudiant/consulter/download?id_semestre=" + id_semestre);
+		;
 		return model;
 	}
 

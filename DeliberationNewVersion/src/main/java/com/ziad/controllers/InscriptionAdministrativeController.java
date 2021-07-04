@@ -40,6 +40,7 @@ public class InscriptionAdministrativeController {
 	private final static String ATTRIBUT_LIST_SEMESTRES_JSON = "semestresjson";
 	private final static String ATTRIBUT_LIST_MODULES_JSON = "modulesjson";
 	private final static String ATTRIBUT_LIST_ANNEE_ACADEMIQUES = "annees_academiques";
+	private final static String ATTRIBUT_ANNEE_ACADEMIQUE = "annee";
 	private final static String ATTRIBUT_INSCRIPTION_EN_LIGNE = "inscriptionenligne";
 	private final static String ATTRIBUT_LIST_INSCRIPTIONS_ADMINISTRATIVES = "InscriptionAssociative";
 	private final static String ATTRIBUT_ETUDIANT = "etudiant";
@@ -67,7 +68,7 @@ public class InscriptionAdministrativeController {
 		ArrayList<Object> besoins = inscription_metier.prepareInscriptionDatas();
 		model.addObject(ATTRIBUT_LIST_ETUDIANTS, (List<Etudiant>) besoins.get(0));
 		model.addObject(ATTRIBUT_LIST_FILIERES, (List<Filiere>) besoins.get(1));
-		model.addObject(ATTRIBUT_LIST_ANNEE_ACADEMIQUES, (List<AnneeAcademique>) besoins.get(2));
+		model.addObject(ATTRIBUT_ANNEE_ACADEMIQUE,besoins.get(2));
 		model.addObject(ATTRIBUT_INSCRIPTION_EN_LIGNE, idInscription);
 		return model;
 	}

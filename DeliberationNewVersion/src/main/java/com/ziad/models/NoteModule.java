@@ -85,19 +85,13 @@ public class NoteModule implements NoteNorm {
 		this.etat = etat;
 	}
 
-	public void delibererModule(DeliberationType session) {
+	public void delibererModule() {
 		if (note >= idComposed.getModule().getValidation()) {
 			isValid = true;
 			etat = Etat.VALIDE.name();
 		} else {
-			if (note >= idComposed.getModule().getEliminatoire()) {
-				etat = Etat.COMPONSE.name();
-			} else {
-				etat = Etat.ELIMINIE.name();
-			}
-			if (session.equals(DeliberationType.ORDINAIRE)) {
-				etat = DeliberationType.RATTRAPAGE.name();
-			}
+			isValid = false;
+			etat = Etat.NONVALID.name();
 		}
 	}
 
@@ -128,7 +122,7 @@ public class NoteModule implements NoteNorm {
 			if (note >= idComposed.getModule().getEliminatoire()) {
 				etat = Etat.COMPONSE.name();
 			} else {
-				etat = Etat.ELIMINIE.name();
+				etat = Etat.NONVALID.name();
 			}
 		}
 

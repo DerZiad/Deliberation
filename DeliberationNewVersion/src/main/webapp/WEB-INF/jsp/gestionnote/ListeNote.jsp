@@ -32,7 +32,7 @@
 
 						<div class="col-md-9">
 							<div class="position-relative form-group">
-								<button class="btn btn-success">Valider</button>
+								<button class="btn btn-success">Discuss</button>
 							</div>
 
 						</div>

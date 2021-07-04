@@ -8,23 +8,29 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Element;
+import com.ziad.models.Etablissement;
 import com.ziad.models.Etape;
+import com.ziad.models.Etudiant;
 import com.ziad.models.Filiere;
 import com.ziad.models.InscriptionEnLigne;
 import com.ziad.models.InscriptionPedagogique;
 import com.ziad.models.Modulee;
+import com.ziad.models.NoteElement;
 import com.ziad.models.NoteEtape;
 import com.ziad.models.NoteModule;
 import com.ziad.models.NoteNorm;
 import com.ziad.models.NoteSemestre;
 import com.ziad.models.Semestre;
 import com.ziad.utilities.adaptater.AnneeAcademiqueAdaptater;
+import com.ziad.utilities.adaptater.EtablissementAdaptater;
 import com.ziad.utilities.adaptater.EtapeAdaptater;
+import com.ziad.utilities.adaptater.EtudiantAdaptater;
 import com.ziad.utilities.adaptater.FiliereAdaptater;
 import com.ziad.utilities.adaptater.InscriptionEnLigneAdaptater;
 import com.ziad.utilities.adaptater.InscriptionPedagogiqueAdaptater;
 import com.ziad.utilities.adaptater.ModuleAdaptater;
 import com.ziad.utilities.adaptater.NormalAdapt;
+import com.ziad.utilities.adaptater.NoteElementAdaptater;
 import com.ziad.utilities.adaptater.NotesEtapeAdaptater;
 import com.ziad.utilities.adaptater.NotesModuleAdaptater;
 import com.ziad.utilities.adaptater.NotesSemestreAdaptater;
@@ -123,14 +129,31 @@ public class JSONConverter{
 		return gson.toJson(notes);
 	}
 	
+	public String convertNotesElement(List<NoteElement> notes) {
+		Gson gson = gsonBuilder.registerTypeAdapter(NoteElement.class,new NoteElementAdaptater()).create();
+		return gson.toJson(notes);
+	}
+	
 	public String convertNotesNormal(NoteNorm note) {
-		Gson gson = gsonBuilder.registerTypeAdapter(NormalAdapt.class,new NormalAdapt()).create();
+		Gson gson = gsonBuilder.registerTypeAdapter(NoteNorm.class,new NormalAdapt()).create();
 		return gson.toJson(note);
 	}
 	
 	public String convertNotesNormal(List<NoteNorm> notes) {
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		Gson gson = gsonBuilder.registerTypeAdapter(NormalAdapt.class,new NormalAdapt()).create();
+		Gson gson = gsonBuilder.registerTypeAdapter(NoteNorm.class,new NormalAdapt()).create();
 		return gson.toJson(notes);
+	}
+	
+	public String convertEtudiants(List<Etudiant> etudiants) {
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		Gson gson = gsonBuilder.registerTypeAdapter(Etudiant.class,new EtudiantAdaptater()).create();
+		return gson.toJson(etudiants);
+	}
+	
+	public String convertEtablissement(List<Etablissement> etablissements) {
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		Gson gson = gsonBuilder.registerTypeAdapter(Etablissement.class, new EtablissementAdaptater()).create();
+		return gson.toJson(etablissements);
 	}
 }

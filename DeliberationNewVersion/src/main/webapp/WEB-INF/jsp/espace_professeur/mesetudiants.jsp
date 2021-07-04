@@ -16,12 +16,23 @@
 					method="POST">
 					<div class="col-md-6">
 						<div class="position-relative form-group">
-							<label for="name" class="">Années academiques</label> <select
-								name="annee" id="exampleSelect" class="form-control">
-								<c:forEach var="annee" items="${annees}">
-									<option value="${annee.id_annee_academique }">${annee.annee_academique }</option>
-								</c:forEach>
-							</select>
+							<label for="name" class="">Année academique</label> 
+							<select id="annee_academique" name="annee" class="form-control">
+									<option value="${annee.id_annee_academique}" selected>${annee}</option>
+								</select>
+								
+								
+						</div>
+						<div class="position-relative form-group">
+							<label for="type" class="">Type</label>
+							<div>
+								<input type="radio" id="box" name="type" value="${ordinaire}"
+									checked> <label for="box">Ordinaire</label>
+							</div>
+							<div>
+								<input type="radio" id="box" name="type" value="${rattrapage}"
+									checked> <label for="box">Rattrapage</label>
+							</div>
 						</div>
 						<div class="position-relative form-group">
 							<button class="btn btn-success">Download excel</button>
@@ -50,26 +61,5 @@
 				</table>
 			</div>
 		</div>
-		<script>
-var annees = JSON.parse('${anneesjson}');
-var inscriptions_pedagogiques = JSON.parse('${inscriptionsjson}');
-jQuery(document).ready(function(){
-	$('select[name=annee]').change(function(){
-		var list_value = $('select[name=annee]').val();
-		var remplir = "";
-		for (var i = 0;i<inscriptions_pedagogiques.length;i++) {
-			if(inscriptions_pedagogiques[i].id_annee_academique == list_value){
-				remplir = remplir + '<tr>' + '\n';
-				remplir = remplir + '<td><a style="color: black" href="#">' + inscriptions_pedagogiques[i].massar + '</a></td> \n';
-				remplir = remplir + '<td><a style="color: black" href="#">' + inscriptions_pedagogiques[i].nom_etudiant + '</a></td> \n';
-				remplir = remplir + '<td><a style="color: black" href="#">' + inscriptions_pedagogiques[i].prenom_etudiant + '</a></td> \n';
-				remplir = remplir + '</tr>' + '\n';
-			}
-		}
-		$('tbody[id=etudiants]').html(remplir);
-	});
-});
-</script>
-
 	</layout:put>
 </layout:extends>

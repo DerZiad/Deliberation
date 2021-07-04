@@ -12,5 +12,5 @@ import com.ziad.models.AnneeAcademique;
 public interface AnnneAcademiqueRepository extends JpaRepository<AnneeAcademique,Long>{
 
 	@Query("select a from AnneeAcademique a where a.annee_academique = :annee")
-	List<AnneeAcademique> getAnneeAcademique(@Param("annee") int annee);	
+	AnneeAcademique getAnneeAcademique(@Param("annee") int annee);	
 }

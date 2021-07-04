@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Deliberation;
+import com.ziad.models.Element;
 import com.ziad.models.Etape;
 import com.ziad.models.Modulee;
 import com.ziad.models.Semestre;
@@ -25,6 +26,10 @@ public interface DeliberationRepository extends JpaRepository<Deliberation, Long
 
 	@Query("select d from Deliberation d where d.etape =:etape and anneeAcademique =:annee")
 	List<Deliberation> getDeliberationByEtapeAnnneAcademique(@Param("etape") Etape Etape,
+			@Param("annee") AnneeAcademique annee);
+	
+	@Query("select d from Deliberation d where d.element =:element and anneeAcademique =:annee")
+	List<Deliberation> getDeliberationByElementAnnneAcademique(@Param("element") Element Element,
 			@Param("annee") AnneeAcademique annee);
 
 }

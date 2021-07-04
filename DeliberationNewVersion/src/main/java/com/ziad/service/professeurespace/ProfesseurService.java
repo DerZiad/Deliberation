@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.ziad.enums.TypeNote;
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Element;
@@ -26,6 +27,7 @@ import com.ziad.repositories.ElementRepository;
 import com.ziad.repositories.InscriptionPedagogiqueRepository;
 import com.ziad.repositories.ProfesseurRepository;
 import com.ziad.repositories.UserRepository;
+import com.ziad.utilities.Algorithms;
 import com.ziad.utilities.ExcelExport;
 import com.ziad.utilities.JSONConverter;
 
@@ -51,7 +53,10 @@ public class ProfesseurService implements ProfesseurInterface {
 	private ProfesseurRepository professeurRepository;
 
 	private ExcelExport generator_excel;
-
+	
+	@Autowired
+	private Algorithms algorithmeRepository;
+	
 	public List<Element> listerElements() throws DataNotFoundExceptions {
 		/**
 		 * Recuperer l'utilisateur
@@ -70,29 +75,35 @@ public class ProfesseurService implements ProfesseurInterface {
 	}
 
 	public ArrayList<Object> listerEtudiants(Long id_element) throws DataNotFoundExceptions, EntityNotFoundException {
+		AnneeAcademique anneeActuel = algorithmeRepository.grabAnneeAcademiqueActuel();
+		
 		Element element = elementRepository.getOne(id_element);
 		List<InscriptionPedagogique> inscriptions_pedagogiques = inscriptionPedagogiqueRepository
-				.getInscriptionsPedagogiqueByElement(element);
-		if (inscriptions_pedagogiques.size() == 0)
-			throw new DataNotFoundExceptions("La liste des étudiants est vide");
+				.getInscriptionPedagogiquesByElementAndAnneeAcademique(element,anneeActuel);
 		ArrayList<Object> besoins = new ArrayList<Object>();
 		besoins.add(inscriptions_pedagogiques);
-		besoins.add(converter.convertInscriptionsPedagogiques(inscriptions_pedagogiques));
-		besoins.add(anneeAcademiqueRepository.findAll());
-		besoins.add(converter.convertAnneesAcademiques(anneeAcademiqueRepository.findAll()));
+		besoins.add(anneeActuel);
 		besoins.add(element);
 		return besoins;
 	}
 
 	@Override
-	public void generateExcel(Long id_element, Long id_annee, HttpServletResponse response)
+	public void generateExcel(Long id_element, Long id_annee, HttpServletResponse response,String typeNote)
 			throws EntityNotFoundException, IOException {
 		Element element = elementRepository.getOne(id_element);
 		AnneeAcademique annee = anneeAcademiqueRepository.getOne(id_annee);
 		List<Etudiant> etudiants = inscriptionPedagogiqueRepository.getEtudiantsByElementAndAnneeAcademique(element,
 				annee);
-		generator_excel = new ExcelExport(etudiants, element.getLibelle_element(), element.getId_element());
-		generator_excel.export(response);
+		TypeNote note = null;
+		if(typeNote.equals(TypeNote.EXAM_ORDINAIRE.name())) {
+			note = TypeNote.EXAM_ORDINAIRE;
+		}else {
+			note = TypeNote.EXAM_RATTRAPAGE;
+		}
+		
+		
+		generator_excel = new ExcelExport(etudiants);
+		generator_excel.export(response,note);
 
 	}
 

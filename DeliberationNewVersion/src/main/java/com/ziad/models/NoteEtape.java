@@ -95,7 +95,7 @@ public class NoteEtape implements Serializable, NoteNorm {
 			etat = Etat.VALIDE.name();
 			isValid = true;
 		} else
-			etat = Etat.ELIMINIE.name();
+			etat = Etat.NONVALID.name();
 	}
 
 	public double arrondir(Double note) {
@@ -108,7 +108,7 @@ public class NoteEtape implements Serializable, NoteNorm {
 			etat = Etat.VALIDE.name();
 			isValid = true;
 		} else
-			etat = Etat.ELIMINIE.name();
+			etat = Etat.NONVALID.name();
 
 	}
 
