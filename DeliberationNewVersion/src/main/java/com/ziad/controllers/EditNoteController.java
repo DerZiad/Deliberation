@@ -20,7 +20,7 @@ import com.ziad.enums.TypeNote;
 import com.ziad.exceptions.CSVReaderOException;
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.NoteNorm;
-import com.ziad.service.administrateur.editnote.EditNoteInterface;
+import com.ziad.services.interfaces.EditNoteInterface;
 
 @Controller
 @RequestMapping("/gestionnote")

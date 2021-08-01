@@ -36,7 +36,7 @@ import com.ziad.models.Deliberation;
 import com.ziad.models.Etape;
 import com.ziad.models.Filiere;
 import com.ziad.models.Semestre;
-import com.ziad.service.deliberation.DeliberationInterface;
+import com.ziad.services.interfaces.DeliberationInterface;
 import com.ziad.utilities.JSONConverter;
 
 @Controller
@@ -68,7 +68,7 @@ public class DeliberationController {
 	private final static String ATTRIBUT_DELIBERATION = "deliberation";
 	private final static String ATTRIBUT_NOTES_MODULE = "notejson";
 
-	private final static String PATH_DELIBERATION_LIST = "admin/ResultatModule";
+	private final static String PATH_DELIBERATION_LIST = "admin/ResultatDeliberation";
 	private final static String PATH_DELIBERATIONS_LIST = "admin/listesDeliberation";
 
 	private final static String REDIRECT_DELIBERATION_LIST = "redirect:/delib/listerDelib?id=%d";
@@ -247,26 +247,29 @@ public class DeliberationController {
 			throws EntityNotFoundException, DataNotFoundExceptions {
 		ErrorException error = null;
 		ModelAndView model = new ModelAndView(PAGE_DELIBERATION_PAR_MODULE);
-		List<Object> besoins = deliberationMetier.getBesoinPageDeliberationParModule(req);
-		model.addObject(ATTRIBUT_FILIERES, (List<Filiere>) besoins.get(0));
-		model.addObject(ATTRIBUT_ANNEE_ACADEMIQUE, (AnneeAcademique) besoins.get(1));
-		model.addObject(ATTRIBUT_SEMESTRES, (List<Semestre>) besoins.get(2));
-		model.addObject(ATTRIBUT_MODULES_JSON, (String) besoins.get(3));
-		model.addObject(ATTRIBUT_SEMESTRES_JSON, (String) besoins.get(4));
 		try {
-			deliberationMetier.delibererModule(idModule, idAnneeAcademique);
-			model = new ModelAndView();
-			System.out.println("suceess");
+			Deliberation delib = deliberationMetier.delibererModule(idModule, idAnneeAcademique);
+			model = new ModelAndView(String.format(REDIRECT_DELIBERATION_LIST, delib.getIdDeliberation()));
 		} catch (DeliberationModuleNotAllowed e) {
 			error = new ErrorException("Erreur dans " + e.getModule().getLibelle_module(), e.getMessage());
 			model.addObject(ATTRIBUT_ERROR, error);
+			List<Object> besoins = deliberationMetier.getBesoinPageDeliberationParModule(req);
+			model.addObject(ATTRIBUT_FILIERES, (List<Filiere>) besoins.get(0));
+			model.addObject(ATTRIBUT_ANNEE_ACADEMIQUE, (AnneeAcademique) besoins.get(1));
+			model.addObject(ATTRIBUT_SEMESTRES, (List<Semestre>) besoins.get(2));
+			model.addObject(ATTRIBUT_MODULES_JSON, (String) besoins.get(3));
+			model.addObject(ATTRIBUT_SEMESTRES_JSON, (String) besoins.get(4));
 			System.out.println("ErreurMod");
 		} catch (DeliberationElementNotAllowed e1) {
-			error = new ErrorException("Erreur dans " + e1.getElement().getLibelle_element(), e1.getMessage());
+			List<Object> besoins = deliberationMetier.getBesoinPageDeliberationParModule(req);
+			model.addObject(ATTRIBUT_FILIERES, (List<Filiere>) besoins.get(0));
+			model.addObject(ATTRIBUT_ANNEE_ACADEMIQUE, (AnneeAcademique) besoins.get(1));
+			model.addObject(ATTRIBUT_SEMESTRES, (List<Semestre>) besoins.get(2));
+			model.addObject(ATTRIBUT_MODULES_JSON, (String) besoins.get(3));
+			model.addObject(ATTRIBUT_SEMESTRES_JSON, (String) besoins.get(4));
 			model.addObject(ATTRIBUT_ERROR, error);
 			return model;
 		}
-
 		return model;
 	}
 
@@ -289,6 +292,27 @@ public class DeliberationController {
 		model.addObject(ATTRIBUT_ANNEE_ACADEMIQUE, (AnneeAcademique) besoins.get(1));
 		model.addObject(ATTRIBUT_SEMESTRES, (List<Semestre>) besoins.get(2));
 		model.addObject(ATTRIBUT_SEMESTRES_JSON, (String) besoins.get(3));
+		return model;
+	}
+	
+	@PostMapping("/deliberationsemestre")
+	public ModelAndView delibererSemestre(@RequestParam("element") Long idSemestre,
+			@RequestParam("annee") Long idAnneeAcademique, HttpServletRequest req)
+			throws EntityNotFoundException, DataNotFoundExceptions {
+		ErrorException error = null;
+		ModelAndView model = new ModelAndView(PAGE_DELIBERATION_PAR_MODULE);
+		try {
+			Deliberation delib = deliberationMetier.delibererSemestre(idSemestre, idAnneeAcademique);
+			model = new ModelAndView(String.format(REDIRECT_DELIBERATION_LIST, delib.getIdDeliberation()));
+		} catch (DeliberationSemestreNotAllowed e) {
+			error = new ErrorException("Erreur dans " + e.getModule().getLibelle_module(), e.getMessage());
+			model.addObject(ATTRIBUT_ERROR, error);
+			List<Object> besoins = deliberationMetier.getBesoinPageDeliberationParSemestre(req);
+			model.addObject(ATTRIBUT_FILIERES, (List<Filiere>) besoins.get(0));
+			model.addObject(ATTRIBUT_ANNEE_ACADEMIQUE, (AnneeAcademique) besoins.get(1));
+			model.addObject(ATTRIBUT_SEMESTRES, (List<Semestre>) besoins.get(2));
+			model.addObject(ATTRIBUT_SEMESTRES_JSON, (String) besoins.get(3));
+		}
 		return model;
 	}
 

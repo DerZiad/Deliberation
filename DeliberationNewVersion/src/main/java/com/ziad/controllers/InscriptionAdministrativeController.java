@@ -27,7 +27,7 @@ import com.ziad.models.Etudiant;
 import com.ziad.models.Filiere;
 import com.ziad.models.InscriptionAdministrative;
 import com.ziad.models.InscriptionEnLigne;
-import com.ziad.service.administrateur.inscription.administrative.InscritpionAdministrativeInterface;
+import com.ziad.services.interfaces.InscritpionAdministrativeInterface;
 
 @Controller
 @RequestMapping("/admin")

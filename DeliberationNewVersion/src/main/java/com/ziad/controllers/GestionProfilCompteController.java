@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ziad.models.User;
-import com.ziad.service.gestioncompte.GestionCompteService;
+import com.ziad.services.GestionCompteService;
 
 @Controller
 @RequestMapping("/gestioncompte")

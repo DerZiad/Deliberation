@@ -17,6 +17,7 @@
 						<tr>
 							<th class="th-sm">Deliberation</th>
 							<th class="th-sm">Année academique</th>
+							<th class="th-sm">Filiere</th>
 							<th class="th-sm">Type déliberation</th>
 							<th class="th-sm">Element</th>
 							<th class="th-sm">Action</th>
@@ -25,22 +26,37 @@
 					<tbody id="notes">
 						<c:forEach var="deliberation" items="${deliberations}">
 							<tr>
-								<td style="color: black">${deliberation.delibered ? "Rattrapage":"Ordinaire"}</td>
+								<c:if test="${deliberation.element ne null}">
+									<td style="color: black">${deliberation.delibered ? "Rattrapage":"Ordinaire"}</td>
+								</c:if>
+								<c:if test="${deliberation.element eq null}">
+									<td>Deliberation</td>
+								</c:if>
 								<td style="color: black">${deliberation.anneeAcademique.annee_academique}</td>
+								<c:if test="${deliberation.element ne null }">
+									<td style="color: black">${deliberation.element.module.
+									semestre.etape.filiere.nom_filiere}</td>
+									<td style="color: black">Element</td>
+									<td style="color: black">${deliberation.element.libelle_element }</td>
+
+								</c:if>
 								<c:if test="${deliberation.module ne null }">
+									<td style="color: black">${deliberation.module.
+									semestre.etape.filiere.nom_filiere}</td>
 									<td style="color: black">Module</td>
-									<td style="color: black">${deliberation.module.libelle_module }
-										${deliberation.semestre.etape.filiere.nom_filiere}</td>
+									<td style="color: black">${deliberation.module.libelle_module }</td>
+
 								</c:if>
 								<c:if test="${deliberation.etape ne null }">
+									<td style="color: black">${deliberation.etape
+									.filiere.nom_filiere}</td>
 									<td style="color: black">Etape</td>
-									<td style="color: black"></td>
+									<td style="color: black">${deliberation.etape.libelle_etape}</td>
 								</c:if>
 								<c:if test="${deliberation.semestre ne null }">
+									<td>${deliberation.semestre.etape.filiere.nom_filiere}</td>
 									<td style="color: black">Semestre</td>
-									<td style="color: black">${deliberation.semestre.libelle_semestre }
-										${deliberation.semestre.etape.filiere.nom_filiere}
-										${deliberation.semestre.etape.filiere.nom_filiere}</td>
+									<td style="color: black">${deliberation.semestre.libelle_semestre }</td>
 								</c:if>
 								<td><a
 									href="/delib/listerDelib?id=${deliberation.idDeliberation }"

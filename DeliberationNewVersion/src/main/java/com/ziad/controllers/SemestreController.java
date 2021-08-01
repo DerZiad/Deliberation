@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ziad.exceptions.DataNotFoundExceptions;
-import com.ziad.service.administrateur.semestre.SemestreInterface;
+import com.ziad.services.interfaces.SemestreInterface;
 
 @Controller
 @RequestMapping("/admin/filiere/profile/{id_filiere}/etapes/semestres")

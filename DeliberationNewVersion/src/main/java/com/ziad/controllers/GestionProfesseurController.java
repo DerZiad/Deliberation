@@ -18,7 +18,7 @@ import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Element;
 import com.ziad.models.Filiere;
 import com.ziad.models.Professeur;
-import com.ziad.service.administrateur.gestionprofesseur.GestionProfesseurInterface;
+import com.ziad.services.interfaces.GestionProfesseurInterface;
 
 @Controller
 @RequestMapping("/admin")

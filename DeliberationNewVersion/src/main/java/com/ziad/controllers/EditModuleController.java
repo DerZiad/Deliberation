@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Element;
 import com.ziad.models.Modulee;
-import com.ziad.service.professeurespace.responsable.module.EditModuleInterface;
+import com.ziad.services.interfaces.EditModuleInterface;
 
 @Controller
 @RequestMapping("/professeur/responsablemodule")

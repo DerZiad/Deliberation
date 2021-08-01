@@ -20,7 +20,7 @@ import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Element;
 import com.ziad.models.InscriptionPedagogique;
-import com.ziad.service.professeurespace.ProfesseurInterface;
+import com.ziad.services.interfaces.ProfesseurInterface;
 
 @Controller
 @RequestMapping("/professeur")

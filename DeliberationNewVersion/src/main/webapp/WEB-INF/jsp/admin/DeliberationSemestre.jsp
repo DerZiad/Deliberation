@@ -27,11 +27,9 @@
 						</div>
 						<div class="col-md-6">
 							<div class="position-relative form-group">
-								<label for="name" class="">Années académiques</label> <select
+								<label for="name" class="">Année académique</label> <select
 									name="annee" id="exampleSelect" class="form-control">
-									<c:forEach var="annee" items="${annees}">
-										<option value="${annee.id_annee_academique }">${annee.annee_academique }</option>
-									</c:forEach>
+									<option value="${annee.id_annee_academique }">${annee.annee_academique }</option>
 								</select>
 							</div>
 						</div>

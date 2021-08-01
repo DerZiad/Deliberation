@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.lowagie.text.DocumentException;
 import com.ziad.exceptions.DataNotFoundExceptions;
-import com.ziad.service.etudiant.EspaceEtudiantInterface;
+import com.ziad.services.interfaces.EspaceEtudiantInterface;
 
 @Controller
 @RequestMapping("/etudiant")

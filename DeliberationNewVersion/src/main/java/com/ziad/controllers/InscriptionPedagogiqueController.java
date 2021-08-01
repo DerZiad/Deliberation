@@ -21,7 +21,7 @@ import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Filiere;
 import com.ziad.models.InscriptionAdministrative;
 import com.ziad.models.InscriptionPedagogique;
-import com.ziad.service.administrateur.inscription.pedagogique.InscriptionPedagogiqueInterface;
+import com.ziad.services.interfaces.InscriptionPedagogiqueInterface;
 
 @Controller
 @RequestMapping("/admin/inscriptionpedagogique")

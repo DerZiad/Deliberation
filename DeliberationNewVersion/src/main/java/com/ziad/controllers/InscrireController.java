@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ziad.enums.Gender;
 import com.ziad.exceptions.DataNotFoundExceptions;
-import com.ziad.service.inscriptionenligne.InscriptionInterface;
+import com.ziad.services.interfaces.InscriptionInterface;
 
 @Controller
 public class InscrireController {

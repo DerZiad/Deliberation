@@ -17,7 +17,7 @@
 	</div>
 	<div class="app-header__mobile-menu">
 		<div>
-			<button type="button"
+			<button type="button">
 				<span class="hamburger-box"> <span class="hamburger-inner"></span>
 				</span>
 			</button>

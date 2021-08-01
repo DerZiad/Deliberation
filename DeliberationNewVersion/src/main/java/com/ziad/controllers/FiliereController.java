@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Etablissement;
 import com.ziad.models.Filiere;
-import com.ziad.service.administrateur.filiere.FiliereInterface;
+import com.ziad.services.interfaces.FiliereInterface;
 
 @Controller
 @RequestMapping("/admin")

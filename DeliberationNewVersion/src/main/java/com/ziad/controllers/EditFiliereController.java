@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.models.Filiere;
-import com.ziad.service.professeurespace.responsable.filiere.EditFiliereInterface;
+import com.ziad.services.interfaces.EditFiliereInterface;
 
 @Controller
 public class EditFiliereController {
