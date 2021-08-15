@@ -32,7 +32,7 @@ public interface DeliberationInterface {
 	
 	public Deliberation delibererElementRattrapage(Long idDeliberation,MultipartFile file,Double coefficientExamRattrapage, Integer consideration)
 			throws InvalidCredinals, CSVReaderOException, IOException;
-	
+	public Deliberation delibererEtape(Long idEtape, Long idAnne) throws DeliberationEtapeNotAllowed;
 	
 	
 	

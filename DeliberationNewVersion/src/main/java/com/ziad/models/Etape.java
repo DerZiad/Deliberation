@@ -37,7 +37,7 @@ public class Etape implements Serializable,ElementNorm{
 	/**
 	 * Relations
 	 * */
-	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.PERSIST})
+	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
 	private Filiere filiere;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "etape")
@@ -63,6 +63,16 @@ public class Etape implements Serializable,ElementNorm{
 		this.validation = validation;
 		this.filiere = filiere;
 	}
+	
+	public Etape(Etape e) {
+		super();
+		this.id_etape = e.getId_etape();
+		this.libelle_etape = e.getLibelle_etape();
+		this.diplomante = e.isDiplomante();
+		this.validation = e.getValidation();
+		this.filiere = e.getFiliere();
+	}
+
 
 	public Long getId_etape() {
 		return id_etape;

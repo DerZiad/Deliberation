@@ -300,7 +300,7 @@ public class DeliberationController {
 			@RequestParam("annee") Long idAnneeAcademique, HttpServletRequest req)
 			throws EntityNotFoundException, DataNotFoundExceptions {
 		ErrorException error = null;
-		ModelAndView model = new ModelAndView(PAGE_DELIBERATION_PAR_MODULE);
+		ModelAndView model = new ModelAndView(PAGE_DELIBERATION_PAR_SEMESTRE);
 		try {
 			Deliberation delib = deliberationMetier.delibererSemestre(idSemestre, idAnneeAcademique);
 			model = new ModelAndView(String.format(REDIRECT_DELIBERATION_LIST, delib.getIdDeliberation()));
@@ -328,9 +328,30 @@ public class DeliberationController {
 		ModelAndView model = new ModelAndView(PAGE_DELIBERATION_PAR_ETAPE);
 		List<Object> besoins = deliberationMetier.getBesoinPageDeliberationParEtape(req);
 		model.addObject(ATTRIBUT_FILIERES, (List<Filiere>) besoins.get(0));
-		model.addObject(ATTRIBUT_ANNEE_ACADEMIQUE, (List<AnneeAcademique>) besoins.get(1));
+		model.addObject(ATTRIBUT_ANNEE_ACADEMIQUE, (AnneeAcademique) besoins.get(1));
 		model.addObject(ATTRIBUT_ETAPES, (List<Etape>) besoins.get(2));
 		model.addObject(ATTRIBUT_ETAPES_JSON, (String) besoins.get(3));
+		return model;
+	}
+	
+	@PostMapping("/deliberationetape")
+	public ModelAndView delibererEtape(@RequestParam("element") Long idEtape,
+			@RequestParam("annee") Long idAnneeAcademique, HttpServletRequest req)
+			throws EntityNotFoundException, DataNotFoundExceptions {
+		ErrorException error = null;
+		ModelAndView model = new ModelAndView(PAGE_DELIBERATION_PAR_ETAPE);
+		try {
+			Deliberation delib = deliberationMetier.delibererEtape(idEtape, idAnneeAcademique);
+			model = new ModelAndView(String.format(REDIRECT_DELIBERATION_LIST, delib.getIdDeliberation()));
+		} catch (DeliberationEtapeNotAllowed e) {
+			error = new ErrorException("Erreur dans " + e.getSemestre().getLibelle_semestre(), e.getMessage());
+			model.addObject(ATTRIBUT_ERROR, error);
+			List<Object> besoins = deliberationMetier.getBesoinPageDeliberationParEtape(req);
+			model.addObject(ATTRIBUT_FILIERES, (List<Filiere>) besoins.get(0));
+			model.addObject(ATTRIBUT_ANNEE_ACADEMIQUE, (AnneeAcademique) besoins.get(1));
+			model.addObject(ATTRIBUT_ETAPES, (List<Etape>) besoins.get(2));
+			model.addObject(ATTRIBUT_ETAPES_JSON, (String) besoins.get(3));
+		}
 		return model;
 	}
 

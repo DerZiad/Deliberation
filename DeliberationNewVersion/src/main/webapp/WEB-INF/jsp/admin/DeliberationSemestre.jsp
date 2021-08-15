@@ -11,7 +11,7 @@
 		<div class="main-card mb-3 card">
 			<div class="card-body">
 				<h5 class="card-title">Déliberation par semstre</h5>
-				<form class="" action="/delib/" method="POST">
+				<form class="" action="/delib/deliberationsemestre" method="POST">
 					<input type="hidden" name="type" value="parsemestre" />
 					<c:if test=""></c:if>
 					<div class="form-row">
@@ -46,7 +46,16 @@
 						<button class="mt-2 btn btn-primary col-md-12" type="submit">Valider</button>
 					</div>
 				</form>
-				<label for="element-class" class="element-class" style="color: red">${error}</label>
+				<c:if test="${error ne null }">
+					<br>
+					<br>
+					<div class="card alert alert-danger" role="alert">
+						<div class="card-body">
+							<h5 class="card-title">${error.title }</h5>
+							<p class="card-text">${error.getMessage() }</p>
+						</div>
+					</div>
+				</c:if>
 			</div>
 		</div>
 		<script>

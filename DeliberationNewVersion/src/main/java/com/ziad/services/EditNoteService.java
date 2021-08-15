@@ -48,6 +48,7 @@ import com.ziad.repositories.NotesModuleRepository;
 import com.ziad.repositories.NotesSemestreRepository;
 import com.ziad.repositories.SemestreRepository;
 import com.ziad.services.interfaces.EditNoteInterface;
+import com.ziad.utilities.Algorithms;
 import com.ziad.utilities.ExcelExport;
 import com.ziad.utilities.ExcelReader;
 import com.ziad.utilities.JSONConverter;
@@ -83,7 +84,10 @@ public class EditNoteService implements EditNoteInterface {
 	private InscriptionPedagogiqueRepository inscriptionPedagogiqueRepository;
 	@Autowired
 	private ExcelReader reader;
-
+	@Autowired
+	private Algorithms algo;
+	
+	
 	@Override
 	public ArrayList<Object> grabBesoins() throws DataNotFoundExceptions {
 		ArrayList<Object> besoins = new ArrayList<Object>();
@@ -135,54 +139,34 @@ public class EditNoteService implements EditNoteInterface {
 		return besoins;
 	}
 
-	@Override
-	public NoteNorm getNoteElement(Long idEtudiant, Long idElement, String type) throws EntityNotFoundException {
-		Etudiant etudiant = etudiantRepository.getOne(idEtudiant);
-		if (type.equals(ElementType.ELEMENT.name())) {
-			ComposedInscriptionPedagogique id = new ComposedInscriptionPedagogique(etudiant,
-					elementRepository.getOne(idElement));
-			NoteElement noteElement = noteElementRepository.getOne(id);
-			return noteElement;
-		} else if (type.equals(ElementType.MODULE.name())) {
-			ComposedNoteModule idCompose = new ComposedNoteModule(moduleRepository.getOne(idElement), etudiant);
-			NoteModule noteModule = noteModuleRepository.getOne(idCompose);
-			return noteModule;
-		} else if (type.equals(ElementType.SEMESTRE.name())) {
-			ComposedNoteSemestre idCompose = new ComposedNoteSemestre(semestreRepository.getOne(idElement), etudiant);
-			return noteSemestreRepository.getOne(idCompose);
-		} else {
-			ComposedNoteEtape idCompose = new ComposedNoteEtape(etapeRepository.getOne(idElement), etudiant);
-			return noteEtapeRepository.getOne(idCompose);
-		}
-	}
 
 	@Override
 	public NoteNorm editNote(Long idEtudiant, Long idElement, Double note, String type) throws EntityNotFoundException {
 		Etudiant etudiant = etudiantRepository.getOne(idEtudiant);
 		if (type.equals(ElementType.ELEMENT.name())) {
 			ComposedInscriptionPedagogique id = new ComposedInscriptionPedagogique(etudiant,
-					elementRepository.getOne(idElement));
+					elementRepository.getOne(idElement),algo.grabAnneeAcademiqueActuel());
 			NoteElement noteElement = noteElementRepository.getOne(id);
 			noteElement.setNote(note);
 			noteElement.calculState();
 			noteElementRepository.save(noteElement);
 			return noteElement;
 		} else if (type.equals(ElementType.MODULE.name())) {
-			ComposedNoteModule idCompose = new ComposedNoteModule(moduleRepository.getOne(idElement), etudiant);
+			ComposedNoteModule idCompose = new ComposedNoteModule(moduleRepository.getOne(idElement), etudiant,algo.grabAnneeAcademiqueActuel());
 			NoteModule noteModule = noteModuleRepository.getOne(idCompose);
 			noteModule.setNote(note);
 			noteModule.calculState();
 			noteModuleRepository.save(noteModule);
 			return noteModule;
 		} else if (type.equals(ElementType.SEMESTRE.name())) {
-			ComposedNoteSemestre idCompose = new ComposedNoteSemestre(semestreRepository.getOne(idElement), etudiant);
+			ComposedNoteSemestre idCompose = new ComposedNoteSemestre(semestreRepository.getOne(idElement), etudiant,algo.grabAnneeAcademiqueActuel());
 			NoteSemestre noteSemestre = noteSemestreRepository.getOne(idCompose);
 			noteSemestre.setNote(note);
 			noteSemestre.calculState();
 			noteSemestreRepository.save(noteSemestre);
 			return noteSemestre;
 		} else {
-			ComposedNoteEtape idCompose = new ComposedNoteEtape(etapeRepository.getOne(idElement), etudiant);
+			ComposedNoteEtape idCompose = new ComposedNoteEtape(etapeRepository.getOne(idElement), etudiant,algo.grabAnneeAcademiqueActuel());
 			NoteEtape noteEtape = noteEtapeRepository.getOne(idCompose);
 			noteEtape.setNote(note);
 			noteEtape.calculState();
@@ -226,7 +210,7 @@ public class EditNoteService implements EditNoteInterface {
 						note_type = type_object;
 				}
 				NoteElement noteElement = noteElementRepository
-						.getOne(new ComposedInscriptionPedagogique(etudiant.get(0), element));
+						.getOne(new ComposedInscriptionPedagogique(etudiant.get(0), element,algo.grabAnneeAcademiqueActuel()));
 				Note noteS = new Note(note, coefficient, note_type, noteElement);
 				noteElement.addNote(noteS);
 				noteElementRepository.save(noteElement);
@@ -236,6 +220,27 @@ public class EditNoteService implements EditNoteInterface {
 
 		}
 
+	}
+
+	@Override
+	public NoteNorm getNoteElement(Long idEtudiant, Long idElement, String type) throws EntityNotFoundException {
+		Etudiant etudiant = etudiantRepository.getOne(idEtudiant);
+		if (type.equals(ElementType.ELEMENT.name())) {
+			ComposedInscriptionPedagogique id = new ComposedInscriptionPedagogique(etudiant,
+					elementRepository.getOne(idElement),algo.grabAnneeAcademiqueActuel());
+			NoteElement noteElement = noteElementRepository.getOne(id);
+			return noteElement;
+		} else if (type.equals(ElementType.MODULE.name())) {
+			ComposedNoteModule idCompose = new ComposedNoteModule(moduleRepository.getOne(idElement), etudiant,algo.grabAnneeAcademiqueActuel());
+			NoteModule noteModule = noteModuleRepository.getOne(idCompose);
+			return noteModule;
+		} else if (type.equals(ElementType.SEMESTRE.name())) {
+			ComposedNoteSemestre idCompose = new ComposedNoteSemestre(semestreRepository.getOne(idElement), etudiant,algo.grabAnneeAcademiqueActuel());
+			return noteSemestreRepository.getOne(idCompose);
+		} else {
+			ComposedNoteEtape idCompose = new ComposedNoteEtape(etapeRepository.getOne(idElement), etudiant,algo.grabAnneeAcademiqueActuel());
+			return noteEtapeRepository.getOne(idCompose);
+		}
 	}
 
 }

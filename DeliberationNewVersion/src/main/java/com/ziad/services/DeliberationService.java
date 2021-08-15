@@ -25,6 +25,7 @@ import com.ziad.enums.TypeNote;
 import com.ziad.exceptions.CSVReaderOException;
 import com.ziad.exceptions.DataNotFoundExceptions;
 import com.ziad.exceptions.DeliberationElementNotAllowed;
+import com.ziad.exceptions.DeliberationEtapeNotAllowed;
 import com.ziad.exceptions.DeliberationModuleNotAllowed;
 import com.ziad.exceptions.DeliberationSemestreNotAllowed;
 import com.ziad.exceptions.InvalidCredinals;
@@ -295,6 +296,13 @@ public class DeliberationService implements DeliberationInterface {
 		AnneeAcademique annee = anneeAcademiqueRepository.getOne(idAnne);
 		return algorithme.delibererSemestre(semestre, annee);
 	}
+	
+	@Override
+	public Deliberation delibererEtape(Long idEtape, Long idAnne) throws DeliberationEtapeNotAllowed {
+		Etape etape = etapeRepository.getOne(idEtape);
+		AnneeAcademique annee = anneeAcademiqueRepository.getOne(idAnne);
+		return algorithme.delibererEtape(etape, annee);
+	}
 
 	@Override
 	public ArrayList<Object> getBesoinPageDeliberationParElement(HttpServletRequest req)
@@ -447,7 +455,12 @@ public class DeliberationService implements DeliberationInterface {
 		besoins.add(filieres);
 		besoins.add(algorithmeRepository.grabAnneeAcademiqueActuel());
 		besoins.add(semestres);
-		besoins.add(converter.convertSemestre(semestreRepository.findAll()));
+		JSONConverter converter = new JSONConverter();
+		List<Semestre> semestresNew = new ArrayList<Semestre>();
+		
+		List<Semestre> semestre = semestreRepository.findAll();
+		semestre.stream().forEach((Semestre s) -> semestresNew.add(new Semestre(s)));
+		besoins.add(converter.convertSemestre(semestresNew));
 		return besoins;
 	}
 
@@ -474,12 +487,14 @@ public class DeliberationService implements DeliberationInterface {
 			}
 		}
 
-		List<AnneeAcademique> anneesAcademiques = anneeAcademiqueRepository.findAll();
+		AnneeAcademique anneeAcademique = algorithmeRepository.grabAnneeAcademiqueActuel();
 		ArrayList<Object> besoins = new ArrayList<Object>();
 		besoins.add(filieres);
-		besoins.add(anneesAcademiques);
-		besoins.add(etapes);
-		besoins.add(converter.convertEtape(etapeRepository.findAll()));
+		besoins.add(anneeAcademique);
+		List<Etape> etapesNew = new ArrayList<Etape>();
+		etapes.stream().forEach((Etape e) -> etapesNew.add(new Etape(e)));
+		besoins.add(etapesNew);
+		besoins.add(converter.convertEtape(etapesNew));
 		return besoins;
 	}
 

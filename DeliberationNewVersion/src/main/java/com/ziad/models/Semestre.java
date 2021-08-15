@@ -76,6 +76,16 @@ public class Semestre implements Serializable,Comparable<Semestre>,ElementNorm {
 		this.type_semestre = type_semestre;
 		this.ordre = ordre;
 	}
+	
+	public Semestre(Semestre s) {
+		super();
+		this.id_semestre = s.getId_semestre();
+		this.validation = s.getValidation();
+		this.libelle_semestre = s.getLibelle_semestre();
+		this.etape = s.getEtape();
+		this.type_semestre = s.getType_semestre();
+		this.ordre = s.getOrdre();
+	}
 
 	public Long getId_semestre() {
 		return id_semestre;

@@ -12,7 +12,10 @@ import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Etudiant;
 import com.ziad.models.Modulee;
 
+import lombok.Data;
+
 @Embeddable
+@Data
 public class ComposedNoteModule implements Serializable {
 
 	/**

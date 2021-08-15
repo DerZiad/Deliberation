@@ -11,7 +11,10 @@ import com.ziad.models.AnneeAcademique;
 import com.ziad.models.Element;
 import com.ziad.models.Etudiant;
 
+import lombok.Data;
+
 @Embeddable
+@Data
 public class ComposedInscriptionPedagogique implements Serializable {
 
 	/**

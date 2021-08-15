@@ -11,8 +11,8 @@
 		<div class="main-card mb-3 card">
 			<div class="card-body">
 				<h5 class="card-title">Déliberation par etape</h5>
-				<form class="" action="/delib/" method="POST">
-					<input type="hidden" name="type" value="paretape"/>
+				<form class="" action="/delib/deliberationetape" method="POST">
+					<input type="hidden" name="type" value="paretape" />
 					<div class="form-row">
 						<div class="col-md-6">
 							<div class="position-relative form-group">
@@ -28,9 +28,7 @@
 							<div class="position-relative form-group">
 								<label for="name" class="">Années académiques</label> <select
 									name="annee" id="exampleSelect" class="form-control">
-									<c:forEach var="annee" items="${annees}">
-										<option value="${annee.id_annee_academique}">${annee.annee_academique }</option>
-									</c:forEach>
+									<option value="${annee.id_annee_academique}">${annee}</option>
 								</select>
 							</div>
 						</div>
@@ -38,7 +36,7 @@
 							<div class="position-relative form-group">
 								<label for="element-class" class="element-class">Etapes</label>
 								<select name=element id="exampleSelect" class="form-control">
-									<c:forEach items="${etapes}" var="etape"> 
+									<c:forEach items="${etapes}" var="etape">
 										<option value="${etape.id_etape}">${etape.libelle_etape}</option>
 									</c:forEach>
 								</select>
@@ -52,6 +50,16 @@
 						<button class="mt-2 btn btn-primary col-md-12" type="submit">Valider</button>
 					</div>
 				</form>
+				<c:if test="${error ne null }">
+					<br>
+					<br>
+					<div class="card alert alert-danger" role="alert">
+						<div class="card-body">
+							<h5 class="card-title">${error.title }</h5>
+							<p class="card-text">${error.getMessage() }</p>
+						</div>
+					</div>
+				</c:if>
 			</div>
 		</div>
 		<script>

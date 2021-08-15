@@ -10,7 +10,10 @@ import javax.persistence.OneToOne;
 import com.ziad.models.Etudiant;
 import com.ziad.models.Filiere;
 
+import lombok.Data;
+
 @Embeddable
+@Data
 public class ComposedInscriptionAdministrative implements Serializable {
 
 	private static final long serialVersionUID = 1L;
