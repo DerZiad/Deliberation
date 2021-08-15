@@ -9,8 +9,8 @@
 		<version>2.3.4.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.umi</groupId>
-	<artifactId>DeliberationNewVersion</artifactId>
+	<groupId>com.ziad</groupId>
+	<artifactId>Deliberation</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>Deliberation</name>

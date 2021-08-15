@@ -14,7 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.ziad.enums.DeliberationType;
 import com.ziad.enums.Etat;
 import com.ziad.enums.TypeNote;
 import com.ziad.models.compositeid.ComposedInscriptionPedagogique;
