@@ -639,13 +639,6 @@ Authentification
 
 
 
-# Lien du projet
-
-https://github.com/Bz-Root/deliberation
-
-
-
-
 
 
 
