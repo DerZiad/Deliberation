@@ -1,100 +1,11 @@
-
+<h1> Deliberation</h1>
 
 
 **UNIVERSITE MOULAY ISMAIL –UMI-** 
 
-**BACHELOR EN GENIE INFORMATIQUE -BGI-** 
+**Réalisé par :**:	   			                                       
 
-**Projet**
-
-**Intitulé** : 
-
-
-
-**Réalisé par :**:	   			                                        **Encadré par** : 
-
-- **Ziad Bougrine                                                      	Ali Oubelkacem**
-
-`        	`**Chaimae Lamini**
-
-`                                                          	`**Ali Bekri** 
-
-Soutenu le 11 devant le jury : 
-
-**Bekri Ali, Professeur à la Faculté des Sciences- Meknès**
-
-**Benhlima Said, Professeur à la Faculté des Sciences- Meknès**
-
-**Lamini Chaimae, Professeur à la Faculté des Sciences- Meknès**
-
-**Oubelkacem Ali, Professeur à la Faculté des Sciences- Meknès**
-
-`	`**Année Universitaire : 2020-2021**
-
-
-
-Tout d'abord, je tiens à remercier tout particulièrement les personnes suivantes et à leur témoigner toute ma reconnaissance, pour leur dévouement et leur soutien pour la concrétisation de ce projet: 
-
-· ***M. Ali OUBELKACEM***, responsable projet, pour ses conseils éclairés, sa patience, sa disponibilité et pour la confiance qu'il m'a accordée dès l'ébauche du projet et tout au long de ces quatre mois. 
-
-· ***M. Ali BEKRI***, responsable projet, pour m'avoir accordé toute la confiance nécessaire pour élaborer ce projet librement, et avoir mis à ma disposition tous les moyens nécessaires. 
-
-· ***Mme. CHAYMAA LAMINI***, enseignante-chercheuse, pour son investissement, sa contribution et toute l'aide et les conseils apportés durant ce projet. 
-
-· Les enseignants pour leur coopération professionnelle tout au long de cette expérience, pour leur patience malgré les conditions causées par la pandémie Covid-19 et pour avoir partagé avec nous, les étudiants du Bachelor, une partie de leurs savoir-faire et de leurs expériences professionnelles.
-
-Et toutes les personnes qui ont facilité la participation à l'élaboration de ce projet.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Table des matières
-` `TOC \o "1-3" \h \z \u [Introduction Général	 PAGEREF _Toc75903117 \h 4](#_Toc75903117)
-
-[Contexte général du projet	 PAGEREF _Toc75903118 \h 6](#_Toc75903118)
-
-[Etude préliminaire	 PAGEREF _Toc75903119 \h 8](#_Toc75903119)
-
-[Conception	 PAGEREF _Toc75903120 \h 13](#_Toc75903120)
-
-[Environnement et outils de développement	 PAGEREF _Toc75903121 \h 32](#_Toc75903121)
-
-[Architecture et couches de l‘application	 PAGEREF _Toc75903122 \h 43](#_Toc75903122)
-
-[Démonstration	 PAGEREF _Toc75903123 \h 50](#_Toc75903123)
-
-[Lien du projet	 PAGEREF _Toc75903124 \h 56](#_Toc75903124)
-
-[CONCLUSION ET PERSPECTIVES	 PAGEREF _Toc75903125 \h 57](#_Toc75903125)
-
-[BIBLIOGRAPHIE	 PAGEREF _Toc75903126 \h 59](#_Toc75903126)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- **Ziad Bougrine                                              
 
 # Introduction Général
 
