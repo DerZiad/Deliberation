@@ -12,7 +12,7 @@
 	<groupId>com.ziad</groupId>
 	<artifactId>Deliberation</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>Deliberation</name>
 	<description>Deliberation Bachelor</description>
 
@@ -244,6 +244,12 @@
 			<artifactId>lombok</artifactId>
 			<version>1.18.20</version>
 			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.6.0</version>
 		</dependency>
 
 	</dependencies>
