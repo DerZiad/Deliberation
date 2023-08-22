@@ -1,26 +1,8 @@
-<h1> Deliberation</h1>
+# UNIVERSITE MOULAY ISMAIL
 
+**Réalisé par : Ziad Bougrine** 		                                              
 
-**UNIVERSITE MOULAY ISMAIL –UMI-** 
-
-**Réalisé par :**:	   			                                       
-
-- **Ziad Bougrine                                              
-
-# Introduction Général
-
-
-
-
-
-
-
-
-
-
-
-
-Introduction General
+## Introduction Général
 
 Dans le cadre de ma seconde année du cycle Génie Informatique au Bachelor de l'Université Moulay Ismaïl, il m'est proposé un projet de 4 mois me permettant de mettre en pratique mes connaissances théoriques au travers un cahier des charges définissant la conception et le développement d'une application destinée à la délibération des étudiants du Bachelor. Ce projet a été réalisé durant l'année universitaire 2019-2020 par mes camarades, et il m'a été proposé d'y apporter des modifications et des améliorations éventuelles.
 
@@ -35,53 +17,20 @@ Le présent rapport donne un descriptif complet sur le développement de ce proj
 
 
 
-# Contexte général du projet
-A – Présentation général
-
-B – Objectifs
-
-
-
-
-
-
-
-
-Contexte général du projet
-
-A – Présentation général
+## Contexte général du projet
+### Présentation général
 
 La formation Bachelor à Meknès suscite de plus en plus d’engouement de la part des nouveaux bacheliers au niveau nationale. L'accroissement de la demande vis-à-vis de cette formation donne un travail de plus en plus lourds à l'administration. L'informatisation de la gestion administrative est une bonne solution pour faciliter, entre autres, les tâches du calcul des notes des étudiants inscrits dans les différentes filières et semestres, et pour le suivie des appointements des enseignants.
 
 Un système qui est fort, le tout est soumis sous contrôle, et une plateforme permettant à chaque étudiant de consulter son profil, voir ses notes, une possibilité d’impression d’une candidature scolaire pour chaque étudiant qui est inscrit administrativement et inscrit pédagogiquement dans le site web.
 
-B – Objectifs
+### Objectifs
 
 Cette application développée a pour but non seulement de mettre à disposition des personnes s'occupant de l'administration de la formation Bachelor, des outils adéquats pour mener à bien ces tâches quotidiennes, mais aussi permettre d'autres outils aux étudiants et aux professeurs pour une communication plus rapide et effective avec l'administration. L’application facilite aussi la gestion des notes par un système de délibération qui se chargera de la récupération des notes, la délibération des notes, et l’inscription automatique soumit à des conditions définies par l’administrateur. L’application gère aussi un portail aux étudiants qui offrira une manière facile de consultation des notes et le parcours de chaque étudiant.
 
+## Etude préliminaire
 
-
-
-
-
-
-
-# Etude préliminaire
-
-A – Etude de l’existant
-
-B – Spécification des fonctionnalités attendues
-
-
-
-
-
-
-
-
-ETUDE PRELIMIAIRE
-
-A – Etude de l’existant
+### Etude de l’existant
 
 1. Interface Administrateur : permettant de gérer l’établissement et tous ce qui concernent la structure académique.
 1. Interface Administrateur : permettant de gérer les étudiants et les inscriptions administratives et pédagogiques des étudiants.
@@ -100,10 +49,7 @@ A – Etude de l’existant
 1. Interface Etudiant : Une possibilité de télécharger un certificat de scolarité de cette candidature
 1. Chaque acteur a le droit de consulter la gestion de compte et modifier son mot de passe
 
-
-
-
-B - Spécification des fonctionnalités attendues
+### Spécification des fonctionnalités attendues
 
 |**Spécification fonctionnelles**|**Maintenue par moi**|**Maintenue** |
 | :- | :- | :- |
@@ -124,14 +70,6 @@ B - Spécification des fonctionnalités attendues
 |Archivage des notes après chaque délibération faite |X||
 
 J’ai utilisé le sonar cube comme logiciel de scan qui est utilisé par plusieurs grands société, pour voir la qualité du code et effectuer une comparaison afin de donner une valeur au travail
-
-
-
-
-
-
-
-
 
 
 
@@ -715,4 +653,3 @@ La programmation d’application web est une tendance de plus en plus adoptée p
 · "Bibliothèque Javascript JQuery", par Yacine Bouzidi: <http://researchers.lille.inria.fr/~yabouzid/cours3.pdf>
 
 Je propose openclassrooms comme un site des cours, j’ai eu des diplômes et j’ai pu acquérir plusieurs compétences et connaissances.
-
