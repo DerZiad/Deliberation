@@ -14,7 +14,9 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Deliberation</name>
-	<description>Deliberation Bachelor</description>
+	<description>The Bachelor's program in Meknes is gaining increasing popularity among new high school graduates nationwide. The growing demand for this program places a heavier workload on the administration. The computerization of administrative management is a good solution to streamline tasks such as calculating the grades of students enrolled in various programs and semesters, as well as tracking teacher compensation.
+
+A robust system, subject to control, and a platform enabling each student to access their profile, view their grades, and print academic transcripts for administrative and pedagogic enrollment.</description>
 
 	<properties>
 		<java.version>11</java.version>
